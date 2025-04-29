@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { Dashboard, Login } from "./pages";
+import { Dashboard, Login, Activity } from "./pages";
 import UserLayout from "./layouts";
 
 const Navigation: React.FC = () => {
@@ -9,6 +9,7 @@ const Navigation: React.FC = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/user/*" element={<UserLayout />}>
         <Route path="dashboard" element={<Dashboard />} />
+        <Route path="activity" element={<Activity />} />
       </Route>
     </Routes>
   );

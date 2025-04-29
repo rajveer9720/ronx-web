@@ -1,0 +1,80 @@
+import { RecentActivity, PartnerResults } from "../../interfaces/activity";
+
+export const recentActivityData: RecentActivity[] = [
+  {
+    id: 118,
+    action: "Registration",
+    matrix: "x3 0.4x",
+    level: 1,
+    time: "4/19/2023, 3:13:00 PM",
+  },
+  {
+    id: 117,
+    action: "Registration",
+    matrix: "x3 0.4x",
+    level: 1,
+    time: "4/19/2023, 3:22:00 PM",
+  },
+  {
+    id: 116,
+    action: "Registration",
+    matrix: "x3 0.4x",
+    level: 1,
+    time: "4/19/2023, 3:23:00 PM",
+  },
+  {
+    id: 115,
+    action: "Registration",
+    matrix: "x3 0.4x",
+    level: 1,
+    time: "4/19/2023, 3:24:00 PM",
+  },
+  {
+    id: 114,
+    action: "Registration",
+    matrix: "x3 0.4x",
+    level: 1,
+    time: "4/19/2023, 3:25:00 PM",
+  },
+  {
+    id: 113,
+    action: "Registration",
+    matrix: "x3 0.4x",
+    level: 1,
+    time: "4/19/2023, 3:26:00 PM",
+  },
+  {
+    id: 112,
+    action: "Registration",
+    matrix: "x3 0.4x",
+    level: 1,
+    time: "4/19/2023, 3:27:00 PM",
+  },
+  {
+    id: 111,
+    action: "Registration",
+    matrix: "x3 0.4x",
+    level: 1,
+    time: "4/19/2023, 3:28:00 PM",
+  },
+  {
+    id: 110,
+    action: "Registration",
+    matrix: "x3 0.4x",
+    level: 1,
+    time: "4/19/2023, 3:29:00 PM",
+  },
+  {
+    id: 109,
+    action: "Registration",
+    matrix: "x3 0.4x",
+    level: 1,
+    time: "4/19/2023, 3:30:00 PM",
+  },
+];
+
+export const partnerResultsData: PartnerResults = {
+  totalInvestor: 100,
+  totalInvestedBNB: 0.0164,
+  totalPayoutBNB: 149386219,
+};
