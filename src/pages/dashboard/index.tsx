@@ -41,7 +41,7 @@ const Dashboard = () => {
   return (
     <Box>
       <Typography variant="h6" fontWeight={600} textAlign={"right"}>
-        Welcome back, Samsung!
+        Welcome back, Ronxald!
       </Typography>
 
       <Grid container spacing={2} mt={2}>

@@ -11,6 +11,7 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
+import { AVATAR } from "../../utils/constants";
 
 const UserProfile = () => {
   const userDetails = [
@@ -23,7 +24,7 @@ const UserProfile = () => {
 
   return (
     <Grid container spacing={2}>
-      <Grid size={{ xs: 12, sm: 12, md: 4 }}>
+      <Grid size={{ xs: 12, sm: 12, md: 6 }}>
         <Card sx={cardStyle}>
           <Box display={"flex"} alignItems={"center"}>
             <PeopleRounded color="primary" />
@@ -32,24 +33,39 @@ const UserProfile = () => {
             </Typography>
           </Box>
           <Divider sx={{ my: 1 }} />
-          <List disablePadding>
-            {userDetails.map((detail, index) => (
-              <ListItem key={index} disablePadding disableGutters>
-                <ListItemText
-                  primary={detail.label}
-                  secondary={detail.value}
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                />
-              </ListItem>
-            ))}
-          </List>
+          <Grid
+            container
+            spacing={2}
+            alignItems={"center"}
+            justifyContent={"center"}
+          >
+            <Grid
+              size={{ xs: 12, sm: 12, md: 6 }}
+              textAlign={{ xs: "center", sm: "center", md: "left" }}
+            >
+              <img src={AVATAR} alt="User Avatar" width={200} height={200} />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 12, md: 6 }}>
+              <List disablePadding>
+                {userDetails.map((detail, index) => (
+                  <ListItem key={index} disablePadding disableGutters>
+                    <ListItemText
+                      primary={detail.label}
+                      secondary={detail.value}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            </Grid>
+          </Grid>
         </Card>
       </Grid>
-      <Grid size={{ xs: 12, sm: 12, md: 4 }} offset={{ md: 4 }}>
+      <Grid size={{ xs: 12, sm: 12, md: 6 }}>
         <Card sx={cardStyle}>
           <Box display={"flex"} alignItems="center">
             <Typography variant="h6">Referral Link</Typography>
