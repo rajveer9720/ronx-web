@@ -1,4 +1,8 @@
-import { DashboardRounded, AccessTimeRounded } from "@mui/icons-material";
+import {
+  DashboardRounded,
+  AccessTimeRounded,
+  CalculateOutlined,
+} from "@mui/icons-material";
 import { Navigation } from "@toolpad/core/AppProvider";
 
 export const Sidebar: Navigation = [
@@ -7,5 +11,10 @@ export const Sidebar: Navigation = [
     title: "Activity",
     icon: <AccessTimeRounded />,
     segment: "user/activity",
+  },
+  {
+    title: "Calculator",
+    icon: <CalculateOutlined />,
+    segment: "user/calculator",
   },
 ];

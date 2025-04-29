@@ -5,7 +5,7 @@ import { PeopleRounded, PaidRounded } from "@mui/icons-material";
 import { DashboardCard } from "../../components";
 import { recentActivityData, partnerResultsData } from "../../api/activity";
 
-const Activity: React.FC = () => {
+const Activity = () => {
   const ActivityCards = [
     {
       title: "Total Investors",

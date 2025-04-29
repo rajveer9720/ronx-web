@@ -3,6 +3,7 @@ import Footer from "./Footer";
 import Form from "./Form";
 import AlertDialog from "./AlertDialog";
 import BackdropSpin from "./BackdropSpin";
+import PageHeader from "./PageHeader";
 import UserProfile from "./UserProfile";
 import { SnackbarProvider } from "./SnackbarProvider";
 import { SnackbarUtilsConfigurator } from "./SnackbarUtils";
@@ -13,6 +14,7 @@ export {
   Form,
   AlertDialog,
   BackdropSpin,
+  PageHeader,
   UserProfile,
   SnackbarProvider,
   SnackbarUtilsConfigurator,

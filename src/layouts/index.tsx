@@ -5,7 +5,7 @@ import { PageContainer } from "@toolpad/core/PageContainer";
 import { useToolpadRouter } from "../router";
 import theme from "../theme/theme";
 import { LOGO } from "../utils/constants";
-import { Footer } from "../components";
+import { Footer, PageHeader } from "../components";
 import { Sidebar } from "../utils/sidebarUtils";
 
 const UserLayout = () => {
@@ -35,7 +35,7 @@ const UserLayout = () => {
             px: { xs: 2, sm: 2, md: 2 },
           }}
           slots={{
-            header: () => <></>,
+            header: () => <PageHeader />,
           }}
         >
           <Outlet />
