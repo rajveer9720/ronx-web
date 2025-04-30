@@ -5,6 +5,8 @@ import AlertDialog from "./AlertDialog";
 import BackdropSpin from "./BackdropSpin";
 import PageHeader from "./PageHeader";
 import UserProfile from "./UserProfile";
+import ReferralCard from "./ReferralCard";
+import ProgramCard from "./ProgramCard";
 import { SnackbarProvider } from "./SnackbarProvider";
 import { SnackbarUtilsConfigurator } from "./SnackbarUtils";
 
@@ -16,6 +18,8 @@ export {
   BackdropSpin,
   PageHeader,
   UserProfile,
+  ReferralCard,
+  ProgramCard,
   SnackbarProvider,
   SnackbarUtilsConfigurator,
 };

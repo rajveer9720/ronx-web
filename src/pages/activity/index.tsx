@@ -1,4 +1,3 @@
-import React from "react";
 import { Box, Typography, Grid } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { PeopleRounded, PaidRounded } from "@mui/icons-material";

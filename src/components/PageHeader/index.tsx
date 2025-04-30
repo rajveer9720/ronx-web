@@ -1,3 +1,4 @@
+import { HomeFilled } from "@mui/icons-material";
 import { Breadcrumbs, Typography, Box, Link } from "@mui/material";
 import { useLocation, Link as RouterLink } from "react-router-dom";
 
@@ -8,9 +9,17 @@ const PageHeader = () => {
   return (
     <Box sx={{ mb: 2 }}>
       <Breadcrumbs aria-label="breadcrumb">
-        <Link component={RouterLink} underline="hover" color="inherit" to="/">
-          Home
-        </Link>
+        <Box
+          display={"flex"}
+          alignItems="center"
+          justifyContent={"center"}
+          gap={1}
+        >
+          <HomeFilled />
+          <Link component={RouterLink} underline="hover" color="inherit" to="/">
+            Home
+          </Link>
+        </Box>
         {pathnames.map((value, index) => {
           const to = `/${pathnames.slice(0, index + 1).join("/")}`;
           const isLast = index === pathnames.length - 1;

@@ -11,10 +11,13 @@ const DashboardCard = (props: DashboardCardProps) => {
   const { title, icon, children } = props;
   return (
     <Card sx={cardStyle}>
-      {icon && <Box mb={1}>{icon}</Box>}
-      <Typography variant="h6" mb={1}>
+      <Box display={"flex"} alignItems={"center"} mb={2}>
+      {icon}
+      <Typography variant="h6" mx={1} fontWeight={600}>
         {title}
       </Typography>
+      </Box>
+      
       {children}
     </Card>
   );
