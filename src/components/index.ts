@@ -7,6 +7,7 @@ import PageHeader from "./PageHeader";
 import UserProfile from "./UserProfile";
 import ReferralCard from "./ReferralCard";
 import ProgramCard from "./ProgramCard";
+import LevelCard from "./LevelCard";
 import { SnackbarProvider } from "./SnackbarProvider";
 import { SnackbarUtilsConfigurator } from "./SnackbarUtils";
 
@@ -20,6 +21,7 @@ export {
   UserProfile,
   ReferralCard,
   ProgramCard,
+  LevelCard,
   SnackbarProvider,
   SnackbarUtilsConfigurator,
 };

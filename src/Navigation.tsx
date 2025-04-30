@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { Dashboard, Login, Activity, Calculator } from "./pages";
+import { Dashboard, Login, Activity, Calculator, Program } from "./pages";
 import UserLayout from "./layouts";
 
 const Navigation: React.FC = () => {
@@ -11,6 +11,7 @@ const Navigation: React.FC = () => {
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="calculator" element={<Calculator />} />
         <Route path="activity" element={<Activity />} />
+        <Route path="matrix/:type/:level" element={<Program />} />
       </Route>
     </Routes>
   );

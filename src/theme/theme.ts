@@ -19,7 +19,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: "Poppins, sans-serif",
+    fontFamily: "Work Sans, sans-serif",
   },
   shape: {
     borderRadius: 12,
