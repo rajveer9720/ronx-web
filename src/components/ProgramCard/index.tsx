@@ -1,4 +1,3 @@
-import { SquareRounded } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -42,10 +41,13 @@ const ProgramCard = (props: ProgramCardProps) => {
       <Box display="flex" justifyContent="center" alignItems="center" mb={1}>
         <Box display="grid" gridTemplateColumns="repeat(4, 1fr)" gap={2}>
           {[...Array(length)].map((_, index) => (
-            <SquareRounded
+            <Card
               key={index}
-              fontSize="large"
-              sx={{ color: theme.palette.grey[500] }}
+              sx={{
+                borderRadius: 1,
+                backgroundColor: theme.palette.action.hover,
+                p: 2.2,
+              }}
             />
           ))}
         </Box>
