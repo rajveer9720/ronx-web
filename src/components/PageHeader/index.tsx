@@ -9,13 +9,8 @@ const PageHeader = () => {
   return (
     <Box sx={{ mb: 2 }}>
       <Breadcrumbs aria-label="breadcrumb">
-        <Box
-          display={"flex"}
-          alignItems="center"
-          justifyContent={"center"}
-          gap={1}
-        >
-          <HomeFilled />
+        <Box display={"flex"}>
+          <HomeFilled fontSize="small" />
           <Link component={RouterLink} underline="hover" color="inherit" to="/">
             Home
           </Link>
@@ -42,7 +37,7 @@ const PageHeader = () => {
       </Breadcrumbs>
       <Typography
         variant="h4"
-        sx={{ mt: 1, fontWeight: 600, textTransform: "capitalize" }}
+        sx={{ mt: 1, fontWeight: 700, textTransform: "capitalize" }}
       >
         {pathnames[pathnames.length - 1]?.replace(/-/g, " ") || "Dashboard"}
       </Typography>

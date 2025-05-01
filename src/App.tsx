@@ -1,8 +1,8 @@
 import { ThemeProvider } from "@emotion/react";
 import { CssBaseline } from "@mui/material";
-import theme from "./theme/theme";
 import Navigation from "./Navigation";
 import { Web3ModalProvider } from "./providers/web3Provider";
+import theme from "./theme/theme";
 
 function App() {
   return (

@@ -28,10 +28,10 @@ const ProgramCard = (props: ProgramCardProps) => {
   return (
     <Card sx={cardStyle}>
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Typography variant="h6" fontWeight={600}>
+        <Typography variant="h6" fontWeight={700}>
           {textPrimary}
         </Typography>
-        <Typography variant="h6" fontWeight={600}>
+        <Typography variant="h6" fontWeight={700}>
           {textSecondary}
         </Typography>
       </Box>

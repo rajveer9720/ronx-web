@@ -13,7 +13,7 @@ const DashboardCard = (props: DashboardCardProps) => {
     <Card sx={cardStyle}>
       <Box display={"flex"} alignItems={"center"} mb={2}>
       {icon}
-      <Typography variant="h6" mx={1} fontWeight={600}>
+      <Typography variant="h6" mx={1} fontWeight={700}>
         {title}
       </Typography>
       </Box>

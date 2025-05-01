@@ -24,7 +24,7 @@ const UserProfile = () => {
     <Card sx={cardStyle}>
       <Box display={"flex"} alignItems={"center"}>
         <Person color="primary" />
-        <Typography variant="h6" mx={1}>
+        <Typography variant="h6" fontWeight={700} mx={1}>
           User Profile
         </Typography>
       </Box>

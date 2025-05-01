@@ -5,7 +5,9 @@ const ReferralCard = () => {
   return (
     <Card sx={cardStyle}>
       <Box display={"flex"} alignItems="center" mb={2}>
-        <Typography variant="h6">Referral Link</Typography>
+        <Typography variant="h6" fontWeight={700}>
+          Referral Link
+        </Typography>
         <IconButton color="info" sx={{ mx: 1 }}>
           <InfoOutline />
         </IconButton>
