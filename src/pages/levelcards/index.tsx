@@ -1,8 +1,18 @@
 import { Box, Button, Chip, Grid, Typography } from "@mui/material";
-import { LevelCard } from "../../components";
 import { ChevronLeft, ChevronRight, Tag } from "@mui/icons-material";
+import * as levelCardData from "../../mock";
+import { LevelCard } from "../../components";
 
 const LevelCards = () => {
+  const data = levelCardData.levelcard[0];
+  const { levels } = data;
+
+  const currentLevel = levels[0];
+
+  const prevLevel = 0;
+  const nextLevel = 2;
+  const uplineId = "123";
+
   return (
     <Grid container spacing={2}>
       <Grid size={{ xs: 12, sm: 12, md: 6 }} offset={{ xs: 0, sm: 0, md: 3 }}>
@@ -10,27 +20,27 @@ const LevelCards = () => {
           <Typography variant="h6" fontWeight={600}>
             Upline ID
           </Typography>
-          <Chip size="small" color="primary" icon={<Tag />} label="123" />
+          <Chip size="small" color="primary" icon={<Tag />} label={uplineId} />
         </Box>
 
         <Box py={2}>
           <LevelCard
-            large
-            disabled
-            busd={5}
-            cycles={2}
-            people={4}
-            level={1}
-            revenue={10}
+            large={true}
+            disabled={false}
+            busd={currentLevel.busd}
+            cycles={currentLevel.cycles}
+            people={currentLevel.people}
+            level={currentLevel.level}
+            revenue={currentLevel.revenue}
           />
         </Box>
 
         <Box display={"flex"} justifyContent="space-between">
           <Button size="large" variant="contained" startIcon={<ChevronLeft />}>
-            Level 0
+            Level {prevLevel}
           </Button>
           <Button size="large" variant="contained" endIcon={<ChevronRight />}>
-            Level 2
+            Level {nextLevel}
           </Button>
         </Box>
       </Grid>

@@ -18,7 +18,7 @@ export const Sidebar: Navigation = [
   {
     title: "Partners",
     icon: <Diversity3 />,
-    segment: "user/partners",
+    segment: "user/partner",
   },
   {
     title: "Stats",
