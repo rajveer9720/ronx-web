@@ -20,13 +20,13 @@ import { useTheme } from "@mui/material/styles";
 const Calculator = () => {
   const theme = useTheme();
   const [selectedStage, setSelectedStage] = useState(stages[0]);
-  const [selectedSlots, setSelectedSlots] = useState<number[]>([]);
+  const [selectedSlots, setSelectedSlots] = useState<number[]>([1]);
   const cost = calculateCost(selectedSlots, selectedStage, slotPrices);
   const result = calculateResult(selectedSlots, selectedStage, slotPrices);
 
   const handleStageSelect = (stage: (typeof stages)[0]) => {
     setSelectedStage(stage);
-    setSelectedSlots([]);
+    setSelectedSlots([1]);
   };
 
   const handleSlotSelect = (slot: number) => {
@@ -36,11 +36,14 @@ const Calculator = () => {
           ? []
           : Array.from({ length: 12 }, (_, i) => i + 1);
       }
-      if (prev.includes(slot)) {
-        return prev.filter((s) => s < slot);
+      if (slot === 1) {
+        return prev.includes(1) ? prev : [1, ...prev];
       }
-      if (selectedStage.name === "Stage 1" && slot < 1) {
-        return prev; // Prevent deselecting below stage 1
+      if (prev.includes(slot) && prev[prev.length - 1] === slot) {
+        return prev.filter((s) => s !== slot);
+      }
+      if (prev.includes(slot)) {
+        return prev.filter((s) => s - 1 < slot);
       }
       return Array.from({ length: slot }, (_, i) => i + 1);
     });
@@ -101,8 +104,8 @@ const Calculator = () => {
                     textAlign: "center",
                     cursor: "pointer",
                     backgroundColor: selectedSlots.includes(index + 1)
-                      ? theme.palette.primary.main // Selected slot color (blue)
-                      : theme.palette.grey[500], // Unselected slot color (light grey)
+                      ? theme.palette.primary.main
+                      : theme.palette.grey[500],
                     boxShadow: 3,
                     color: "white",
                     borderRadius: "100%",
