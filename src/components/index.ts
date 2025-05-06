@@ -8,6 +8,7 @@ import UserProfile from "./UserProfile";
 import ReferralCard from "./ReferralCard";
 import ProgramCard from "./ProgramCard";
 import LevelCard from "./LevelCard";
+import { ToolbarActions, ToolbarAppTitle } from "./AppToolbar";
 import { SnackbarProvider } from "./SnackbarProvider";
 import { SnackbarUtilsConfigurator } from "./SnackbarUtils";
 
@@ -22,6 +23,8 @@ export {
   ReferralCard,
   ProgramCard,
   LevelCard,
+  ToolbarActions,
+  ToolbarAppTitle,
   SnackbarProvider,
   SnackbarUtilsConfigurator,
 };

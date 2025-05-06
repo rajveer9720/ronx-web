@@ -5,11 +5,19 @@ import { PageContainer } from "@toolpad/core/PageContainer";
 import { useToolpadRouter } from "../router";
 import theme from "../theme/theme";
 import { LOGO } from "../utils/constants";
-import { Footer, PageHeader } from "../components";
+import {
+  BackdropSpin,
+  Footer,
+  PageHeader,
+  ToolbarActions,
+  ToolbarAppTitle,
+} from "../components";
 import { Sidebar } from "../utils/sidebarUtils";
+import { useLoader } from "../context/LoaderContext";
 
 const UserLayout = () => {
   const router = useToolpadRouter();
+  const { loading } = useLoader();
 
   return (
     <AppProvider
@@ -17,14 +25,20 @@ const UserLayout = () => {
       router={router}
       theme={theme}
       branding={{
-        logo: <img src={LOGO} alt="Logo" width="150" />,
+        logo: <img src={LOGO} alt="Logo" style={{ height: 32 }} />,
         title: "",
       }}
     >
+      <BackdropSpin
+        loading={loading}
+        text="Processing your request, please wait..."
+      />
       <DashboardLayout
         sidebarExpandedWidth={250}
         slots={{
           toolbarAccount: () => null,
+          toolbarActions: () => <ToolbarActions />,
+          appTitle: () => <ToolbarAppTitle />,
           sidebarFooter: ({ mini }) => <Footer role="user" mini={mini} />,
         }}
       >
@@ -32,7 +46,8 @@ const UserLayout = () => {
           sx={{
             maxWidth: "100% !important",
             width: "100%",
-            px: { xs: 2, sm: 2, md: 2 },
+            px: { xs: 2, sm: 2, md: 5 },
+            py: { xs: 2, sm: 2, md: 5 },
           }}
           slots={{
             header: () => <PageHeader />,

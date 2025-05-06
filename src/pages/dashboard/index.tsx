@@ -1,52 +1,78 @@
 import { Box, Typography, Grid } from "@mui/material";
 import CountUp from "react-countup";
-import { AttachMoney, Diversity3, Groups, Percent } from "@mui/icons-material";
-import { useState } from "react";
 import {
-  BackdropSpin,
   DashboardCard,
   ReferralCard,
   UserProfile,
   ProgramCard,
 } from "../../components";
+import { DashboardCards } from "../../utils/dashBoardUtils";
+import { useEffect, useState } from "react";
+import { useLoader } from "../../context/LoaderContext";
+import { data as UserData } from "../../mock";
+import { IProgram } from "../../interfaces/program";
+import { getPrograms } from "../../api/program";
+import { ILevel } from "../../interfaces/level";
+import { getLevelsByParams } from "../../api/level";
+import { Filter3, Filter4 } from "@mui/icons-material";
 
 const Dashboard = () => {
-  const [loading, setLoading] = useState(false);
-  const DashboardCards = [
-    {
-      title: "Partners",
-      icon: <Diversity3 color="primary" />,
-      start: 0,
-      end: 2,
-    },
-    {
-      title: "Team",
-      icon: <Groups color="primary" />,
-      start: 0,
-      end: 7,
-    },
-    {
-      title: "Ratio",
-      icon: <Percent color="secondary" />,
-      start: 0,
-      suffix: "%",
-      decimals: 2,
-      end: 175,
-    },
-    {
-      title: "Profits",
-      icon: <AttachMoney color="secondary" />,
-      start: 0,
-      decimals: 4,
-      end: 35,
-    },
-  ];
+  const { showLoader, hideLoader } = useLoader();
+  const [programs, setPrograms] = useState<IProgram[]>([]);
+  const [levels, setLevels] = useState<ILevel[]>([]);
+
+  const fetchPrograms = async () => {
+    showLoader();
+    try {
+      const response = await getPrograms();
+      const data = response.data;
+      setPrograms(data);
+    } catch (error) {
+      console.error("Error fetching programs:", error);
+    } finally {
+      hideLoader();
+    }
+  };
+
+  const fetchLevels = async () => {
+    showLoader();
+    try {
+      const response = await getLevelsByParams(UserData.id);
+      const data = response.data;
+      setLevels(data);
+    } catch (error) {
+      console.error("Error fetching levels:", error);
+    } finally {
+      hideLoader();
+    }
+  };
+
+  useEffect(() => {
+    fetchPrograms();
+    fetchLevels();
+  }, []);
 
   return (
     <Box>
-      <Typography variant="h6" fontWeight={600} textAlign={"right"}>
-        Welcome back, Ronxald!
-      </Typography>
+      <Grid container spacing={2} mt={2}>
+        <Grid size={{ xs: 12, sm: 12, md: 4 }}>
+          <UserProfile data={UserData} />
+        </Grid>
+
+        {programs.map((program, index) => (
+          <Grid size={{ xs: 12, sm: 12, md: 4 }} key={index}>
+            <ProgramCard
+              textPrimary={program.name}
+              textSecondary={String(program.price) + " BUSD"}
+              href={`/program/${program.name.toLowerCase()}`}
+              levels={levels.filter((level) => level.program.id === program.id)}
+              icon={
+                program.name.toLowerCase() === "x3" ? <Filter3 /> : <Filter4 />
+              }
+            />
+          </Grid>
+        ))}
+      </Grid>
 
       <Grid container spacing={2} mt={2}>
         {DashboardCards.map((card, index) => (
@@ -67,28 +93,9 @@ const Dashboard = () => {
         ))}
 
         <Grid size={{ xs: 12, sm: 12, md: 4 }}>
-          <ReferralCard />
+          <ReferralCard referral_code={UserData?.referral_code} />
         </Grid>
       </Grid>
-
-      <Grid container spacing={2} mt={2}>
-        <Grid size={{ xs: 12, sm: 12, md: 6 }}>
-          <UserProfile />
-        </Grid>
-
-        <Grid size={{ xs: 12, sm: 12, md: 3 }}>
-          <ProgramCard textPrimary="X3" textSecondary="5 BUSD" length={12} />
-        </Grid>
-
-        <Grid size={{ xs: 12, sm: 12, md: 3 }}>
-          <ProgramCard textPrimary="X4" textSecondary="15 BUSD" length={12} />
-        </Grid>
-      </Grid>
-
-      <BackdropSpin
-        loading={loading}
-        text="Processing your request, please wait..."
-      />
     </Box>
   );
 };

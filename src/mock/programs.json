@@ -1,40 +1,14 @@
 {
-  "levelcard": [
+  "data": [
     {
-      "type": "X3",
-      "price": "5 BUSD",
-      "levels": [
-        { "level": 1, "busd": 50, "people": 120, "cycles": 44, "revenue": 10 },
-        { "level": 2, "busd": 10, "people": 12, "cycles": 44, "revenue": 20 },
-        { "level": 3, "busd": 15, "people": 12, "cycles": 44, "revenue": 30 },
-        { "level": 4, "busd": 20, "people": 12, "cycles": 44, "revenue": 40 },
-        { "level": 5, "busd": 25, "people": 12, "cycles": 44, "revenue": 50 },
-        { "level": 6, "busd": 30, "people": 12, "cycles": 44, "revenue": 60 },
-        { "level": 7, "busd": 35, "people": 12, "cycles": 44, "revenue": 70 },
-        { "level": 8, "busd": 40, "people": 12, "cycles": 44, "revenue": 80 },
-        { "level": 9, "busd": 45, "people": 12, "cycles": 44, "revenue": 90 },
-        { "level": 10, "busd": 50, "people": 12, "cycles": 44, "revenue": 100 },
-        { "level": 11, "busd": 55, "people": 12, "cycles": 44, "revenue": 110 },
-        { "level": 12, "busd": 60, "people": 12, "cycles": 44, "revenue": 120 }
-      ]
+      "id": 1,
+      "name": "X3",
+      "price": 5
     },
     {
-      "type": "X4",
-      "price": "15 BUSD",
-      "levels": [
-        { "level": 1, "busd": 15, "people": 12, "cycles": 44, "revenue": 15 },
-        { "level": 2, "busd": 20, "people": 12, "cycles": 44, "revenue": 30 },
-        { "level": 3, "busd": 25, "people": 12, "cycles": 44, "revenue": 45 },
-        { "level": 4, "busd": 30, "people": 12, "cycles": 44, "revenue": 60 },
-        { "level": 5, "busd": 35, "people": 12, "cycles": 44, "revenue": 75 },
-        { "level": 6, "busd": 40, "people": 12, "cycles": 44, "revenue": 90 },
-        { "level": 7, "busd": 45, "people": 12, "cycles": 44, "revenue": 105 },
-        { "level": 8, "busd": 50, "people": 12, "cycles": 44, "revenue": 120 },
-        { "level": 9, "busd": 55, "people": 12, "cycles": 44, "revenue": 135 },
-        { "level": 10, "busd": 60, "people": 12, "cycles": 44, "revenue": 150 },
-        { "level": 11, "busd": 65, "people": 12, "cycles": 44, "revenue": 165 },
-        { "level": 12, "busd": 70, "people": 12, "cycles": 44, "revenue": 180 }
-      ]
+      "id": 2,
+      "name": "X4",
+      "price": 15
     }
   ]
 }

@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-export interface DashboardCardData {
+export interface IDashboardCardData {
   title: string;
   icon: ReactNode;
   start: number;

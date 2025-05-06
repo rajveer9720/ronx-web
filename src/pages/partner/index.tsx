@@ -6,7 +6,7 @@ import * as partnerJson from "../../mock";
 const Partner = () => {
   const rows: PartnerRow[] = partnerJson.partners;
 
-  const partnerColumns: GridColDef[] = [
+  const columns: GridColDef[] = [
     { field: "id", headerName: "ID", flex: 1 },
     { field: "date", headerName: "Date", flex: 1 },
     { field: "address", headerName: "Address", flex: 2 },
@@ -18,19 +18,8 @@ const Partner = () => {
   ];
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-        backgroundColor: "white",
-      }}
-    >
-      <DataGrid
-        rows={rows}
-        columns={partnerColumns}
-        disableRowSelectionOnClick
-      />
+    <Box mt={4}>
+      <DataGrid rows={rows} columns={columns} disableRowSelectionOnClick />
     </Box>
   );
 };

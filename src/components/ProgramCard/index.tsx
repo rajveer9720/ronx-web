@@ -5,32 +5,36 @@ import {
   Divider,
   Typography,
   useTheme,
+  Link,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
+import { ILevel } from "../../interfaces/level";
+import { ReactNode } from "react";
+import { getBgColor } from "../../utils/levelUtils";
+import { Slots } from "../../utils/slots";
 
 interface ProgramCardProps {
   textPrimary?: string;
   textSecondary?: string;
-  length?: number;
-  type?: string;
-  level?: number;
+  href: string;
+  levels: ILevel[];
+  icon?: ReactNode;
 }
 
 const ProgramCard = (props: ProgramCardProps) => {
   const theme = useTheme();
-  const navigate = useNavigate();
-  const { textPrimary, textSecondary, length, level, type } = props;
-
-  const handlePreviewClick = () => {
-    navigate(`/user/matrix/${type}/${level}`);
-  };
+  const { icon, textPrimary, textSecondary, href, levels } = props;
 
   return (
     <Card sx={cardStyle}>
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Typography variant="h6" fontWeight={700}>
-          {textPrimary}
-        </Typography>
+        <Box display={"flex"} alignItems={"center"}>
+          {icon}
+          <Typography variant="h6" mx={1} fontWeight={700}>
+            {textPrimary}
+          </Typography>
+        </Box>
+
         <Typography variant="h6" fontWeight={700}>
           {textSecondary}
         </Typography>
@@ -38,25 +42,31 @@ const ProgramCard = (props: ProgramCardProps) => {
 
       <Divider sx={{ my: 1 }} />
 
-      <Box display="flex" justifyContent="center" alignItems="center" mb={1}>
-        <Box display="grid" gridTemplateColumns="repeat(4, 1fr)" gap={2}>
-          {[...Array(length)].map((_, index) => (
-            <Card
-              key={index}
-              sx={{
-                borderRadius: 1,
-                backgroundColor: theme.palette.action.hover,
-                p: 2.2,
-              }}
-            />
-          ))}
+      <Box display="flex" justifyContent="center" alignItems="center" py={2}>
+        <Box display="grid" gridTemplateColumns="repeat(6, 1fr)" gap={4}>
+          {Slots.map((_, index) => {
+            const lvl =
+              levels.find((level) => level.level === index + 1) ||
+              ({} as ILevel);
+            return (
+              <Card
+                key={index}
+                sx={{
+                  backgroundColor: getBgColor(lvl, theme),
+                  p: 2.2,
+                }}
+              />
+            );
+          })}
         </Box>
       </Box>
 
       <Box display="flex" justifyContent="flex-end">
-        <Button variant="outlined" onClick={handlePreviewClick}>
-          Preview
-        </Button>
+        <Link component={RouterLink} underline="none" to={href}>
+          <Button variant="outlined" color="primary">
+            Preview
+          </Button>
+        </Link>
       </Box>
     </Card>
   );
@@ -65,7 +75,6 @@ const ProgramCard = (props: ProgramCardProps) => {
 const cardStyle = {
   p: 2,
   borderRadius: "20px",
-  border: "1px solid #e0e0e0",
   boxShadow: "0 6px 20px rgba(0, 0, 0, 0.06)",
   display: "flex",
   flexDirection: "column",

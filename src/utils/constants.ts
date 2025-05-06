@@ -1,2 +1,2 @@
-export const LOGO = "/assets/images/logo.png";
+export const LOGO = "/assets/images/logo.svg";
 export const AVATAR = "/assets/images/avatar.png";

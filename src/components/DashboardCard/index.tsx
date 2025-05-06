@@ -12,12 +12,12 @@ const DashboardCard = (props: DashboardCardProps) => {
   return (
     <Card sx={cardStyle}>
       <Box display={"flex"} alignItems={"center"} mb={2}>
-      {icon}
-      <Typography variant="h6" mx={1} fontWeight={700}>
-        {title}
-      </Typography>
+        {icon}
+        <Typography variant="h6" mx={1} fontWeight={700}>
+          {title}
+        </Typography>
       </Box>
-      
+
       {children}
     </Card>
   );
@@ -26,7 +26,6 @@ const DashboardCard = (props: DashboardCardProps) => {
 const cardStyle = {
   p: 2,
   borderRadius: "20px",
-  border: "1px solid #e0e0e0",
   boxShadow: "0 6px 20px rgba(0, 0, 0, 0.06)",
   transition: "all 0.3s ease",
   "&:hover": {

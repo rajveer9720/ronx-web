@@ -39,6 +39,10 @@ export const createAppTheme = (mode: PaletteMode) => {
           dark: PRIMARY_DARK,
           contrastText: "#ffffff",
         },
+        background: {
+          default: "#f5f5f5",
+          paper: "#ffffff",
+        },
       },
 
       components: {
@@ -225,19 +229,6 @@ export const createAppTheme = (mode: PaletteMode) => {
             },
           },
         },
-        // Tooltip component
-        MuiTooltip: {
-          styleOverrides: {
-            tooltip: {
-              backgroundColor: alpha(PRIMARY, 0.5),
-              fontSize: "0.8rem",
-              fontWeight: 400,
-            },
-            arrow: {
-              color: alpha(PRIMARY, 0.5),
-            },
-          },
-        },
         // TextField & Input components
         MuiOutlinedInput: {
           styleOverrides: {
@@ -318,9 +309,9 @@ export const createAppTheme = (mode: PaletteMode) => {
           styleOverrides: {
             root: {
               "&.Mui-selected": {
-                backgroundColor: alpha('#ffffff', 0.5),
+                backgroundColor: alpha("#ffffff", 0.5),
                 "&:hover": {
-                  backgroundColor: alpha('#ffffff', 0.5),
+                  backgroundColor: alpha("#ffffff", 0.5),
                 },
                 "&::before": {
                   content: '""',
@@ -334,7 +325,7 @@ export const createAppTheme = (mode: PaletteMode) => {
                 },
               },
               "&:hover": {
-                backgroundColor: alpha('#ffffff', 0.3),
+                backgroundColor: alpha("#ffffff", 0.3),
               },
             },
           },

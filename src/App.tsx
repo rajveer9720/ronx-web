@@ -3,13 +3,16 @@ import { CssBaseline } from "@mui/material";
 import Navigation from "./Navigation";
 import { Web3ModalProvider } from "./providers/web3Provider";
 import theme from "./theme/theme";
+import { LoaderProvider } from "./context/LoaderContext";
 
 function App() {
   return (
     <Web3ModalProvider>
       <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Navigation />
+        <LoaderProvider>
+          <CssBaseline />
+          <Navigation />
+        </LoaderProvider>
       </ThemeProvider>
     </Web3ModalProvider>
   );

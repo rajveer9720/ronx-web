@@ -9,30 +9,37 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-
+import { Link as RouterLink } from "react-router-dom";
+import { ILevel } from "../../interfaces/level";
+import { getBgColor } from "../../utils/levelUtils";
 interface LevelCardProps {
-  level?: number;
-  busd?: number;
-  people?: number;
-  cycles?: number;
+  levelData: ILevel;
   large?: boolean;
-  revenue?: number;
   disabled?: boolean;
+  route?: string;
 }
 
 const LevelCard = (props: LevelCardProps) => {
   const theme = useTheme();
-  const { level, busd, people, cycles, large, revenue, disabled } = props;
+  const { levelData, large, disabled, route } = props;
 
   return (
     <Card
       sx={{
         boxShadow: 0,
         borderRadius: 2,
-        backgroundColor: theme.palette.action.hover,
+        backgroundColor:
+          getBgColor(levelData, theme) || theme.palette.action.hover,
+        color: levelData ? theme.palette.primary.contrastText : undefined,
       }}
     >
-      <CardActionArea disableRipple={disabled} disableTouchRipple={disabled}>
+      <CardActionArea
+        disableRipple={disabled}
+        disableTouchRipple={disabled}
+        component={RouterLink}
+        to={large ? "" : route || ""}
+        state={levelData}
+      >
         <CardContent>
           <Box
             display="flex"
@@ -55,7 +62,7 @@ const LevelCard = (props: LevelCardProps) => {
                   fontWeight={large ? 600 : undefined}
                   sx={{ verticalAlign: "center" }}
                 >
-                  {level}
+                  {levelData.level}
                 </Typography>
               </Box>
             </Box>
@@ -64,73 +71,88 @@ const LevelCard = (props: LevelCardProps) => {
               variant={large ? "h4" : "subtitle2"}
               fontWeight={large ? 600 : undefined}
             >
-              {busd}
+              {levelData.busd}
             </Typography>
           </Box>
 
-          <Box
-            display={"flex"}
-            justifyContent="center"
-            gap={large ? 5 : 2}
-            py={large ? 4 : 2}
-          >
-            <Card
-              sx={{
-                boxShadow: 1,
-                borderRadius: large ? 1.5 : undefined,
-                backgroundColor: theme.palette.action.hover,
-                p: large ? 5 : 2.5,
-              }}
-            />
-            <Card
-              sx={{
-                boxShadow: 1,
-                borderRadius: large ? 1.5 : undefined,
-                backgroundColor: theme.palette.action.hover,
-                p: large ? 5 : 2.5,
-              }}
-            />
-            <Card
-              sx={{
-                boxShadow: 1,
-                borderRadius: large ? 1.5 : undefined,
-                backgroundColor: theme.palette.action.hover,
-                p: large ? 5 : 2.5,
-              }}
-            />
+          <Box>
+            {!levelData?.active && large ? (
+              <Box textAlign={"center"} gap={large ? 5 : 2} py={large ? 4 : 2}>
+                <Typography variant={"body1"}>Buy it now</Typography>
+                <Typography variant={"h2"} fontWeight={700}>
+                  {levelData.busd} BUSD
+                </Typography>
+              </Box>
+            ) : (
+              <Box
+                display={"flex"}
+                justifyContent="center"
+                gap={large ? 5 : 2}
+                py={large ? 4 : 2}
+              >
+                <Card
+                  variant="outlined"
+                  sx={{
+                    boxShadow: 1,
+                    borderRadius: large ? 1.5 : undefined,
+                    backgroundColor: theme.palette.action.hover,
+                    p: large ? 5 : 2.5,
+                  }}
+                />
+                <Card
+                  variant="outlined"
+                  sx={{
+                    boxShadow: 1,
+                    borderRadius: large ? 1.5 : undefined,
+                    backgroundColor: theme.palette.action.hover,
+                    p: large ? 5 : 2.5,
+                  }}
+                />
+                <Card
+                  variant="outlined"
+                  sx={{
+                    boxShadow: 1,
+                    borderRadius: large ? 1.5 : undefined,
+                    backgroundColor: theme.palette.action.hover,
+                    p: large ? 5 : 2.5,
+                  }}
+                />
+              </Box>
+            )}
           </Box>
 
           <Box
             display="flex"
+            visibility={!levelData?.active ? "hidden" : "visible"}
             justifyContent={large ? "end" : "space-between"}
             alignItems="center"
             gap={large ? 5 : 0}
           >
-            <Tooltip title="Partners" placement="top" arrow>
+            <Tooltip title="Partners" placement="top" color="info" arrow>
               <Chip
                 size={large ? "medium" : "small"}
-                color="primary"
+                color="info"
                 icon={<People />}
-                label={people}
+                label={levelData.people}
               />
             </Tooltip>
 
             <Tooltip title="Cycles" placement="top" arrow>
               <Chip
                 size={large ? "medium" : "small"}
-                color="primary"
+                color="info"
                 icon={<Cached />}
-                label={cycles}
+                label={levelData.cycles}
               />
             </Tooltip>
 
-            {revenue && (
+            {large && levelData.revenue && (
               <Tooltip title="Total Revenue" placement="top" arrow>
                 <Chip
                   size={large ? "medium" : "small"}
-                  color="primary"
+                  color="info"
                   icon={<AccountBalanceWallet />}
-                  label={revenue}
+                  label={levelData.revenue}
                 />
               </Tooltip>
             )}

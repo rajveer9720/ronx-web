@@ -6,7 +6,7 @@ import { StatRow } from "../../interfaces/stats";
 const Stats = () => {
   const rows: StatRow[] = statsJson.stats;
 
-  const statsColumns: GridColDef[] = [
+  const columns: GridColDef[] = [
     { field: "id", headerName: "ID", flex: 1 },
     { field: "date", headerName: "Date", flex: 1 },
     { field: "type", headerName: "Type", flex: 1 },
@@ -17,12 +17,8 @@ const Stats = () => {
   ];
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      sx={{ backgroundColor: "white" }}
-    >
-      <DataGrid rows={rows} columns={statsColumns} disableRowSelectionOnClick />
+    <Box mt={4}>
+      <DataGrid rows={rows} columns={columns} disableRowSelectionOnClick />
     </Box>
   );
 };

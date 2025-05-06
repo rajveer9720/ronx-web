@@ -1,34 +1,33 @@
 import { AttachMoney, Diversity3, Groups, Percent } from "@mui/icons-material";
 import React from "react";
-import * as dashboardData from "../mock";
-import { DashboardCardData } from "../interfaces/dashboard";
+import { IDashboardCardData } from "../interfaces/dashboard";
 
-export const getDashboardCards = (): DashboardCardData[] => [
+export const DashboardCards: IDashboardCardData[] = [
   {
     title: "Partners",
-    icon: React.createElement(Diversity3, { color: "primary" }),
+    icon: React.createElement(Diversity3, { color: "info" }),
     start: 0,
-    end: dashboardData.cards.partners,
+    end: 2,
   },
   {
     title: "Team",
-    icon: React.createElement(Groups, { color: "primary" }),
+    icon: React.createElement(Groups, { color: "info" }),
     start: 0,
-    end: dashboardData.cards.team,
+    end: 7,
   },
   {
     title: "Ratio",
-    icon: React.createElement(Percent, { color: "secondary" }),
+    icon: React.createElement(Percent, { color: "info" }),
     start: 0,
     suffix: "%",
     decimals: 2,
-    end: dashboardData.cards.ratio,
+    end: 175,
   },
   {
     title: "Profits",
-    icon: React.createElement(AttachMoney, { color: "secondary" }),
+    icon: React.createElement(AttachMoney, { color: "info" }),
     start: 0,
     decimals: 4,
-    end: dashboardData.cards.profits,
+    end: 35.0001,
   },
 ];

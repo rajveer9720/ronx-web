@@ -20,13 +20,12 @@ import { useTheme } from "@mui/material/styles";
 const Calculator = () => {
   const theme = useTheme();
   const [selectedStage, setSelectedStage] = useState(stages[0]);
-  const [selectedSlots, setSelectedSlots] = useState<number[]>([1]);
+  const [selectedSlots, setSelectedSlots] = useState<number[]>([]);
   const cost = calculateCost(selectedSlots, selectedStage, slotPrices);
   const result = calculateResult(selectedSlots, selectedStage, slotPrices);
 
   const handleStageSelect = (stage: (typeof stages)[0]) => {
     setSelectedStage(stage);
-    setSelectedSlots([1]);
   };
 
   const handleSlotSelect = (slot: number) => {
@@ -52,9 +51,8 @@ const Calculator = () => {
   const cardStyle = {
     p: 5,
     borderRadius: "20px",
-    border: "1px solid #e0e0e0",
-    boxShadow: "none",
     transition: "all 0.3s ease",
+    boxShadow: "0 6px 20px rgba(0, 0, 0, 0.06)",
     my: 2,
   };
 
