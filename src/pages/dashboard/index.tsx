@@ -14,7 +14,6 @@ import { IProgram } from "../../interfaces/program";
 import { getPrograms } from "../../api/program";
 import { ILevel } from "../../interfaces/level";
 import { getLevelsByParams } from "../../api/level";
-import { Filter3, Filter4 } from "@mui/icons-material";
 
 const Dashboard = () => {
   const { showLoader, hideLoader } = useLoader();
@@ -66,9 +65,6 @@ const Dashboard = () => {
               textSecondary={String(program.price) + " BUSD"}
               href={`/program/${program.name.toLowerCase()}`}
               levels={levels.filter((level) => level.program.id === program.id)}
-              icon={
-                program.name.toLowerCase() === "x3" ? <Filter3 /> : <Filter4 />
-              }
             />
           </Grid>
         ))}
@@ -78,7 +74,7 @@ const Dashboard = () => {
         {DashboardCards.map((card, index) => (
           <Grid key={index} size={{ xs: 12, sm: 12, md: 2 }}>
             <DashboardCard title={card.title} icon={card.icon}>
-              <Typography variant="h4" fontWeight="bold">
+              <Typography variant="h5" fontWeight="bold">
                 <CountUp
                   end={card.end}
                   start={card.start}

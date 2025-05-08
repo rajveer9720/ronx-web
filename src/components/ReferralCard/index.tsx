@@ -1,5 +1,13 @@
 import { Check, ContentCopy, Share } from "@mui/icons-material";
-import { Box, Button, Card, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  Typography,
+  useColorScheme,
+  useTheme,
+} from "@mui/material";
 import { useState } from "react";
 
 interface ReferralCardProps {
@@ -8,7 +16,9 @@ interface ReferralCardProps {
 
 const ReferralCard = (props: ReferralCardProps) => {
   const { referral_code } = props;
+  const theme = useTheme();
   const [copied, setCopied] = useState<boolean>(false);
+  const { mode } = useColorScheme();
 
   const handleCopy = async () => {
     try {
@@ -24,19 +34,35 @@ const ReferralCard = (props: ReferralCardProps) => {
 
   return (
     <Card sx={cardStyle}>
-      <Box display={"flex"} alignItems={"center"} mb={2}>
-        <Share color="info" />
-        <Typography variant="h6" mx={1} fontWeight={700}>
-          Referral Link
-        </Typography>
-      </Box>
-
       <Box
         display={"flex"}
-        alignItems="center"
+        alignItems={"center"}
         justifyContent={"space-between"}
       >
-        <Typography variant="body2">{`${import.meta.env.VITE_APP_REF_LINK}${referral_code}`}</Typography>
+        <Box display={"flex"} alignItems={"center"} gap={2}>
+          <Avatar
+            sx={{
+              bgcolor: mode === "dark" ? theme.palette.action.focus : "#f4f7fe",
+              width: 56,
+              height: 56,
+            }}
+            variant="rounded"
+          >
+            <Share color="primary" fontSize="large" />
+          </Avatar>
+
+          <Box>
+            <Typography variant="h5" fontWeight="bold">
+              Referral Link
+            </Typography>
+
+            <Typography
+              variant="button"
+              textTransform={"capitalize"}
+            >{`${import.meta.env.VITE_APP_REF_LINK}${referral_code}`}</Typography>
+          </Box>
+        </Box>
+
         <Button
           size="small"
           startIcon={copied ? <Check /> : <ContentCopy />}

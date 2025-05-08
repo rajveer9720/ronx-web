@@ -19,7 +19,7 @@ export const ToolbarActions = () => (
         <Search />
       </IconButton>
     </Box>
-    <ThemeSwitcher />
+    {/* <ThemeSwitcher /> */}
   </Box>
 );
 

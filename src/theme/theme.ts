@@ -6,9 +6,14 @@ import {
 } from "@mui/material/styles";
 import deepmerge from "deepmerge";
 
-const PRIMARY = "#0044fc"; // Vibrant purple
-const PRIMARY_LIGHT = "#c2c8fe"; // Lighter purple for hover states
-const PRIMARY_DARK = "#002fe3"; // Darker purple
+// const PRIMARY = "#0044fc";
+// const PRIMARY = "#3a4bc9";
+// const PRIMARY_LIGHT = "#7483e3";
+// const PRIMARY_DARK = "#161a8f";
+
+const PRIMARY = "#672aca";
+const PRIMARY_LIGHT = "#804dd2";
+const PRIMARY_DARK = "#4e1cbb";
 
 export const createAppTheme = (mode: PaletteMode) => {
   const baseTheme: ThemeOptions = {
@@ -22,7 +27,7 @@ export const createAppTheme = (mode: PaletteMode) => {
       },
     },
     typography: {
-      fontFamily: "Work Sans, sans-serif",
+      fontFamily: "DM Sans, sans-serif",
     },
     shape: {
       borderRadius: 12,
@@ -32,7 +37,6 @@ export const createAppTheme = (mode: PaletteMode) => {
   const themeModes: Record<PaletteMode, ThemeOptions> = {
     light: {
       palette: {
-        mode: "light",
         primary: {
           main: PRIMARY,
           light: PRIMARY_LIGHT,
@@ -62,16 +66,17 @@ export const createAppTheme = (mode: PaletteMode) => {
             },
             containedPrimary: {
               backgroundColor: PRIMARY,
+              color: "#ffffff",
               "&:hover": {
                 backgroundColor: PRIMARY_DARK,
               },
             },
             outlinedPrimary: {
-              borderColor: PRIMARY,
-              color: PRIMARY,
+              borderColor: PRIMARY_LIGHT,
+              color: PRIMARY_LIGHT,
               "&:hover": {
                 backgroundColor: alpha(PRIMARY_LIGHT, 0.1),
-                borderColor: PRIMARY,
+                borderColor: PRIMARY_LIGHT,
               },
             },
             textPrimary: {
@@ -82,15 +87,10 @@ export const createAppTheme = (mode: PaletteMode) => {
             },
           },
         },
-        // Chip component
-        MuiChip: {
+        MuiSvgIcon: {
           styleOverrides: {
             colorPrimary: {
-              backgroundColor: PRIMARY,
-              "&.MuiChip-outlined": {
-                borderColor: PRIMARY,
-                color: PRIMARY,
-              },
+              color: PRIMARY_LIGHT,
             },
           },
         },
@@ -189,18 +189,10 @@ export const createAppTheme = (mode: PaletteMode) => {
             },
           },
         },
-        MuiListItemIcon: {
-          styleOverrides: {
-            root: {
-              color: PRIMARY,
-              minWidth: 40,
-            },
-          },
-        },
         MuiListItemText: {
           styleOverrides: {
             primary: {
-              fontWeight: 500,
+              fontWeight: 600,
             },
           },
         },
@@ -208,18 +200,18 @@ export const createAppTheme = (mode: PaletteMode) => {
           styleOverrides: {
             root: {
               "&.Mui-selected": {
-                backgroundColor: alpha(PRIMARY_LIGHT, 0.5),
+                backgroundColor: "transparent",
                 "&:hover": {
-                  backgroundColor: alpha(PRIMARY_LIGHT, 0.5),
+                  backgroundColor: alpha(PRIMARY_LIGHT, 0.3),
                 },
                 "&::before": {
                   content: '""',
                   position: "absolute",
-                  left: 0,
-                  top: "20%",
-                  bottom: "20%",
+                  top: "10%",
+                  bottom: "10%",
+                  right: 0,
                   width: 4,
-                  borderRadius: "0 4px 4px 0",
+                  borderRadius: "40px",
                   backgroundColor: PRIMARY,
                 },
               },
@@ -279,56 +271,13 @@ export const createAppTheme = (mode: PaletteMode) => {
         },
       },
     },
-
     dark: {
       palette: {
-        mode: "dark",
         primary: {
-          main: PRIMARY_LIGHT,
-          light: PRIMARY,
-          dark: PRIMARY_DARK,
+          main: PRIMARY,
+          light: PRIMARY_LIGHT,
+          dark: PRIMARY_LIGHT,
           contrastText: "#ffffff",
-        },
-      },
-
-      components: {
-        MuiButton: {
-          styleOverrides: {
-            outlinedPrimary: {
-              borderColor: PRIMARY_LIGHT,
-              color: PRIMARY_LIGHT,
-              "&:hover": {
-                backgroundColor: alpha(PRIMARY_LIGHT, 0.1),
-                borderColor: PRIMARY_LIGHT,
-              },
-            },
-          },
-        },
-
-        MuiListItemButton: {
-          styleOverrides: {
-            root: {
-              "&.Mui-selected": {
-                backgroundColor: alpha("#ffffff", 0.5),
-                "&:hover": {
-                  backgroundColor: alpha("#ffffff", 0.5),
-                },
-                "&::before": {
-                  content: '""',
-                  position: "absolute",
-                  left: 0,
-                  top: "20%",
-                  bottom: "20%",
-                  width: 4,
-                  borderRadius: "0 4px 4px 0",
-                  backgroundColor: PRIMARY,
-                },
-              },
-              "&:hover": {
-                backgroundColor: alpha("#ffffff", 0.3),
-              },
-            },
-          },
         },
       },
     },
@@ -341,17 +290,8 @@ export const createAppTheme = (mode: PaletteMode) => {
       themeModes[mode],
       {
         colorSchemes: {
-          light: {},
-          dark: {
-            palette: {
-              mode: "dark",
-              primary: {
-                main: PRIMARY,
-                dark: PRIMARY_DARK,
-                light: PRIMARY_LIGHT,
-              },
-            },
-          },
+          light: themeModes.light,
+          dark: themeModes.dark,
         },
         cssVariables: {
           colorSchemeSelector: "data-toolpad-color-scheme",

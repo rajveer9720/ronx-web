@@ -4,7 +4,6 @@ export interface IUser {
   email: string;
   phone: string;
   wallet_address: string;
-  avatar: string;
   referral_code: string;
   is_disabled: boolean;
   upline_id: number;

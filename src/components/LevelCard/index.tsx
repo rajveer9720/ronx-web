@@ -7,6 +7,7 @@ import {
   Chip,
   Tooltip,
   Typography,
+  useColorScheme,
   useTheme,
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
@@ -21,6 +22,7 @@ interface LevelCardProps {
 
 const LevelCard = (props: LevelCardProps) => {
   const theme = useTheme();
+  const { mode } = useColorScheme();
   const { levelData, large, disabled, route } = props;
 
   return (
@@ -30,7 +32,9 @@ const LevelCard = (props: LevelCardProps) => {
         borderRadius: 2,
         backgroundColor:
           getBgColor(levelData, theme) || theme.palette.action.hover,
-        color: levelData ? theme.palette.primary.contrastText : undefined,
+        color: levelData?.active
+          ? theme.palette.primary.contrastText
+          : theme.palette.common[mode === "dark" ? "white" : "black"],
       }}
     >
       <CardActionArea
@@ -85,35 +89,37 @@ const LevelCard = (props: LevelCardProps) => {
               </Box>
             ) : (
               <Box
+                visibility={
+                  !levelData?.active || levelData?.missed_revenue
+                    ? "hidden"
+                    : "visible"
+                }
                 display={"flex"}
                 justifyContent="center"
                 gap={large ? 5 : 2}
                 py={large ? 4 : 2}
               >
                 <Card
-                  variant="outlined"
                   sx={{
-                    boxShadow: 1,
+                    boxShadow: 0,
                     borderRadius: large ? 1.5 : undefined,
-                    backgroundColor: theme.palette.action.hover,
+                    backgroundColor: '#002de3',
                     p: large ? 5 : 2.5,
                   }}
                 />
                 <Card
-                  variant="outlined"
                   sx={{
-                    boxShadow: 1,
+                    boxShadow: 0,
                     borderRadius: large ? 1.5 : undefined,
-                    backgroundColor: theme.palette.action.hover,
+                    backgroundColor: getBgColor(levelData, theme),
                     p: large ? 5 : 2.5,
                   }}
                 />
                 <Card
-                  variant="outlined"
                   sx={{
-                    boxShadow: 1,
+                    boxShadow: 0,
                     borderRadius: large ? 1.5 : undefined,
-                    backgroundColor: theme.palette.action.hover,
+                    backgroundColor: getBgColor(levelData, theme),
                     p: large ? 5 : 2.5,
                   }}
                 />
@@ -122,8 +128,12 @@ const LevelCard = (props: LevelCardProps) => {
           </Box>
 
           <Box
+            visibility={
+              !levelData?.active || levelData?.missed_revenue
+                ? "hidden"
+                : "visible"
+            }
             display="flex"
-            visibility={!levelData?.active ? "hidden" : "visible"}
             justifyContent={large ? "end" : "space-between"}
             alignItems="center"
             gap={large ? 5 : 0}

@@ -34,7 +34,7 @@ const UserLayout = () => {
         text="Processing your request, please wait..."
       />
       <DashboardLayout
-        sidebarExpandedWidth={250}
+        sidebarExpandedWidth={300}
         slots={{
           toolbarAccount: () => null,
           toolbarActions: () => <ToolbarActions />,

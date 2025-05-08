@@ -1,10 +1,11 @@
 import { Theme } from "@mui/material";
 import { ILevel } from "../interfaces/level";
+import { Colors } from "./colors";
 
 export const getBgColor = (level: ILevel, theme: Theme): string => {
-  if (level.missed_revenue > 0) return theme.palette.warning.light;
-  if (level.active) return theme.palette.primary.main;
-  return theme.palette.action.hover;
+  if (level.missed_revenue > 0) return Colors.missed_revenue;
+  if (level.active) return Colors.active;
+  return theme.palette.text.primary;
 };
 
 export const EmptyLevel: ILevel = {

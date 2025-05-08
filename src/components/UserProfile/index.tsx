@@ -1,7 +1,8 @@
-import { Portrait } from "@mui/icons-material";
+import { Tag } from "@mui/icons-material";
 import {
   Box,
   Card,
+  Chip,
   Divider,
   Grid,
   List,
@@ -21,11 +22,16 @@ const UserProfile = (props: UserProfileProps) => {
 
   return (
     <Card sx={cardStyle}>
-      <Box display={"flex"} alignItems={"center"}>
-        <Portrait />
-        <Typography variant="h6" fontWeight={700} mx={1}>
+      <Box
+        display={"flex"}
+        alignItems={"center"}
+        justifyContent={"space-between"}
+      >
+        <Typography variant="h5" fontWeight={700} mx={1}>
           User Profile
         </Typography>
+
+        <Chip color="primary" icon={<Tag />} label={data?.id} size="small" />
       </Box>
       <Divider sx={{ my: 1 }} />
       <Grid
@@ -35,18 +41,26 @@ const UserProfile = (props: UserProfileProps) => {
         justifyContent={"center"}
       >
         <Grid
-          size={{ xs: 12, sm: 12, md: 6 }}
+          size={{ xs: 12, sm: 12, md: 4 }}
           textAlign={{ xs: "center", sm: "center", md: "left" }}
         >
           <img src={data?.avatar} alt="User Avatar" width={150} height={150} />
         </Grid>
-        <Grid size={{ xs: 12, sm: 12, md: 6 }}>
+        <Grid size={{ xs: 12, sm: 12, md: 8 }}>
           <List disablePadding>
             {userDetails.map((detail, index) => (
               <ListItem key={index} disablePadding disableGutters>
                 <ListItemText
                   primary={detail.label}
                   secondary={detail.value}
+                  slotProps={{
+                    secondary: {
+                      display: "block",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    },
+                  }}
                   sx={{
                     display: "flex",
                     alignItems: "center",

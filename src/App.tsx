@@ -6,6 +6,7 @@ import theme from "./theme/theme";
 import { LoaderProvider } from "./context/LoaderContext";
 
 function App() {
+  localStorage.setItem("toolpad-mode", "dark");
   return (
     <Web3ModalProvider>
       <ThemeProvider theme={theme}>

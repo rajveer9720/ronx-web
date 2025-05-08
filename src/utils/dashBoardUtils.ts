@@ -5,19 +5,22 @@ import { IDashboardCardData } from "../interfaces/dashboard";
 export const DashboardCards: IDashboardCardData[] = [
   {
     title: "Partners",
-    icon: React.createElement(Diversity3, { color: "info" }),
+    icon: React.createElement(Diversity3, {
+      color: "primary",
+      fontSize: "large",
+    }),
     start: 0,
     end: 2,
   },
   {
     title: "Team",
-    icon: React.createElement(Groups, { color: "info" }),
+    icon: React.createElement(Groups, { color: "primary", fontSize: "large" }),
     start: 0,
     end: 7,
   },
   {
     title: "Ratio",
-    icon: React.createElement(Percent, { color: "info" }),
+    icon: React.createElement(Percent, { color: "primary", fontSize: "large" }),
     start: 0,
     suffix: "%",
     decimals: 2,
@@ -25,7 +28,10 @@ export const DashboardCards: IDashboardCardData[] = [
   },
   {
     title: "Profits",
-    icon: React.createElement(AttachMoney, { color: "info" }),
+    icon: React.createElement(AttachMoney, {
+      color: "primary",
+      fontSize: "large",
+    }),
     start: 0,
     decimals: 4,
     end: 35.0001,

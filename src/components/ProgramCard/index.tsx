@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { ILevel } from "../../interfaces/level";
-import { ReactNode } from "react";
 import { getBgColor } from "../../utils/levelUtils";
 import { Slots } from "../../utils/slots";
 
@@ -18,24 +17,20 @@ interface ProgramCardProps {
   textSecondary?: string;
   href: string;
   levels: ILevel[];
-  icon?: ReactNode;
 }
 
 const ProgramCard = (props: ProgramCardProps) => {
   const theme = useTheme();
-  const { icon, textPrimary, textSecondary, href, levels } = props;
+  const { textPrimary, textSecondary, href, levels } = props;
 
   return (
     <Card sx={cardStyle}>
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Box display={"flex"} alignItems={"center"}>
-          {icon}
-          <Typography variant="h6" mx={1} fontWeight={700}>
-            {textPrimary}
-          </Typography>
-        </Box>
+        <Typography variant="h5" mx={1} fontWeight={700}>
+          {textPrimary}
+        </Typography>
 
-        <Typography variant="h6" fontWeight={700}>
+        <Typography variant="h5" fontWeight={700}>
           {textSecondary}
         </Typography>
       </Box>
