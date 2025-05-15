@@ -1,70 +1,47 @@
 import { useEffect, useRef } from "react";
-import { Network } from "vis-network/standalone";
+import { Network, Node, Options } from "vis-network/standalone";
 import { DataSet } from "vis-data";
-
-interface VisNode {
-  id: number;
-  label: string;
-  level: number;
-  value: number;
-  color: string;
-}
-
-interface VisEdge {
-  id?: number;
-  from: number;
-  to: number;
-}
 
 const MatrixChart: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
+  const nodes = new DataSet<Node>([
+    { id: 1, label: "12345", color: "#FFD700", value: 40, level: 1 },
+    { id: 2, label: "12345", color: "#ffffff", value: 30, level: 2 },
+    { id: 3, label: "12345", color: "#ffffff", value: 30, level: 3 },
+    { id: 4, label: "12345", color: "#FF8800", value: 20, level: 4 },
+    { id: 5, label: "12345", color: "#ffffff", value: 20, level: 5 },
+    { id: 6, label: "12345", color: "#ffffff", value: 20, level: 6 },
+  ]);
+
+  const options: Options = {
+    layout: {
+      hierarchical: {
+        // enable: true,
+        direction: "UD",
+        nodeSpacing: 100,
+        levelSeparation: 100,
+      },
+    },
+    nodes: {
+      shape: "circle",
+      size: 100,
+      // font: { color: "#fff", size: 12, face: "Arial" },
+      scaling: { min: 10, max: 40 },
+    },
+    interaction: {
+      dragNodes: false,
+      dragView: false,
+    },
+    // physics: false,
+  };
+
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const nodes = new DataSet<VisNode>([
-      { id: 1, label: "", level: 0, value: 40, color: "#FFD700" },
-      { id: 2, label: "", level: 1, value: 30, color: "#ffffff" },
-      { id: 3, label: "", level: 1, value: 30, color: "#ffffff" },
-      { id: 4, label: "", level: 2, value: 20, color: "#FF8800" },
-      { id: 5, label: "", level: 2, value: 20, color: "#ffffff" },
-      { id: 6, label: "", level: 2, value: 20, color: "#ffffff" },
-    ]);
-
-    const edges = new DataSet<VisEdge>([
-      { from: 1, to: 2 },
-      { from: 1, to: 3 },
-      { from: 2, to: 4 },
-      { from: 2, to: 5 },
-      { from: 3, to: 6 },
-    ]);
-
-    const options: import("vis-network").Options = {
-      layout: {
-        hierarchical: {
-          direction: "UD",
-          nodeSpacing: 100,
-          levelSeparation: 0,
-        },
-      },
-      nodes: {
-        shape: "dot",
-        size: 10,
-        font: { color: "#fff", size: 12, face: "Arial" },
-        scaling: { min: 10, max: 40 },
-      },
-      edges: {
-        arrows: { to: false },
-        color: "#aaa",
-        smooth: true,
-      },
-      // interaction: { hover: true },
-      physics: false,
-    };
-
-    const network = new Network(containerRef.current, { nodes, edges }, options);
+    const network = new Network(containerRef.current, { nodes }, options);
     return () => network.destroy();
-  }, []);
+  });
 
   return (
     <div
@@ -91,7 +68,14 @@ const MatrixChart: React.FC = () => {
           minHeight: "150px",
         }}
       />
-      <div style={{ marginTop: "10px", fontSize: "14px", display: "flex", justifyContent: "space-between" }}>
+      <div
+        style={{
+          marginTop: "10px",
+          fontSize: "14px",
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
         <span>👥 5281</span>
         <span>🔁 427</span>
       </div>
