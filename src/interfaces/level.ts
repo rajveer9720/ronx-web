@@ -8,3 +8,7 @@ export interface ILevel {
   created_at: string;
   updated_at: string;
 }
+
+export interface ILevelRequest {
+  program_id?: number;
+}

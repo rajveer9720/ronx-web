@@ -8,15 +8,21 @@ import {
   Partner,
   Stats,
   LevelCards,
+  Invite,
+  MainLayout,
+  GuestLayout,
 } from "./pages";
-import UserLayout from "./layouts";
 
 const Navigation: React.FC = () => {
   return (
     <Routes>
       <Route path="/" element={<></>} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/*" element={<UserLayout />}>
+      <Route element={<GuestLayout />}>
+        <Route path="login" element={<Login />} />
+        <Route path="invitation" element={<Invite />} />
+      </Route>
+
+      <Route element={<MainLayout />}>
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="calculator" element={<Calculator />} />
         <Route path="activity" element={<Activity />} />

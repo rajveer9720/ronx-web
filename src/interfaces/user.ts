@@ -4,10 +4,15 @@ export interface IUser {
   email: string;
   phone: string;
   wallet_address: string;
-  referral_code: string;
+  refer_code: string;
   is_disabled: boolean;
   upline_id: number;
   created_at: string; // ISO date string
   updated_at: string; // ISO date string
   deleted_at: string | null; // nullable ISO date string
+}
+
+export interface IUserRequest {
+  id?: number;
+  wallet_address?: string;
 }

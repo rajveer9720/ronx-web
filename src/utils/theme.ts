@@ -5,15 +5,16 @@ import {
   ThemeOptions,
 } from "@mui/material/styles";
 import deepmerge from "deepmerge";
+import { Colors } from "../utils/colors";
 
 // const PRIMARY = "#0044fc";
 // const PRIMARY = "#3a4bc9";
 // const PRIMARY_LIGHT = "#7483e3";
 // const PRIMARY_DARK = "#161a8f";
 
-const PRIMARY = "#672aca";
-const PRIMARY_LIGHT = "#804dd2";
-const PRIMARY_DARK = "#4e1cbb";
+const PRIMARY = Colors.primary;
+const PRIMARY_LIGHT = Colors.primary_light;
+const PRIMARY_DARK = Colors.primary_dark;
 
 export const createAppTheme = (mode: PaletteMode) => {
   const baseTheme: ThemeOptions = {
@@ -30,7 +31,7 @@ export const createAppTheme = (mode: PaletteMode) => {
       fontFamily: "DM Sans, sans-serif",
     },
     shape: {
-      borderRadius: 12,
+      borderRadius: 10,
     },
   };
 
@@ -82,7 +83,7 @@ export const createAppTheme = (mode: PaletteMode) => {
             textPrimary: {
               color: PRIMARY_LIGHT,
               "&:hover": {
-                backgroundColor: alpha(PRIMARY_LIGHT, 0.1),
+                backgroundColor: alpha(PRIMARY_DARK, 0.1),
               },
             },
           },
@@ -91,14 +92,6 @@ export const createAppTheme = (mode: PaletteMode) => {
           styleOverrides: {
             colorPrimary: {
               color: PRIMARY_LIGHT,
-            },
-          },
-        },
-        // Divider component
-        MuiDivider: {
-          styleOverrides: {
-            root: {
-              backgroundColor: alpha(PRIMARY, 0.12),
             },
           },
         },
@@ -202,7 +195,7 @@ export const createAppTheme = (mode: PaletteMode) => {
               "&.Mui-selected": {
                 backgroundColor: "transparent",
                 "&:hover": {
-                  backgroundColor: alpha(PRIMARY_LIGHT, 0.3),
+                  backgroundColor: alpha(PRIMARY_LIGHT, 0.2),
                 },
                 "&::before": {
                   content: '""',
@@ -216,7 +209,7 @@ export const createAppTheme = (mode: PaletteMode) => {
                 },
               },
               "&:hover": {
-                backgroundColor: alpha(PRIMARY_LIGHT, 0.3),
+                backgroundColor: alpha(PRIMARY_LIGHT, 0.2),
               },
             },
           },

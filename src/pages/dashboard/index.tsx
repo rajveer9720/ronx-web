@@ -7,67 +7,44 @@ import {
   ProgramCard,
 } from "../../components";
 import { DashboardCards } from "../../utils/dashBoardUtils";
-import { useEffect, useState } from "react";
-import { useLoader } from "../../context/LoaderContext";
-import { data as UserData } from "../../mock";
-import { IProgram } from "../../interfaces/program";
-import { getPrograms } from "../../api/program";
-import { ILevel } from "../../interfaces/level";
-import { getLevelsByParams } from "../../api/level";
+import { useEffect } from "react";
+import { IUser } from "../../interfaces/user";
+import { useAppDispatch } from "../../store/hooks/hook";
+import { hideLoader, showLoader } from "../../store/slices/loaderSlice";
+import { useGetProgramsQuery } from "../../store/apis/programApi";
+import { useGetUserQuery } from "../../store/apis/userApi";
 
 const Dashboard = () => {
-  const { showLoader, hideLoader } = useLoader();
-  const [programs, setPrograms] = useState<IProgram[]>([]);
-  const [levels, setLevels] = useState<ILevel[]>([]);
-
-  const fetchPrograms = async () => {
-    showLoader();
-    try {
-      const response = await getPrograms();
-      const data = response.data;
-      setPrograms(data);
-    } catch (error) {
-      console.error("Error fetching programs:", error);
-    } finally {
-      hideLoader();
-    }
-  };
-
-  const fetchLevels = async () => {
-    showLoader();
-    try {
-      const response = await getLevelsByParams(UserData.id);
-      const data = response.data;
-      setLevels(data);
-    } catch (error) {
-      console.error("Error fetching levels:", error);
-    } finally {
-      hideLoader();
-    }
-  };
+  const dispatch = useAppDispatch();
+  const { data: programs, isLoading: isProgramLoading } = useGetProgramsQuery();
+  const { data: user, isLoading: isUserLoading } = useGetUserQuery({ id: 1 });
 
   useEffect(() => {
-    fetchPrograms();
-    fetchLevels();
-  }, []);
+    if (isProgramLoading || isUserLoading) {
+      dispatch(showLoader());
+    } else {
+      dispatch(hideLoader());
+    }
+  }, [isProgramLoading, isUserLoading]);
 
   return (
     <Box>
       <Grid container spacing={2} mt={2}>
         <Grid size={{ xs: 12, sm: 12, md: 4 }}>
-          <UserProfile data={UserData} />
+          <UserProfile data={user as IUser} />
         </Grid>
 
-        {programs.map((program, index) => (
-          <Grid size={{ xs: 12, sm: 12, md: 4 }} key={index}>
-            <ProgramCard
-              textPrimary={program.name}
-              textSecondary={String(program.price) + " BUSD"}
-              href={`/program/${program.name.toLowerCase()}`}
-              levels={levels.filter((level) => level.program.id === program.id)}
-            />
-          </Grid>
-        ))}
+        {programs &&
+          programs?.map((program, index) => (
+            <Grid size={{ xs: 12, sm: 12, md: 4 }} key={index}>
+              <ProgramCard
+                textPrimary={program.name}
+                textSecondary={"BUSD"}
+                href={`/program/${program.name.toLowerCase()}`}
+                program={program}
+              />
+            </Grid>
+          ))}
       </Grid>
 
       <Grid container spacing={2} mt={2}>
@@ -89,7 +66,7 @@ const Dashboard = () => {
         ))}
 
         <Grid size={{ xs: 12, sm: 12, md: 4 }}>
-          <ReferralCard referral_code={UserData?.referral_code} />
+          <ReferralCard referral_code={user?.refer_code || ""} />
         </Grid>
       </Grid>
     </Box>

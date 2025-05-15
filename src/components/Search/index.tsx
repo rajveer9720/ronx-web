@@ -7,6 +7,11 @@ import {
   TextField,
 } from "@mui/material";
 import { useState } from "react";
+import {
+  selectSearchTerm,
+  setSearchTerm,
+} from "../../store/slices/searchSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks/hook";
 
 interface SearchFieldProps {
   placeholder?: string;
@@ -15,8 +20,14 @@ interface SearchFieldProps {
 }
 
 const SearchField = (props: SearchFieldProps) => {
+  const dispatch = useAppDispatch();
   const { placeholder, onSearch, styles } = props;
-  const [searchValue, setSearchValue] = useState<string>("");
+  const searchTerm = useAppSelector(selectSearchTerm);
+  const [searchValue, setSearchValue] = useState<string>(searchTerm || "");
+  const handleInputChange = (value: string) => {
+    dispatch(setSearchTerm(value));
+  };
+
   return (
     <SearchStyled>
       <TextField
@@ -25,7 +36,10 @@ const SearchField = (props: SearchFieldProps) => {
         variant="outlined"
         size="small"
         value={searchValue}
-        onChange={(event) => setSearchValue(event.target.value)}
+        onChange={(event) => {
+          setSearchValue(event.target.value);
+          handleInputChange(event.target.value);
+        }}
         sx={styles}
         slotProps={{
           input: {

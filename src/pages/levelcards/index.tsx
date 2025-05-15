@@ -12,91 +12,97 @@ import {
   ChevronRight,
   ExpandLess,
   ExpandMore,
+  LockOpenRounded,
+  LockRounded,
   Tag,
 } from "@mui/icons-material";
 import { LevelCard } from "../../components";
 import { useParams } from "react-router-dom";
-import { useLoader } from "../../context/LoaderContext";
 import { useEffect, useState } from "react";
-import { IProgram } from "../../interfaces/program";
-import { getPrograms } from "../../api/program";
-import { getLevelsByParams } from "../../api/level";
-import { ILevel } from "../../interfaces/level";
-import { data as UserData } from "../../mock";
 import { Link as RouterLink } from "react-router-dom";
-import { EmptyLevel } from "../../utils/levelUtils";
-import { Slots } from "../../utils/slots";
+import { EmptyUserLevel } from "../../utils/levelUtils";
+import { IUserLevel } from "../../interfaces/user-levels";
+import { useGetProgramsQuery } from "../../store/apis/programApi";
+import { useGetUserLevelsQuery } from "../../store/apis/userlevelApi";
+import { useAppDispatch } from "../../store/hooks/hook";
+import { hideLoader, showLoader } from "../../store/slices/loaderSlice";
 
 const LevelCards = () => {
   const { name, level } = useParams();
-  const { showLoader, hideLoader } = useLoader();
-  const [program, setProgram] = useState<IProgram>({} as IProgram);
-  const [currentLevel, setCurrentLevel] = useState<ILevel>({} as ILevel);
+  const dispatch = useAppDispatch();
   const [currentLevelIndex, setCurrentLevelIndex] = useState<number>(
     Number(level) || 0
   );
+  const program = useGetProgramsQuery().data?.find(
+    (program) => program.name.toLowerCase() === name?.toLowerCase()
+  );
+  const programLevel = program?.levels?.find(
+    (programLevel: any) => programLevel.level === currentLevelIndex
+  );
+  const {
+    data: userLevels,
+    isLoading: isUserLevelLoading,
+    refetch,
+  } = useGetUserLevelsQuery({
+    user_id: 1,
+    level: currentLevelIndex,
+    program_id: program?.id,
+  });
 
-  const fetchProgram = async () => {
-    showLoader();
-    try {
-      const response = await getPrograms();
-      const data: IProgram[] = response.data;
-      const prog =
-        data.find(
-          (program) => program.name.toLowerCase() == name?.toLowerCase()
-        ) || data[0];
-      setProgram(prog);
-      fetchLevels(prog);
-    } catch (error) {
-      console.error("Error fetching programs:", error);
-    } finally {
-      hideLoader();
-    }
-  };
-
-  const fetchLevels = async (program: IProgram) => {
-    showLoader();
-    try {
-      const emptyLvl: ILevel = {
-        ...EmptyLevel,
-        level: currentLevelIndex || 0,
-        busd: Slots[currentLevelIndex - 1 || 0],
-        program: program,
-      };
-      const response = await getLevelsByParams(
-        UserData.id,
-        program.id,
-        currentLevelIndex
-      );
-      const data = response.data;
-      setCurrentLevel(data[0] || emptyLvl);
-    } catch (error) {
-      console.error("Error fetching levels:", error);
-    } finally {
-      hideLoader();
-    }
-  };
+  const currentLevel =
+    userLevels?.[0] ||
+    ({
+      ...EmptyUserLevel,
+      level: programLevel,
+    } as IUserLevel);
 
   useEffect(() => {
-    fetchProgram();
-  }, []);
+    if (isUserLevelLoading) {
+      dispatch(showLoader());
+    } else {
+      dispatch(hideLoader());
+    }
+  }, [isUserLevelLoading]);
 
   useEffect(() => {
-    fetchLevels(program);
+    refetch();
   }, [currentLevelIndex]);
 
   return (
     <Grid container spacing={2}>
-      <Grid size={{ xs: 12, sm: 12, md: 6 }} offset={{ xs: 0, sm: 0, md: 3 }}>
-        <Box display={"flex"} gap={2} alignItems={"center"}>
-          <Typography variant="h6" fontWeight={600}>
-            Upline ID
-          </Typography>
-          <Chip size="small" color="primary" icon={<Tag />} label={"123"} />
+      <Grid size={{ xs: 12, sm: 12, md: 8 }} offset={{ xs: 0, sm: 0, md: 2 }}>
+        <Box
+          display={"flex"}
+          gap={2}
+          alignItems={"center"}
+          justifyContent={"space-between"}
+        >
+          <Chip
+            color={currentLevel.active ? "primary" : "default"}
+            icon={currentLevel.active ? <LockOpenRounded /> : <LockRounded />}
+            label={currentLevel.active ? "Unlocked" : "Locked"}
+          />
+
+          <Box
+            display={"flex"}
+            gap={2}
+            alignItems={"center"}
+            justifyContent={"flex-end"}
+          >
+            <Typography variant="h6" fontWeight={600}>
+              Upline ID
+            </Typography>
+            <Chip color="primary" icon={<Tag />} label={"123"} />
+          </Box>
         </Box>
 
         <Box py={2}>
-          <LevelCard large={true} disabled={false} levelData={currentLevel} />
+          <LevelCard
+            large={true}
+            disabled={true}
+            userLevel={currentLevel}
+            programName={program?.name || name}
+          />
         </Box>
 
         <Box display={"flex"} justifyContent="space-between">
@@ -105,8 +111,11 @@ const LevelCards = () => {
             underline="none"
             to={
               `/program/${name?.toLowerCase()}` +
-              `/level/${currentLevel.level - 1}`
+              `/level/${currentLevelIndex - 1}`
             }
+            sx={{
+              visibility: currentLevelIndex === 1 ? "hidden" : "visible",
+            }}
           >
             <Button
               size="large"
@@ -116,7 +125,7 @@ const LevelCards = () => {
                 setCurrentLevelIndex((prev) => prev - 1);
               }}
             >
-              Level {currentLevel.level - 1}
+              Level {currentLevelIndex - 1}
             </Button>
           </Link>
 
@@ -140,8 +149,14 @@ const LevelCards = () => {
             underline="none"
             to={
               `/program/${name?.toLowerCase()}` +
-              `/level/${currentLevel.level + 1}`
+              `/level/${currentLevelIndex + 1}`
             }
+            sx={{
+              visibility:
+                currentLevelIndex === program?.levels.length
+                  ? "hidden"
+                  : "visible",
+            }}
           >
             <Button
               size="large"
@@ -151,7 +166,7 @@ const LevelCards = () => {
                 setCurrentLevelIndex((prev) => prev + 1);
               }}
             >
-              Level {currentLevel.level + 1}
+              Level {currentLevelIndex + 1}
             </Button>
           </Link>
         </Box>

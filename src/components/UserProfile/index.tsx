@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { IUser } from "../../interfaces/user";
 import { getUserLabelValueArray } from "../../utils/userUtils";
+import { AVATAR } from "../../utils/constants";
 interface UserProfileProps {
   data: IUser;
 }
@@ -31,22 +32,20 @@ const UserProfile = (props: UserProfileProps) => {
           User Profile
         </Typography>
 
-        <Chip color="primary" icon={<Tag />} label={data?.id} size="small" />
+        <Chip color="primary" icon={<Tag />} label={data?.id} />
       </Box>
       <Divider sx={{ my: 1 }} />
       <Grid
         container
-        spacing={2}
         alignItems={"center"}
         justifyContent={"center"}
+        spacing={2}
+        p={2}
       >
-        <Grid
-          size={{ xs: 12, sm: 12, md: 4 }}
-          textAlign={{ xs: "center", sm: "center", md: "left" }}
-        >
-          <img src={data?.avatar} alt="User Avatar" width={150} height={150} />
+        <Grid size={{ xs: 12, sm: 12, md: 12 }} textAlign={"center"}>
+          <img src={AVATAR} alt="User Avatar" width={100} height={100} />
         </Grid>
-        <Grid size={{ xs: 12, sm: 12, md: 8 }}>
+        <Grid size={{ xs: 12, sm: 12, md: 12 }}>
           <List disablePadding>
             {userDetails.map((detail, index) => (
               <ListItem key={index} disablePadding disableGutters>

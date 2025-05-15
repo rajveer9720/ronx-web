@@ -8,6 +8,8 @@ import UserProfile from "./UserProfile";
 import ReferralCard from "./ReferralCard";
 import ProgramCard from "./ProgramCard";
 import LevelCard from "./LevelCard";
+import GridX3 from "./GridX3";
+import GridX4 from "./GridX4";
 import { ToolbarActions, ToolbarAppTitle } from "./AppToolbar";
 import { SnackbarProvider } from "./SnackbarProvider";
 import { SnackbarUtilsConfigurator } from "./SnackbarUtils";
@@ -23,6 +25,8 @@ export {
   ReferralCard,
   ProgramCard,
   LevelCard,
+  GridX3,
+  GridX4,
   ToolbarActions,
   ToolbarAppTitle,
   SnackbarProvider,

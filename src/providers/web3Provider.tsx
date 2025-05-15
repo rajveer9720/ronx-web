@@ -3,14 +3,16 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
 import { walletConfig } from "../utils/ProviderUtils";
 import {
+  AvatarComponent,
   DisclaimerComponent,
   RainbowKitProvider,
   Theme,
-  lightTheme,
+  darkTheme,
 } from "@rainbow-me/rainbowkit";
 
 import merge from "lodash.merge";
 import { useTheme } from "@mui/material";
+import { AVATAR } from "../utils/constants";
 
 interface Web3ModalProviderProps {
   children: React.ReactNode;
@@ -20,17 +22,27 @@ export const Web3ModalProvider: React.FC<Web3ModalProviderProps> = ({
   children,
 }) => {
   const theme = useTheme();
-  const myTheme = merge(lightTheme(), {
+  const myTheme = merge(darkTheme(), {
     colors: {
       accentColor: theme.palette.primary.main,
     },
     fonts: {
-      body: "Poppins, sans-serif",
+      body: "DM Sans, sans-serif",
     },
   } as Theme);
 
   const queryClient = new QueryClient();
-  const Disclaimer: DisclaimerComponent = ({ Text }) => <Text>Zembo</Text>;
+  const Disclaimer: DisclaimerComponent = ({ Text }) => <Text>RONX</Text>;
+  const CustomAvatar: AvatarComponent = ({ size }) => {
+    return (
+      <img
+        src={AVATAR}
+        width={size}
+        height={size}
+        style={{ borderRadius: size }}
+      />
+    );
+  };
 
   return (
     <WagmiProvider config={walletConfig}>
@@ -38,6 +50,7 @@ export const Web3ModalProvider: React.FC<Web3ModalProviderProps> = ({
         <RainbowKitProvider
           modalSize="compact"
           theme={myTheme}
+          avatar={CustomAvatar}
           appInfo={{
             learnMoreUrl: undefined,
             disclaimer: Disclaimer,

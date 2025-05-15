@@ -15,3 +15,9 @@ export interface IUserLevel {
   created_at: string;
   updated_at: string;
 }
+
+export interface IUserLevelRequest {
+  user_id?: number;
+  level?: number;
+  program_id?: number;
+}

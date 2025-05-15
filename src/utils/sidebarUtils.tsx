@@ -1,32 +1,32 @@
 import {
-  Calculate,
-  SpaceDashboard,
-  BarChart,
-  ViewTimeline,
-  Diversity3,
+  CalculateRounded,
+  GridViewRounded,
+  BarChartRounded,
+  ViewTimelineRounded,
+  Diversity3Rounded,
 } from "@mui/icons-material";
 import { Navigation } from "@toolpad/core/AppProvider";
 
 export const Sidebar: Navigation = [
-  { title: "Dashboard", icon: <SpaceDashboard />, segment: "dashboard" },
+  { title: "Dashboard", icon: <GridViewRounded />, segment: "dashboard" },
   {
     title: "Activity",
-    icon: <ViewTimeline />,
+    icon: <ViewTimelineRounded />,
     segment: "activity",
   },
   {
     title: "Partners",
-    icon: <Diversity3 />,
+    icon: <Diversity3Rounded />,
     segment: "partner",
   },
   {
     title: "Stats",
-    icon: <BarChart />,
+    icon: <BarChartRounded />,
     segment: "stats",
   },
   {
     title: "Calculator",
-    icon: <Calculate />,
+    icon: <CalculateRounded />,
     segment: "calculator",
   },
 ];

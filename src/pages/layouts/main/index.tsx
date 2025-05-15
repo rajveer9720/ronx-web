@@ -2,22 +2,20 @@ import { Outlet } from "react-router-dom";
 import { AppProvider } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { PageContainer } from "@toolpad/core/PageContainer";
-import { useToolpadRouter } from "../router";
-import theme from "../theme/theme";
-import { LOGO } from "../utils/constants";
+import { useToolpadRouter } from "../../../router";
+import { Sidebar } from "../../../utils/sidebarUtils";
+import theme from "../../../utils/theme";
+import { LOGO } from "../../../utils/constants";
 import {
   BackdropSpin,
   Footer,
   PageHeader,
   ToolbarActions,
   ToolbarAppTitle,
-} from "../components";
-import { Sidebar } from "../utils/sidebarUtils";
-import { useLoader } from "../context/LoaderContext";
+} from "../../../components";
 
-const UserLayout = () => {
+const MainLayout = () => {
   const router = useToolpadRouter();
-  const { loading } = useLoader();
 
   return (
     <AppProvider
@@ -29,10 +27,7 @@ const UserLayout = () => {
         title: "",
       }}
     >
-      <BackdropSpin
-        loading={loading}
-        text="Processing your request, please wait..."
-      />
+      <BackdropSpin text="Processing your request, please wait..." />
       <DashboardLayout
         sidebarExpandedWidth={300}
         slots={{
@@ -46,8 +41,8 @@ const UserLayout = () => {
           sx={{
             maxWidth: "100% !important",
             width: "100%",
-            px: { xs: 2, sm: 2, md: 5 },
-            py: { xs: 2, sm: 2, md: 5 },
+            px: { xs: 2, sm: 2, md: 10 },
+            py: { xs: 2, sm: 2, md: 2 },
           }}
           slots={{
             header: () => <PageHeader />,
@@ -60,4 +55,4 @@ const UserLayout = () => {
   );
 };
 
-export default UserLayout;
+export default MainLayout;

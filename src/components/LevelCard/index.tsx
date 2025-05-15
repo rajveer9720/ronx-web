@@ -1,40 +1,52 @@
-import { AccountBalanceWallet, Cached, People, Tag } from "@mui/icons-material";
+import {
+  AcUnitRounded,
+  CachedRounded,
+  PeopleRounded,
+  RedeemRounded,
+  Tag,
+  WarningAmberRounded,
+} from "@mui/icons-material";
 import {
   Box,
+  Button,
   Card,
   CardActionArea,
   CardContent,
   Chip,
+  Divider,
+  Grid,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
   Tooltip,
   Typography,
-  useColorScheme,
   useTheme,
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
-import { ILevel } from "../../interfaces/level";
-import { getBgColor } from "../../utils/levelUtils";
+import { getBgColor, getLevelListItems } from "../../utils/levelUtils";
+import { IUserLevel } from "../../interfaces/user-levels";
+import { PROGRAM_CONST } from "../../utils/slots";
+import GridX3 from "../GridX3";
+import GridX4 from "../GridX4";
 interface LevelCardProps {
-  levelData: ILevel;
+  userLevel: IUserLevel;
   large?: boolean;
   disabled?: boolean;
   route?: string;
+  programName?: string;
 }
 
 const LevelCard = (props: LevelCardProps) => {
   const theme = useTheme();
-  const { mode } = useColorScheme();
-  const { levelData, large, disabled, route } = props;
+  const { userLevel, large, disabled, route, programName } = props;
 
   return (
     <Card
       sx={{
         boxShadow: 0,
         borderRadius: 2,
-        backgroundColor:
-          getBgColor(levelData, theme) || theme.palette.action.hover,
-        color: levelData?.active
-          ? theme.palette.primary.contrastText
-          : theme.palette.common[mode === "dark" ? "white" : "black"],
+        backgroundColor: getBgColor(userLevel, theme),
       }}
     >
       <CardActionArea
@@ -42,131 +54,184 @@ const LevelCard = (props: LevelCardProps) => {
         disableTouchRipple={disabled}
         component={RouterLink}
         to={large ? "" : route || ""}
-        state={levelData}
       >
         <CardContent>
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Box display="flex" gap={1} alignItems="center">
-              <Typography
-                variant={large ? "h4" : "subtitle2"}
-                fontWeight={large ? 600 : undefined}
-                sx={{ verticalAlign: "center" }}
-              >
-                Level
-              </Typography>
-
-              <Box display="flex" alignItems="center">
-                <Tag fontSize={large ? "large" : "small"} />
-                <Typography
-                  variant={large ? "h4" : "subtitle2"}
-                  fontWeight={large ? 600 : undefined}
-                  sx={{ verticalAlign: "center" }}
-                >
-                  {levelData.level}
-                </Typography>
-              </Box>
-            </Box>
-
-            <Typography
-              variant={large ? "h4" : "subtitle2"}
-              fontWeight={large ? 600 : undefined}
-            >
-              {levelData.busd}
-            </Typography>
-          </Box>
-
-          <Box>
-            {!levelData?.active && large ? (
-              <Box textAlign={"center"} gap={large ? 5 : 2} py={large ? 4 : 2}>
-                <Typography variant={"body1"}>Buy it now</Typography>
-                <Typography variant={"h2"} fontWeight={700}>
-                  {levelData.busd} BUSD
-                </Typography>
-              </Box>
-            ) : (
+          <Grid container spacing={2}>
+            <Grid size={{ xs: 12, sm: 12, md: large ? 8 : 12 }}>
               <Box
-                visibility={
-                  !levelData?.active || levelData?.missed_revenue
-                    ? "hidden"
-                    : "visible"
-                }
-                display={"flex"}
-                justifyContent="center"
-                gap={large ? 5 : 2}
-                py={large ? 4 : 2}
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
               >
-                <Card
-                  sx={{
-                    boxShadow: 0,
-                    borderRadius: large ? 1.5 : undefined,
-                    backgroundColor: '#002de3',
-                    p: large ? 5 : 2.5,
-                  }}
-                />
-                <Card
-                  sx={{
-                    boxShadow: 0,
-                    borderRadius: large ? 1.5 : undefined,
-                    backgroundColor: getBgColor(levelData, theme),
-                    p: large ? 5 : 2.5,
-                  }}
-                />
-                <Card
-                  sx={{
-                    boxShadow: 0,
-                    borderRadius: large ? 1.5 : undefined,
-                    backgroundColor: getBgColor(levelData, theme),
-                    p: large ? 5 : 2.5,
-                  }}
-                />
+                <Box display="flex" gap={0.5} alignItems="center">
+                  <Typography
+                    variant={large ? "h4" : "subtitle1"}
+                    fontWeight={large ? 600 : undefined}
+                    sx={{ verticalAlign: "center" }}
+                  >
+                    Level
+                  </Typography>
+
+                  <Box display="flex" alignItems="center">
+                    <Tag fontSize={large ? "large" : "small"} />
+                    <Typography
+                      variant={large ? "h4" : "subtitle1"}
+                      fontWeight={large ? 600 : undefined}
+                      sx={{ verticalAlign: "center" }}
+                    >
+                      {userLevel?.level?.level}
+                    </Typography>
+                  </Box>
+                </Box>
+
+                <Typography
+                  variant={large ? "h4" : "subtitle1"}
+                  fontWeight={large ? 600 : undefined}
+                >
+                  {userLevel?.level?.busd}
+                </Typography>
               </Box>
-            )}
-          </Box>
 
-          <Box
-            visibility={
-              !levelData?.active || levelData?.missed_revenue
-                ? "hidden"
-                : "visible"
-            }
-            display="flex"
-            justifyContent={large ? "end" : "space-between"}
-            alignItems="center"
-            gap={large ? 5 : 0}
-          >
-            <Tooltip title="Partners" placement="top" color="info" arrow>
-              <Chip
-                size={large ? "medium" : "small"}
-                color="info"
-                icon={<People />}
-                label={levelData.people}
-              />
-            </Tooltip>
+              <Box>
+                {!userLevel?.active && large ? (
+                  <Box
+                    textAlign={"center"}
+                    gap={large ? 5 : 2}
+                    py={large ? 4 : 2}
+                  >
+                    <Typography variant={"body1"}>
+                      Unlock this level at
+                    </Typography>
+                    <Typography variant={"h2"} fontWeight={700}>
+                      {userLevel?.level?.busd} BUSD
+                    </Typography>
 
-            <Tooltip title="Cycles" placement="top" arrow>
-              <Chip
-                size={large ? "medium" : "small"}
-                color="info"
-                icon={<Cached />}
-                label={levelData.cycles}
-              />
-            </Tooltip>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        px: { xs: 5, md: 20 },
+                      }}
+                    >
+                      <Button variant="contained" color="primary" fullWidth>
+                        Unlock now
+                      </Button>
+                    </Box>
+                  </Box>
+                ) : (
+                  <Grid container spacing={1} py={large ? 4 : 2}>
+                    {programName?.toLowerCase() === PROGRAM_CONST.X3 && (
+                      <GridX3 size={3} large={large} hide={!userLevel.active} />
+                    )}
 
-            {large && levelData.revenue && (
-              <Tooltip title="Total Revenue" placement="top" arrow>
-                <Chip
-                  size={large ? "medium" : "small"}
-                  color="info"
-                  icon={<AccountBalanceWallet />}
-                  label={levelData.revenue}
-                />
-              </Tooltip>
-            )}
-          </Box>
+                    {programName?.toLowerCase() === PROGRAM_CONST.X4 && (
+                      <GridX4 size={2} large={large} hide={!userLevel.active} />
+                    )}
+                  </Grid>
+                )}
+              </Box>
+
+              <Box
+                display={large ? "none" : "flex"}
+                justifyContent={large ? "end" : "space-between"}
+                alignItems="center"
+                gap={large ? 5 : 0}
+              >
+                <Tooltip title="Partners" placement="top" color="info" arrow>
+                  <Chip
+                    size={large ? "medium" : "small"}
+                    color={userLevel?.active ? "primary" : "default"}
+                    icon={<PeopleRounded />}
+                    label={userLevel?.people}
+                  />
+                </Tooltip>
+
+                <Box
+                  gap={large ? 5 : 2}
+                  alignItems="center"
+                  sx={{ display: { xs: "none", md: "flex" } }}
+                >
+                  {userLevel?.freeze && (
+                    <Tooltip title="Freeze" placement="top" arrow>
+                      <AcUnitRounded sx={{ color: "white" }} fontSize="small" />
+                    </Tooltip>
+                  )}
+
+                  {userLevel?.gift_revenue > 0 && (
+                    <Tooltip title="Gift Revenue" placement="top" arrow>
+                      <RedeemRounded sx={{ color: "white" }} fontSize="small" />
+                    </Tooltip>
+                  )}
+
+                  {userLevel?.missed_revenue > 0 && (
+                    <Tooltip title="Missed Revenue" placement="top" arrow>
+                      <WarningAmberRounded
+                        sx={{ color: "white" }}
+                        fontSize="small"
+                      />
+                    </Tooltip>
+                  )}
+                </Box>
+
+                <Tooltip title="Cycles" placement="top" arrow>
+                  <Chip
+                    size={large ? "medium" : "small"}
+                    color={userLevel?.active ? "primary" : "default"}
+                    icon={<CachedRounded />}
+                    label={userLevel?.cycles}
+                  />
+                </Tooltip>
+              </Box>
+            </Grid>
+
+            <Grid
+              size={{ xs: 12, sm: 12, md: 1 }}
+              sx={{ display: { xs: "none", md: large ? "block" : "none" } }}
+            >
+              <Divider orientation="vertical" />
+            </Grid>
+            <Grid
+              size={{ xs: 12, sm: 12, md: 1 }}
+              sx={{ display: { xs: large ? "block" : "none", md: "none" } }}
+            >
+              <Divider orientation="horizontal" />
+            </Grid>
+
+            <Grid
+              size={{ xs: 12, sm: 12, md: 3 }}
+              sx={{ display: large ? "block" : "none" }}
+            >
+              <List disablePadding>
+                {getLevelListItems(userLevel)?.map((item, index) => {
+                  const isLastItem =
+                    index === getLevelListItems(userLevel).length - 1;
+
+                  return (
+                    <div key={index.toString()}>
+                      <ListItem disableGutters disablePadding sx={{ py: 0.5 }}>
+                        <ListItemAvatar>{item.icon}</ListItemAvatar>
+                        <ListItemText
+                          primary={item.value}
+                          secondary={item.label}
+                          slotProps={{
+                            root: {
+                              sx: {
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                flexDirection: "row-reverse",
+                              },
+                            },
+                          }}
+                        />
+                      </ListItem>
+                      {!isLastItem && <Divider component="div" />}
+                    </div>
+                  );
+                })}
+              </List>
+            </Grid>
+          </Grid>
         </CardContent>
       </CardActionArea>
     </Card>

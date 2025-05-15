@@ -1,22 +1,22 @@
 import {
   Button,
   Typography,
-  useTheme,
-  styled,
-  Stack,
   Card,
   CardContent,
+  Grid,
+  Divider,
+  Box,
+  TextField,
 } from "@mui/material";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAccount, useDisconnect } from "wagmi";
 import { useEffect } from "react";
 import { showSnackbar } from "../../components/SnackbarUtils";
 import { IUserAuth } from "../../interfaces/auth";
-import { userLogin } from "../../api/auth";
-import { LOGO } from "../../utils/constants";
+import { BINANCE_LOGO, LOGO } from "../../utils/constants";
+import MatrixChart from "./yt";
 
 const Login = () => {
-  const theme = useTheme();
   const { isConnected, address } = useAccount();
   const { openConnectModal } = useConnectModal();
   const { disconnect } = useDisconnect();
@@ -39,7 +39,7 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       const payload: IUserAuth = { wallet_address: address as string };
-      const response: any = await userLogin(payload);
+      const response: any = null;
       if (response?.statusCode === 200) {
         showSnackbar({
           message: "Logged in successfully.",
@@ -60,90 +60,62 @@ const Login = () => {
 
   useEffect(() => {
     if (isConnected && address) {
-      handleLogin();
+      // handleLogin();
     }
   }, [isConnected, address]);
 
   return (
-    <LoginContainer direction="column" justifyContent="space-between">
-      <LoginCard variant="outlined">
-        <CardContent>
-          <img src={LOGO} alt="Logo" width="150" />
-          <Typography
-            variant="h5"
-            fontWeight={500}
-            textAlign="center"
-            py={4}
-            my={4}
-          >
-            Login using your wallet
-          </Typography>
-          <Button
-            fullWidth
-            variant="contained"
-            onClick={handleWalletConnect}
-            disabled={isConnected && address ? true : false}
-            sx={{
-              borderRadius: 2,
-              textTransform: "none",
-              fontWeight: 600,
-              backgroundColor: theme.palette.primary.main,
-              color: theme.palette.primary.contrastText,
-              py: 1.2,
-              "&:hover": {
-                backgroundColor: theme.palette.primary.dark,
-                boxShadow: theme.shadows[4],
-              },
-            }}
-          >
-            Connect Wallet
-          </Button>
-        </CardContent>
-      </LoginCard>
-    </LoginContainer>
+    <Grid container sx={{ py: { xs: 2, sm: 2, md: 20 } }}>
+      <Grid size={{ xs: 12, sm: 12, md: 8 }} offset={{ xs: 0, sm: 0, md: 2 }}>
+        <MatrixChart />
+        <Card sx={cardStyle}>
+          <CardContent>
+            <Grid container spacing={2}>
+              <Grid size={{ xs: 12, sm: 12, md: 8 }}>
+                <Box display={"flex"} gap={2} alignItems={"center"}>
+                  <img src={LOGO} alt="Logo" width="150" />
+                  <Divider
+                    variant="fullWidth"
+                    orientation="vertical"
+                    flexItem
+                  />
+                  <img src={BINANCE_LOGO} alt="Logo" width="50" />
+                </Box>
+
+                <Typography variant="h5" fontWeight={700} py={4}>
+                  Create a new account
+                </Typography>
+                <Typography variant="body1" fontWeight={400} width={"80%"}>
+                  You just need a crypto wallet and an upline ID to create a new
+                  account and start referral and earn.
+                </Typography>
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 12, md: 4 }}>
+                <Box py={4} gap={4} display={"flex"} flexDirection="column">
+                  <TextField fullWidth label="Upline ID" />
+
+                  <Button fullWidth onClick={handleWalletConnect} size="large">
+                    {isConnected && address ? "Register Now" : "Connect Wallet"}
+                  </Button>
+                </Box>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
   );
 };
 
-const LoginCard = styled(Card)(({ theme }) => ({
+const cardStyle = {
+  p: 2,
+  borderRadius: "20px",
+  boxShadow: "0 6px 20px rgba(0, 0, 0, 0.06)",
+  transition: "all 0.3s ease",
   display: "flex",
   flexDirection: "column",
-  alignSelf: "center",
-  width: "100%",
-  padding: theme.spacing(4),
-  gap: theme.spacing(2),
-  margin: "auto",
-  boxShadow:
-    "hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px",
-  [theme.breakpoints.up("sm")]: {
-    width: "450px",
-  },
-  ...theme.applyStyles("dark", {
-    boxShadow:
-      "hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px",
-  }),
-}));
-
-const LoginContainer = styled(Stack)(({ theme }) => ({
-  height: "calc((1 - var(--template-frame-height, 0)) * 100dvh)",
-  minHeight: "100%",
-  padding: theme.spacing(1),
-  [theme.breakpoints.up("sm")]: {
-    padding: theme.spacing(4),
-  },
-  "&::before": {
-    content: '""',
-    display: "block",
-    position: "absolute",
-    zIndex: -1,
-    inset: 0,
-    backgroundImage:
-      "radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))",
-    backgroundRepeat: "no-repeat",
-    ...theme.applyStyles("dark", {
-      backgroundImage:
-        "radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))",
-    }),
-  },
-}));
+  justifyContent: "center",
+};
 
 export default Login;
