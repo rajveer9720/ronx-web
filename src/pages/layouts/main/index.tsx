@@ -13,6 +13,7 @@ import {
   ToolbarActions,
   ToolbarAppTitle,
 } from "../../../components";
+import SignupDialog from "../../../components/SignupDialog";
 
 const MainLayout = () => {
   const router = useToolpadRouter();
@@ -39,6 +40,7 @@ const MainLayout = () => {
       >
         <PageContainer
           sx={{
+            position: { md: "relative" },
             maxWidth: "100% !important",
             width: "100%",
             px: { xs: 2, sm: 2, md: 10 },
@@ -48,6 +50,7 @@ const MainLayout = () => {
             header: () => <PageHeader />,
           }}
         >
+          <SignupDialog />
           <Outlet />
         </PageContainer>
       </DashboardLayout>

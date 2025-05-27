@@ -1,11 +1,29 @@
+import {
+  IUser,
+  IUserLogin,
+  IUserReferral,
+  IUserRequest,
+  IUserStats,
+} from "../../interfaces/user";
+import { ApiEndpoints } from "../../utils/routes";
 import { api } from "./api";
-import { IUser, IUserRequest } from "../interfaces/user";
 
 export const userApi = api.injectEndpoints({
   endpoints: (build) => ({
+    login: build.mutation<string, IUserLogin>({
+      query: (params) => ({
+        url: ApiEndpoints.USER_LOGIN,
+        method: "POST",
+        body: params,
+      }),
+      transformResponse(baseQueryReturnValue: any) {
+        return baseQueryReturnValue?.data?.access_token as string;
+      },
+    }),
+
     getUser: build.query<IUser, IUserRequest>({
       query: (params) => ({
-        url: import.meta.env.VITE_API_USER,
+        url: ApiEndpoints.USER,
         params: params,
       }),
       transformResponse(baseQueryReturnValue: any) {
@@ -14,7 +32,36 @@ export const userApi = api.injectEndpoints({
       providesTags: ["User"],
       keepUnusedDataFor: 3600,
     }),
+
+    getUserStats: build.query<IUserStats, IUserRequest>({
+      query: (params) => ({
+        url: ApiEndpoints.USER_STATS,
+        params: params,
+      }),
+      transformResponse(baseQueryReturnValue: any) {
+        return baseQueryReturnValue?.data as IUserStats;
+      },
+      providesTags: ["User"],
+      keepUnusedDataFor: 3600,
+    }),
+
+    getUserReferrals: build.query<IUserReferral[], IUserRequest>({
+      query: (params) => ({
+        url: ApiEndpoints.USER_REFERRAL,
+        params: params,
+      }),
+      transformResponse(baseQueryReturnValue: any) {
+        return baseQueryReturnValue?.data as IUserReferral[];
+      },
+      providesTags: ["User"],
+      keepUnusedDataFor: 3600,
+    }),
   }),
 });
 
-export const { useGetUserQuery } = userApi;
+export const {
+  useGetUserQuery,
+  useGetUserStatsQuery,
+  useLoginMutation,
+  useGetUserReferralsQuery,
+} = userApi;

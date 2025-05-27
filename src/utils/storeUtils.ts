@@ -4,4 +4,5 @@ export const TagTypes = [
   "User",
   "Auth",
   "UserLevel",
+  "Transaction",
 ] as const;

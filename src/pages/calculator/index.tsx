@@ -48,51 +48,47 @@ const Calculator = () => {
     });
   };
 
-  const cardStyle = {
-    p: 5,
-    borderRadius: "20px",
-    transition: "all 0.3s ease",
-    boxShadow: "0 6px 20px rgba(0, 0, 0, 0.06)",
-    my: 2,
-  };
-
   return (
     <Grid container>
       <Grid size={{ xs: 12, sm: 12, md: 4 }} offset={{ xs: 0, sm: 0, md: 4 }}>
-        <Box>
-          <ButtonGroup variant="outlined" size="large" fullWidth>
-            {stages.map((stage) => (
-              <Button
-                key={stage.name}
-                variant={
-                  selectedStage.name === stage.name ? "contained" : "outlined"
-                }
-                onClick={() => handleStageSelect(stage)}
-              >
-                {stage.name}
-              </Button>
-            ))}
-          </ButtonGroup>
-        </Box>
+        <Card sx={{ borderRadius: 2 }}>
+          <Box m={0.5}>
+            <ButtonGroup variant="outlined" size="large" fullWidth>
+              {stages.map((stage) => (
+                <Button
+                  key={stage.name}
+                  variant={
+                    selectedStage.name === stage.name ? "contained" : "outlined"
+                  }
+                  onClick={() => handleStageSelect(stage)}
+                >
+                  {stage.name}
+                </Button>
+              ))}
+            </ButtonGroup>
+          </Box>
 
-        <Card sx={cardStyle}>
-          <Box>
+          <Box p={5}>
             <Typography>Cost of current selected slot(s):</Typography>
             <Typography variant="h6" fontWeight={700}>
               {cost} BUSD
             </Typography>
-          </Box>
-          <Divider sx={{ my: 2 }} />
-          <Box>
+            <Divider sx={{ my: 2 }} />
+
             <Typography>Total Cost after 1 cycle completes:</Typography>
             <Typography variant="h6" fontWeight={700}>
               {result} BUSD
             </Typography>
           </Box>
-        </Card>
 
-        <Card sx={cardStyle}>
-          <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+          <Divider sx={{ my: 0 }} />
+
+          <Box
+            display={"flex"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            p={5}
+          >
             <Box display="grid" gridTemplateColumns="repeat(4, 1fr)" gap={2}>
               {[...Array(12)].map((_, index) => (
                 <Paper
@@ -103,9 +99,11 @@ const Calculator = () => {
                     cursor: "pointer",
                     backgroundColor: selectedSlots.includes(index + 1)
                       ? theme.palette.primary.main
-                      : theme.palette.grey[500],
+                      : theme.palette.common.white,
                     boxShadow: 3,
-                    color: "white",
+                    color: selectedSlots.includes(index + 1)
+                      ? theme.palette.common.white
+                      : theme.palette.common.black,
                     borderRadius: "100%",
                     height: "50px",
                     width: "50px",

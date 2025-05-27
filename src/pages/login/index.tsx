@@ -73,7 +73,7 @@ const Login = () => {
             <Grid container spacing={2}>
               <Grid size={{ xs: 12, sm: 12, md: 8 }}>
                 <Box display={"flex"} gap={2} alignItems={"center"}>
-                  <img src={LOGO} alt="Logo" width="150" />
+                  <img src={LOGO} alt="Logo" width="100" />
                   <Divider
                     variant="fullWidth"
                     orientation="vertical"

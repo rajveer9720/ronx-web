@@ -29,6 +29,8 @@ import { IUserLevel } from "../../interfaces/user-levels";
 import { PROGRAM_CONST } from "../../utils/slots";
 import GridX3 from "../GridX3";
 import GridX4 from "../GridX4";
+import { useAppSelector } from "../../store/hooks/hook";
+import { selectCurrentUser } from "../../store/slices/authSlice";
 interface LevelCardProps {
   userLevel: IUserLevel;
   large?: boolean;
@@ -40,6 +42,7 @@ interface LevelCardProps {
 const LevelCard = (props: LevelCardProps) => {
   const theme = useTheme();
   const { userLevel, large, disabled, route, programName } = props;
+  const currentUser = useAppSelector(selectCurrentUser);
 
   return (
     <Card
@@ -93,7 +96,7 @@ const LevelCard = (props: LevelCardProps) => {
               </Box>
 
               <Box>
-                {!userLevel?.active && large ? (
+                {!userLevel?.unlock && large ? (
                   <Box
                     textAlign={"center"}
                     gap={large ? 5 : 2}
@@ -113,7 +116,12 @@ const LevelCard = (props: LevelCardProps) => {
                         px: { xs: 5, md: 20 },
                       }}
                     >
-                      <Button variant="contained" color="primary" fullWidth>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                        disabled={!currentUser}
+                      >
                         Unlock now
                       </Button>
                     </Box>
@@ -121,11 +129,11 @@ const LevelCard = (props: LevelCardProps) => {
                 ) : (
                   <Grid container spacing={1} py={large ? 4 : 2}>
                     {programName?.toLowerCase() === PROGRAM_CONST.X3 && (
-                      <GridX3 size={3} large={large} hide={!userLevel.active} />
+                      <GridX3 size={3} large={large} hide={!userLevel.unlock} />
                     )}
 
                     {programName?.toLowerCase() === PROGRAM_CONST.X4 && (
-                      <GridX4 size={2} large={large} hide={!userLevel.active} />
+                      <GridX4 size={2} large={large} hide={!userLevel.unlock} />
                     )}
                   </Grid>
                 )}
@@ -140,9 +148,9 @@ const LevelCard = (props: LevelCardProps) => {
                 <Tooltip title="Partners" placement="top" color="info" arrow>
                   <Chip
                     size={large ? "medium" : "small"}
-                    color={userLevel?.active ? "primary" : "default"}
+                    color={userLevel?.unlock ? "primary" : "default"}
                     icon={<PeopleRounded />}
-                    label={userLevel?.people}
+                    label={55}
                   />
                 </Tooltip>
 
@@ -176,9 +184,9 @@ const LevelCard = (props: LevelCardProps) => {
                 <Tooltip title="Cycles" placement="top" arrow>
                   <Chip
                     size={large ? "medium" : "small"}
-                    color={userLevel?.active ? "primary" : "default"}
+                    color={userLevel?.unlock ? "primary" : "default"}
                     icon={<CachedRounded />}
-                    label={userLevel?.cycles}
+                    label={55}
                   />
                 </Tooltip>
               </Box>

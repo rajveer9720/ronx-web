@@ -2,31 +2,30 @@ import {
   CalculateRounded,
   GridViewRounded,
   BarChartRounded,
-  ViewTimelineRounded,
   Diversity3Rounded,
 } from "@mui/icons-material";
 import { Navigation } from "@toolpad/core/AppProvider";
+import { RoutePaths } from "./routes";
 
 export const Sidebar: Navigation = [
-  { title: "Dashboard", icon: <GridViewRounded />, segment: "dashboard" },
+  {
+    title: "Dashboard",
+    icon: <GridViewRounded />,
+    segment: RoutePaths.DASHBOARD,
+  },
+  {
+    title: "Referrals",
+    icon: <Diversity3Rounded />,
+    segment: RoutePaths.REFERRAL,
+  },
   {
     title: "Activity",
-    icon: <ViewTimelineRounded />,
-    segment: "activity",
-  },
-  {
-    title: "Partners",
-    icon: <Diversity3Rounded />,
-    segment: "partner",
-  },
-  {
-    title: "Stats",
     icon: <BarChartRounded />,
-    segment: "stats",
+    segment: RoutePaths.ACTIVITY,
   },
   {
     title: "Calculator",
     icon: <CalculateRounded />,
-    segment: "calculator",
+    segment: RoutePaths.CALCULATOR,
   },
 ];

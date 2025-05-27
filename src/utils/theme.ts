@@ -6,11 +6,8 @@ import {
 } from "@mui/material/styles";
 import deepmerge from "deepmerge";
 import { Colors } from "../utils/colors";
-
-// const PRIMARY = "#0044fc";
-// const PRIMARY = "#3a4bc9";
-// const PRIMARY_LIGHT = "#7483e3";
-// const PRIMARY_DARK = "#161a8f";
+import merge from "lodash.merge";
+import { darkTheme, Theme } from "@rainbow-me/rainbowkit";
 
 const PRIMARY = Colors.primary;
 const PRIMARY_LIGHT = Colors.primary_light;
@@ -195,7 +192,8 @@ export const createAppTheme = (mode: PaletteMode) => {
               "&.Mui-selected": {
                 backgroundColor: "transparent",
                 "&:hover": {
-                  backgroundColor: alpha(PRIMARY_LIGHT, 0.2),
+                  // backgroundColor: alpha(PRIMARY_LIGHT, 0.2),
+                  backgroundColor: "transparent",
                 },
                 "&::before": {
                   content: '""',
@@ -209,7 +207,7 @@ export const createAppTheme = (mode: PaletteMode) => {
                 },
               },
               "&:hover": {
-                backgroundColor: alpha(PRIMARY_LIGHT, 0.2),
+                // backgroundColor: alpha(PRIMARY_LIGHT, 0.2),
               },
             },
           },
@@ -303,3 +301,12 @@ export default theme;
 export const getTheme = (mode: PaletteMode) => {
   return createAppTheme(mode);
 };
+
+export const rainbowkitTheme = merge(darkTheme(), {
+  colors: {
+    accentColor: theme.palette.primary.main,
+  },
+  fonts: {
+    body: theme.typography.body1.fontFamily,
+  },
+} as Theme);

@@ -1,17 +1,17 @@
+import { Box } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useAppDispatch, useAppSelector } from "../../store/hooks/hook";
-import { useEffect } from "react";
 import { selectSearchTerm } from "../../store/slices/searchSlice";
+import { useGetUserReferralsQuery } from "../../store/apis/userApi";
+import { useEffect } from "react";
 import { hideLoader, showLoader } from "../../store/slices/loaderSlice";
-import { useGetTransactionsQuery } from "../../store/apis/transactionApi";
 import moment from "moment";
-import { Box } from "@mui/material";
 
-const Activity = () => {
+const Referral = () => {
   const dispatch = useAppDispatch();
   const { searchTerm } = useAppSelector(selectSearchTerm);
-  const { data: rows, isLoading } = useGetTransactionsQuery({
-    user_id: +searchTerm,
+  const { data: rows, isLoading } = useGetUserReferralsQuery({
+    id: +searchTerm,
   });
 
   useEffect(() => {
@@ -25,29 +25,16 @@ const Activity = () => {
   const columns: GridColDef[] = [
     {
       field: "created_at",
-      headerName: "Date & Time",
+      headerName: "Joining Date",
       flex: 1,
       renderCell: (params) =>
         moment(params?.row.created_at).format(
           import.meta.env.VITE_APP_TIME_STAMP
         ),
     },
-    { field: "type", headerName: "Type", flex: 1 },
-    { field: "id", headerName: "User ID", flex: 1 },
-    {
-      field: "program",
-      headerName: "Matrix",
-      flex: 1,
-      renderCell: (params) => params.row.user_level.level.program.name,
-    },
-    {
-      field: "level",
-      headerName: "Level",
-      flex: 1,
-      renderCell: (params) => params.row.user_level.level.level,
-    },
-    { field: "hash", headerName: "Txn Hash", flex: 1 },
-    { field: "amount", headerName: "Cr/Dr (BUSD)", flex: 1 },
+    { field: "id", headerName: "ID", flex: 1 },
+    { field: "wallet_address", headerName: "Wallet Address", flex: 2 },
+    { field: "profits", headerName: "Profits (BUSD)", flex: 1 },
   ];
 
   return (
@@ -65,4 +52,4 @@ const Activity = () => {
   );
 };
 
-export default Activity;
+export default Referral;

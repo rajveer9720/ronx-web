@@ -5,31 +5,30 @@ import {
   Activity,
   Calculator,
   Program,
-  Partner,
-  Stats,
+  Referral,
   LevelCards,
   Invite,
   MainLayout,
   GuestLayout,
 } from "./pages";
+import { RoutePaths } from "./utils/routes";
 
 const Navigation: React.FC = () => {
   return (
     <Routes>
       <Route path="/" element={<></>} />
       <Route element={<GuestLayout />}>
-        <Route path="login" element={<Login />} />
-        <Route path="invitation" element={<Invite />} />
+        <Route path={RoutePaths.LOGIN} element={<Login />} />
+        <Route path={RoutePaths.INVITE} element={<Invite />} />
       </Route>
 
       <Route element={<MainLayout />}>
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="calculator" element={<Calculator />} />
-        <Route path="activity" element={<Activity />} />
-        <Route path="partner" element={<Partner />} />
-        <Route path="stats" element={<Stats />} />
-        <Route path="program/:name" element={<Program />} />
-        <Route path="program/:name/level/:level" element={<LevelCards />} />
+        <Route path={RoutePaths.DASHBOARD} element={<Dashboard />} />
+        <Route path={RoutePaths.CALCULATOR} element={<Calculator />} />
+        <Route path={RoutePaths.ACTIVITY} element={<Activity />} />
+        <Route path={RoutePaths.REFERRAL} element={<Referral />} />
+        <Route path={RoutePaths.PROGRAM} element={<Program />} />
+        <Route path={RoutePaths.LEVEL_CARDS} element={<LevelCards />} />
       </Route>
     </Routes>
   );

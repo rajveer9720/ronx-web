@@ -1,4 +1,4 @@
-import { Search } from "@mui/icons-material";
+import { Clear, Search } from "@mui/icons-material";
 import {
   IconButton,
   InputAdornment,
@@ -15,17 +15,25 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks/hook";
 
 interface SearchFieldProps {
   placeholder?: string;
-  onSearch: (value: string) => void;
+  onSearch?: (value: string) => void;
   styles?: SxProps;
 }
 
 const SearchField = (props: SearchFieldProps) => {
   const dispatch = useAppDispatch();
+  const { searchTerm } = useAppSelector(selectSearchTerm);
   const { placeholder, onSearch, styles } = props;
-  const searchTerm = useAppSelector(selectSearchTerm);
   const [searchValue, setSearchValue] = useState<string>(searchTerm || "");
-  const handleInputChange = (value: string) => {
+
+  const handleSearch = (value: string) => {
     dispatch(setSearchTerm(value));
+    onSearch?.(searchValue);
+  };
+
+  const clearSearch = () => {
+    setSearchValue("");
+    dispatch(setSearchTerm(""));
+    onSearch?.("");
   };
 
   return (
@@ -38,7 +46,6 @@ const SearchField = (props: SearchFieldProps) => {
         value={searchValue}
         onChange={(event) => {
           setSearchValue(event.target.value);
-          handleInputChange(event.target.value);
         }}
         sx={styles}
         slotProps={{
@@ -49,11 +56,11 @@ const SearchField = (props: SearchFieldProps) => {
                   size="small"
                   onClick={(event) => {
                     event.preventDefault();
-                    onSearch(searchValue);
+                    searchTerm ? clearSearch() : handleSearch(searchValue);
                   }}
                   edge="end"
                 >
-                  <Search />
+                  {searchTerm ? <Clear /> : <Search />}
                 </IconButton>
               </InputAdornment>
             ),

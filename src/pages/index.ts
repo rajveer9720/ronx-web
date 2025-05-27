@@ -3,8 +3,7 @@ import Dashboard from "./dashboard";
 import Activity from "./activity";
 import Calculator from "./calculator";
 import Program from "./program";
-import Partner from "./partner";
-import Stats from "./stats";
+import Referral from "./referral";
 import LevelCards from "./levelcards";
 import Invite from "./invite";
 import MainLayout from "./layouts/main";
@@ -16,8 +15,7 @@ export {
   Activity,
   Calculator,
   Program,
-  Partner,
-  Stats,
+  Referral,
   LevelCards,
   Invite,
   MainLayout,

@@ -1,20 +1,22 @@
-import { Box, Typography, Card, Divider, Grid } from "@mui/material";
-import { LevelCard } from "../../components";
+import { Box, Typography, Card, Divider } from "@mui/material";
+import { LevelList } from "../../components";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { IProgram } from "../../interfaces/program";
 import { EmptyUserLevel } from "../../utils/levelUtils";
-import { useAppDispatch } from "../../store/hooks/hook";
+import { useAppDispatch, useAppSelector } from "../../store/hooks/hook";
 import { useGetProgramsQuery } from "../../store/apis/programApi";
 import { useGetUserLevelsQuery } from "../../store/apis/userlevelApi";
 import { hideLoader, showLoader } from "../../store/slices/loaderSlice";
+import { selectSearchTerm } from "../../store/slices/searchSlice";
 
 const Program = () => {
   const { name } = useParams();
   const dispatch = useAppDispatch();
+  const searchTerm: string = useAppSelector(selectSearchTerm);
   const { data: programs, isLoading: isProgramLoading } = useGetProgramsQuery();
   const { data: userLevels, isLoading: isUserLevelLoading } =
-    useGetUserLevelsQuery({ user_id: 1 });
+    useGetUserLevelsQuery({ user_id: +searchTerm });
   const program: IProgram | undefined = programs?.find(
     (program) => program.name.toLowerCase() === name?.toLowerCase()
   );
@@ -36,31 +38,24 @@ const Program = () => {
   }, [isProgramLoading, isUserLevelLoading]);
 
   return (
-    <Card variant="outlined" sx={{ p: 2, borderRadius: 2 }}>
-      <Box display="flex" justifyContent="space-between" alignItems="center">
+    <Card variant="outlined" sx={{ borderRadius: 2 }}>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        p={2}
+      >
         <Typography variant="h5" fontWeight={"bold"}>
           Program: {program?.name}
         </Typography>
       </Box>
 
-      <Divider sx={{ my: 2 }} />
+      <Divider />
 
-      <Grid container spacing={2} py={2}>
-        {finalLevels?.map((level, index) => {
-          return (
-            <Grid size={{ xs: 6, sm: 6, md: 3 }} key={index.toString()}>
-              <LevelCard
-                programName={program?.name}
-                userLevel={level}
-                route={
-                  `/program/${program?.name?.toLowerCase()}` +
-                  `/level/${level?.level?.level}`
-                }
-              />
-            </Grid>
-          );
-        })}
-      </Grid>
+      <LevelList
+        levels={finalLevels}
+        href={`/program/${program?.name?.toLowerCase()}`}
+      />
     </Card>
   );
 };

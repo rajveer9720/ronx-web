@@ -13,7 +13,11 @@ const DashboardCard = (props: DashboardCardProps) => {
 
   return (
     <Card sx={cardStyle}>
-      <Box display={"flex"} alignItems={"center"} gap={2}>
+      <Box
+        display={"flex"}
+        alignItems={"center"}
+        sx={{ gap: { xs: 1, sm: 2, md: 2 } }}
+      >
         <Avatar
           sx={{
             bgcolor: theme.palette.action.focus,
@@ -36,7 +40,7 @@ const DashboardCard = (props: DashboardCardProps) => {
 };
 
 const cardStyle = {
-  p: 2,
+  p: { xs: 1, sm: 1, md: 2 },
   borderRadius: "20px",
   boxShadow: "0 6px 20px rgba(0, 0, 0, 0.06)",
   transition: "all 0.3s ease",

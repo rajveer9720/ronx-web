@@ -78,9 +78,9 @@ const LevelCards = () => {
           justifyContent={"space-between"}
         >
           <Chip
-            color={currentLevel.active ? "primary" : "default"}
-            icon={currentLevel.active ? <LockOpenRounded /> : <LockRounded />}
-            label={currentLevel.active ? "Unlocked" : "Locked"}
+            color={currentLevel.unlock ? "primary" : "default"}
+            icon={currentLevel.unlock ? <LockOpenRounded /> : <LockRounded />}
+            label={currentLevel.unlock ? "Unlocked" : "Locked"}
           />
 
           <Box
@@ -131,13 +131,13 @@ const LevelCards = () => {
 
           <ButtonGroup
             variant="outlined"
-            sx={{ display: !currentLevel.active ? "none" : "flex" }}
+            sx={{ display: !currentLevel.unlock ? "none" : "flex" }}
           >
             <Button variant="contained">
               <ExpandLess />
             </Button>
             <Button disableRipple color="inherit">
-              Cycles: {currentLevel.cycles}
+              Cycles: 567
             </Button>
             <Button variant="contained">
               <ExpandMore />

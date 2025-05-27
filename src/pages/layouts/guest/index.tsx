@@ -12,13 +12,7 @@ import { Outlet } from "react-router-dom";
 
 const GuestLayout = () => {
   return (
-    <AppProvider
-      theme={theme}
-      branding={{
-        logo: <img src={LOGO} alt="Logo" style={{ height: 32 }} />,
-        title: "",
-      }}
-    >
+    <AppProvider theme={theme}>
       <BackdropSpin text="Processing your request, please wait..." />
       <DashboardLayout
         hideNavigation

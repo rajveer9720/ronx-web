@@ -5,6 +5,7 @@ import {
   Chip,
   Divider,
   Grid,
+  Link,
   List,
   ListItem,
   ListItemText,
@@ -13,6 +14,8 @@ import {
 import { IUser } from "../../interfaces/user";
 import { getUserLabelValueArray } from "../../utils/userUtils";
 import { AVATAR } from "../../utils/constants";
+import { Link as RouterLink } from "react-router-dom";
+
 interface UserProfileProps {
   data: IUser;
 }
@@ -27,23 +30,34 @@ const UserProfile = (props: UserProfileProps) => {
         display={"flex"}
         alignItems={"center"}
         justifyContent={"space-between"}
+        p={2}
       >
         <Typography variant="h5" fontWeight={700} mx={1}>
           User Profile
         </Typography>
 
-        <Chip color="primary" icon={<Tag />} label={data?.id} />
+        <Link component={RouterLink} underline="none" to={"#"}>
+          <Chip color="primary" icon={<Tag />} label={data?.id} />
+        </Link>
       </Box>
-      <Divider sx={{ my: 1 }} />
+
+      <Divider />
+
       <Grid
         container
         alignItems={"center"}
         justifyContent={"center"}
         spacing={2}
-        p={2}
+        p={3}
       >
         <Grid size={{ xs: 12, sm: 12, md: 12 }} textAlign={"center"}>
-          <img src={AVATAR} alt="User Avatar" width={100} height={100} />
+          <img
+            src={AVATAR}
+            alt="User Avatar"
+            width={100}
+            height={100}
+            style={{ borderRadius: "20%" }}
+          />
         </Grid>
         <Grid size={{ xs: 12, sm: 12, md: 12 }}>
           <List disablePadding>
@@ -76,7 +90,6 @@ const UserProfile = (props: UserProfileProps) => {
 };
 
 const cardStyle = {
-  p: 2,
   borderRadius: "20px",
   boxShadow: "0 6px 20px rgba(0, 0, 0, 0.06)",
   transition: "all 0.3s ease",

@@ -5,7 +5,7 @@ export function getUserLabelValueArray(
   user: IUser
 ): { label: string; value: string }[] {
   return [
-    { label: "Upline ID", value: user?.upline_id.toString() },
+    { label: "Upline ID", value: user?.parent?.id?.toString()|| "" },
     { label: "Wallet Address", value: truncateAddress(user?.wallet_address) },
     {
       label: "Joining Date",

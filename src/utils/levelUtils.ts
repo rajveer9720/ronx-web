@@ -10,7 +10,7 @@ import {
 } from "@mui/icons-material";
 
 export const getBgColor = (level: IUserLevel, theme: Theme): string => {
-  if (level.active) return theme.palette.primary.light;
+  if (level.unlock) return theme.palette.primary.light;
   return theme.palette.grey[900];
 };
 
@@ -18,7 +18,7 @@ export const getLevelIconBgColor = (
   level: IUserLevel,
   theme: Theme
 ): string => {
-  if (level.active) return theme.palette.primary.light;
+  if (level.unlock) return theme.palette.primary.light;
   return theme.palette.grey[300];
 };
 
@@ -42,14 +42,14 @@ export const getLevelListItems = (level: IUserLevel) => {
         sx: { color: "white" },
       }),
       label: "Partners",
-      value: level.people,
+      value: 5,
     },
     {
       icon: createElement(CachedRounded, {
         sx: { color: "white" },
       }),
       label: "Cycles",
-      value: level.cycles,
+      value: 5,
     },
     {
       icon: createElement(RedeemRounded, {
@@ -70,7 +70,7 @@ export const getLevelListItems = (level: IUserLevel) => {
         sx: { color: "white" },
       }),
       label: "Total Revenue",
-      value: level.revenue,
+      value: level.total_revenue,
     },
   ];
 
@@ -81,12 +81,10 @@ export const EmptyUserLevel: IUserLevel = {
   id: 0,
   level: {} as any,
   user: {} as any,
-  revenue: 0,
+  total_revenue: 0,
   missed_revenue: 0,
   gift_revenue: 0,
-  people: 0,
-  cycles: 0,
-  active: false,
+  unlock: false,
   freeze: false,
   created_at: "",
   updated_at: "",

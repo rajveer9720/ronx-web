@@ -3,12 +3,10 @@ import { IUser } from "./user";
 
 export interface IUserLevel {
   id: number;
-  revenue: number;
+  total_revenue: number;
   missed_revenue: number;
   gift_revenue: number;
-  people: number;
-  cycles: number;
-  active: boolean;
+  unlock: boolean;
   freeze: boolean;
   user: IUser;
   level: ILevel;
