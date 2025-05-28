@@ -14,7 +14,6 @@ import { useEffect } from "react";
 import { showSnackbar } from "../../components/SnackbarUtils";
 import { IUserAuth } from "../../interfaces/auth";
 import { BINANCE_LOGO, LOGO } from "../../utils/constants";
-import MatrixChart from "./yt";
 
 const Login = () => {
   const { isConnected, address } = useAccount();
@@ -67,7 +66,6 @@ const Login = () => {
   return (
     <Grid container sx={{ py: { xs: 2, sm: 2, md: 20 } }}>
       <Grid size={{ xs: 12, sm: 12, md: 8 }} offset={{ xs: 0, sm: 0, md: 2 }}>
-        <MatrixChart />
         <Card sx={cardStyle}>
           <CardContent>
             <Grid container spacing={2}>
