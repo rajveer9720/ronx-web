@@ -1,0 +1,121 @@
+.matrix-card {
+  background-color: #8e44ec;
+  border-radius: 12px;
+  padding: 12px;
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #fff;
+  font-family: Roboto, sans-serif;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  position: relative;
+  box-sizing: border-box;
+  margin: 0 auto;
+  min-height: 240px;
+  height: 240px;
+}
+
+.matrix-header {
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  height: 20px;
+}
+
+.matrix-graph {
+  position: relative;
+  flex-grow: 1;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border-radius: 8px;
+  overflow: visible; 
+  min-height: 130px;
+  height: 150px;
+}
+
+.cytoscape-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.labels-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible; 
+}
+
+.matrix-footer {
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 5px;
+  padding-top: 5px;
+  height: 20px;
+  width: 100%;
+  bottom: 12px;
+  position: absolute;
+  left: 0;
+  padding: 0 12px;
+}
+
+.icon-text {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.matrix-node-label {
+  position: absolute;
+  transform: translate(-50%, 0);
+  pointer-events: auto;
+  white-space: nowrap;
+  z-index: 2;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.matrix-node-label a {
+  color: #fff;
+  text-decoration: none;
+}
+
+@media (max-width: 600px) {
+  .matrix-card {
+    max-width: 100%;
+    padding: 6px;
+    font-size: 12px;
+    min-height: 220px;
+    height: 220px;
+  }
+  
+  .matrix-header,
+  .matrix-footer {
+    font-size: 11px;
+  }
+  
+  .matrix-node-label {
+    font-size: 10px;
+  }
+  
+  .matrix-graph {
+    height: 120px;
+    min-height: 120px;
+    margin-bottom: 30px; 
+  }
+  
+  .matrix-footer {
+    bottom: 8px;
+  }
+}

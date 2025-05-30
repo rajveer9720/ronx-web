@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import { showSnackbar } from "../../components/SnackbarUtils";
 import { IUserAuth } from "../../interfaces/auth";
 import { BINANCE_LOGO, LOGO } from "../../utils/constants";
+import { GridX3, GridX4 } from "../../components";
 
 const Login = () => {
   const { isConnected, address } = useAccount();
@@ -59,7 +60,6 @@ const Login = () => {
 
   useEffect(() => {
     if (isConnected && address) {
-      // handleLogin();
     }
   }, [isConnected, address]);
 
@@ -68,6 +68,68 @@ const Login = () => {
       <Grid size={{ xs: 12, sm: 12, md: 8 }} offset={{ xs: 0, sm: 0, md: 2 }}>
         <Card sx={cardStyle}>
           <CardContent>
+            <GridX3
+              nodesData={[
+                {
+                  id: "1",
+                  label: "Level 1",
+                  link: "/matrix/1",
+                  nodeColor: "#7b3de4",
+                },
+                {
+                  id: "2",
+                  label: "Level 2",
+                  link: "/matrix/2",
+                  nodeColor: "#7b3de4",
+                },
+                {
+                  id: "3",
+                  label: "Level 3",
+                  link: "/matrix/3",
+                  nodeColor: "#7b3de4",
+                },
+              ]}
+            />
+            <GridX4
+              nodesData={[
+                {
+                  id: "1",
+                  label: "Level 1",
+                  link: "/matrix/1",
+                  nodeColor: "#7b3de4",
+                },
+                {
+                  id: "2",
+                  label: "Level 2",
+                  link: "/matrix/2",
+                  nodeColor: "#7b3de4",
+                },
+                {
+                  id: "3",
+                  label: "Level 3",
+                  link: "/matrix/3",
+                  nodeColor: "#7b3de4",
+                },
+                {
+                  id: "4",
+                  label: "Level 4",
+                  link: "/matrix/4",
+                  nodeColor: "#7b3de4",
+                },
+                {
+                  id: "5",
+                  label: "Level 5",
+                  link: "/matrix/5",
+                  nodeColor: "#7b3de4",
+                },
+                {
+                  id: "6",
+                  label: "Level 6",
+                  link: "/matrix/6",
+                  nodeColor: "#7b3de4",
+                },
+              ]}
+            />
             <Grid container spacing={2}>
               <Grid size={{ xs: 12, sm: 12, md: 8 }}>
                 <Box display={"flex"} gap={2} alignItems={"center"}>
