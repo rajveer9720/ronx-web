@@ -10,13 +10,14 @@ import {
   Invite,
   MainLayout,
   GuestLayout,
+  Home,
 } from "./pages";
 import { RoutePaths } from "./utils/routes";
 
 const Navigation: React.FC = () => {
   return (
     <Routes>
-      <Route path="/" element={<></>} />
+      <Route path={RoutePaths.BASE} element={<Home />} />
       <Route element={<GuestLayout />}>
         <Route path={RoutePaths.LOGIN} element={<Login />} />
         <Route path={RoutePaths.INVITE} element={<Invite />} />

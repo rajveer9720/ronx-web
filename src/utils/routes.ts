@@ -1,4 +1,5 @@
 export enum RoutePaths {
+  BASE = "/",
   DASHBOARD = "dashboard",
   LOGIN = "login",
   ACTIVITY = "activity",

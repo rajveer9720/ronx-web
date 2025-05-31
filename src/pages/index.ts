@@ -1,3 +1,4 @@
+import Home from "./home";
 import Login from "./login";
 import Dashboard from "./dashboard";
 import Activity from "./activity";
@@ -10,6 +11,7 @@ import MainLayout from "./layouts/main";
 import GuestLayout from "./layouts/guest";
 
 export {
+  Home,
   Dashboard,
   Login,
   Activity,
