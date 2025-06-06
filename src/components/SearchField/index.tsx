@@ -1,4 +1,4 @@
-import { Clear, Search } from "@mui/icons-material";
+import { Search } from "@mui/icons-material";
 import {
   IconButton,
   InputAdornment,
@@ -7,11 +7,8 @@ import {
   TextField,
 } from "@mui/material";
 import { useState } from "react";
-import {
-  selectSearchTerm,
-  setSearchTerm,
-} from "../../store/slices/searchSlice";
-import { useAppDispatch, useAppSelector } from "../../store/hooks/hook";
+import { selectSearchTerm } from "../../store/slices/searchSlice";
+import { useAppSelector } from "../../store/hooks/hook";
 
 interface SearchFieldProps {
   placeholder?: string;
@@ -20,21 +17,9 @@ interface SearchFieldProps {
 }
 
 const SearchField = (props: SearchFieldProps) => {
-  const dispatch = useAppDispatch();
   const { searchTerm } = useAppSelector(selectSearchTerm);
   const { placeholder, onSearch, styles } = props;
   const [searchValue, setSearchValue] = useState<string>(searchTerm || "");
-
-  const handleSearch = (value: string) => {
-    dispatch(setSearchTerm(value));
-    onSearch?.(searchValue);
-  };
-
-  const clearSearch = () => {
-    setSearchValue("");
-    dispatch(setSearchTerm(""));
-    onSearch?.("");
-  };
 
   return (
     <SearchStyled>
@@ -53,14 +38,15 @@ const SearchField = (props: SearchFieldProps) => {
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton
+                  disabled={searchValue == searchTerm}
                   size="small"
                   onClick={(event) => {
                     event.preventDefault();
-                    searchTerm ? clearSearch() : handleSearch(searchValue);
+                    onSearch?.(searchValue);
                   }}
                   edge="end"
                 >
-                  {searchTerm ? <Clear /> : <Search />}
+                  <Search />
                 </IconButton>
               </InputAdornment>
             ),

@@ -1,3 +1,5 @@
+import { IPaginate, IPagination } from "./pagination";
+
 export interface IUser {
   id: number;
   wallet_address: string;
@@ -26,5 +28,11 @@ export interface IUserStats {
 
 export interface IUserRequest {
   id?: number;
-  wallet_address?: string;
 }
+
+export interface IUserReferralResponse {
+  data: IUserReferral[];
+  pagination: IPagination;
+}
+
+export interface IUserReferralRequest extends IUserRequest, IPaginate {}

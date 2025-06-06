@@ -16,10 +16,10 @@ import {
   GRID_X3,
 } from "../../utils/cytoscapeUtils";
 import { Box } from "@mui/material";
-import { NodeData } from "../../interfaces/grid";
+import { INodeData } from "../../interfaces/grid";
 
 interface GridX3Props {
-  nodesData: NodeData[];
+  nodesData: INodeData[];
 }
 
 const GridX3 = ({ nodesData }: GridX3Props) => {
@@ -31,10 +31,7 @@ const GridX3 = ({ nodesData }: GridX3Props) => {
   const [height, setHeight] = useState(GRID_X3.DESKTOP_HEIGHT);
 
   const elements = useMemo(() => createGridX3Elements(nodesData), [nodesData]);
-  const style = useMemo(
-    () => createNodeStyles("#7b3de4", GRID_X3.DEFAULT_NODE_SIZE),
-    []
-  );
+  const style: any = useMemo(() => createNodeStyles("#7b3de4"), []);
   const layoutConfig = useMemo(
     () => createGridLayout(Math.min(nodesData.length, 3)),
     [nodesData.length]

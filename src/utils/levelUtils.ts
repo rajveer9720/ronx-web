@@ -8,6 +8,8 @@ import {
   AccountBalanceWalletRounded,
   PeopleRounded,
 } from "@mui/icons-material";
+import { ITransaction } from "../interfaces/transaction";
+import { INodeData } from "../interfaces/grid";
 
 export const getBgColor = (level: IUserLevel, theme: Theme): string => {
   if (level.unlock) return theme.palette.primary.light;
@@ -33,7 +35,48 @@ export const getLevelIcon = (level: IUserLevel): ReactNode => {
     });
 };
 
-export const getLevelListItems = (level: IUserLevel) => {
+export const getNodeColor = (theme: Theme, txn: ITransaction): string => {
+  if (txn.spill_down) return "green"; // Green for spill down
+  if (txn.spill_up) return "blue"; // Orange for gift
+  return theme.palette.primary.main;
+};
+
+export const getNodesData = (theme: Theme, transactions: ITransaction[]) => {
+  const data = transactions.map((txn: ITransaction) => {
+    const node: INodeData = {
+      id: txn.place.toString(),
+      label: txn.user.id.toString(),
+      link: `/user/${txn.user.id}`,
+      nodeColor: getNodeColor(theme, txn),
+    };
+    return node;
+  });
+
+  if (transactions.length != 3 && transactions.length != 6) {
+    const emptyNodes: INodeData[] = [];
+    for (
+      let i = transactions.length;
+      i < (transactions.length < 3 ? 3 : 6);
+      i++
+    ) {
+      emptyNodes.push({
+        id: (i + 1).toString(),
+        label: "NA",
+        link: "/",
+        nodeColor: theme.palette.common.white,
+      });
+    }
+    return [...data, ...emptyNodes];
+  }
+
+  return data;
+};
+
+export const getLevelListItems = (
+  level: IUserLevel,
+  partners: number = 1,
+  cycles: number = 1
+) => {
   let items: any[] = [];
 
   items = [
@@ -42,14 +85,14 @@ export const getLevelListItems = (level: IUserLevel) => {
         sx: { color: "white" },
       }),
       label: "Partners",
-      value: 5,
+      value: partners,
     },
     {
       icon: createElement(CachedRounded, {
         sx: { color: "white" },
       }),
       label: "Cycles",
-      value: 5,
+      value: cycles,
     },
     {
       icon: createElement(RedeemRounded, {

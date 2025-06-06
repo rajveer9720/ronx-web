@@ -16,29 +16,30 @@ import {
   useGetUserQuery,
   useGetUserStatsQuery,
 } from "../../store/apis/userApi";
-import { selectSearchTerm } from "../../store/slices/searchSlice";
 import { selectCurrentUser } from "../../store/slices/authSlice";
+import { selectSearchTerm } from "../../store/slices/searchSlice";
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
-  const { searchTerm, type } = useAppSelector(selectSearchTerm);
-  const currentUser = useAppSelector(selectCurrentUser);
-  const params = {
-    id: type === "number" ? Number(searchTerm) : currentUser?.id,
-    wallet_address: type === "string" ? searchTerm : undefined,
-  };
+  const loggedInUser = useAppSelector(selectCurrentUser);
+  const { searchTerm } = useAppSelector(selectSearchTerm);
+
   const { data: programs, isLoading: isProgramLoading } = useGetProgramsQuery();
-  const { data: user, isLoading: isUserLoading } = useGetUserQuery(params);
-  const { data: userStats } = useGetUserStatsQuery(params);
-  const dashboardItems = getDashboardCards(userStats);
+  const { data: user, isLoading: isUserLoading } = useGetUserQuery({
+    id: Number(searchTerm) || loggedInUser?.id,
+  });
+  const { data: stats, isLoading: isStatsLoading } = useGetUserStatsQuery({
+    id: Number(searchTerm) || loggedInUser?.id,
+  });
+  const dashboardItems = getDashboardCards(stats);
 
   useEffect(() => {
-    if (isProgramLoading || isUserLoading) {
+    if (isProgramLoading || isUserLoading || isStatsLoading) {
       dispatch(showLoader());
     } else {
       dispatch(hideLoader());
     }
-  }, [isProgramLoading, isUserLoading]);
+  }, [isProgramLoading, isUserLoading, isStatsLoading]);
 
   return (
     <Box>

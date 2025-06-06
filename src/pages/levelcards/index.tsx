@@ -24,12 +24,19 @@ import { EmptyUserLevel } from "../../utils/levelUtils";
 import { IUserLevel } from "../../interfaces/user-levels";
 import { useGetProgramsQuery } from "../../store/apis/programApi";
 import { useGetUserLevelsQuery } from "../../store/apis/userlevelApi";
-import { useAppDispatch } from "../../store/hooks/hook";
+import { useAppDispatch, useAppSelector } from "../../store/hooks/hook";
 import { hideLoader, showLoader } from "../../store/slices/loaderSlice";
+import { useGetTransactionsByCycleQuery } from "../../store/apis/transactionApi";
+import { selectCurrentUser } from "../../store/slices/authSlice";
+import { selectSearchTerm } from "../../store/slices/searchSlice";
+import { useGetUserQuery } from "../../store/apis/userApi";
 
 const LevelCards = () => {
   const { name, level } = useParams();
   const dispatch = useAppDispatch();
+  const loggedInUser = useAppSelector(selectCurrentUser);
+  const { searchTerm } = useAppSelector(selectSearchTerm);
+  const [currentCycle, setCurrentCycle] = useState<number>(1);
   const [currentLevelIndex, setCurrentLevelIndex] = useState<number>(
     Number(level) || 0
   );
@@ -39,14 +46,28 @@ const LevelCards = () => {
   const programLevel = program?.levels?.find(
     (programLevel: any) => programLevel.level === currentLevelIndex
   );
+  const { data: user } = useGetUserQuery({
+    id: Number(searchTerm) || loggedInUser?.id,
+  });
   const {
     data: userLevels,
     isLoading: isUserLevelLoading,
-    refetch,
+    refetch: refetchUserLevels,
   } = useGetUserLevelsQuery({
-    user_id: 1,
+    user_id: Number(searchTerm) || loggedInUser?.id,
     level: currentLevelIndex,
     program_id: program?.id,
+  });
+
+  const {
+    data: txns,
+    isLoading: isTxnLoading,
+    refetch: refetchTxns,
+  } = useGetTransactionsByCycleQuery({
+    user_id: Number(searchTerm) || loggedInUser?.id,
+    program_id: program?.id || 0,
+    level: currentLevelIndex,
+    cycle: currentCycle,
   });
 
   const currentLevel =
@@ -57,16 +78,23 @@ const LevelCards = () => {
     } as IUserLevel);
 
   useEffect(() => {
-    if (isUserLevelLoading) {
+    if (isUserLevelLoading || isTxnLoading) {
       dispatch(showLoader());
     } else {
       dispatch(hideLoader());
+      setCurrentCycle(txns?.pagination?.total_pages || 1);
     }
-  }, [isUserLevelLoading]);
+  }, [isUserLevelLoading, isTxnLoading]);
 
   useEffect(() => {
-    refetch();
+    setCurrentCycle(1);
+    refetchTxns();
+    refetchUserLevels();
   }, [currentLevelIndex]);
+
+  useEffect(() => {
+    refetchTxns();
+  }, [currentCycle, txns]);
 
   return (
     <Grid container spacing={2}>
@@ -92,16 +120,18 @@ const LevelCards = () => {
             <Typography variant="h6" fontWeight={600}>
               Upline ID
             </Typography>
-            <Chip color="primary" icon={<Tag />} label={"123"} />
+            <Chip color="primary" icon={<Tag />} label={user?.parent?.id} />
           </Box>
         </Box>
 
         <Box py={2}>
           <LevelCard
-            large={true}
-            disabled={true}
+            large
+            disabled
             userLevel={currentLevel}
             programName={program?.name || name}
+            transactions={txns?.data || []}
+            cycles={txns?.pagination?.total_pages || 0}
           />
         </Box>
 
@@ -133,13 +163,24 @@ const LevelCards = () => {
             variant="outlined"
             sx={{ display: !currentLevel.unlock ? "none" : "flex" }}
           >
-            <Button variant="contained">
+            <Button
+              variant="contained"
+              onClick={() => setCurrentCycle((prev) => prev - 1)}
+              disabled={currentCycle === 1}
+            >
               <ExpandLess />
             </Button>
             <Button disableRipple color="inherit">
-              Cycles: 567
+              Cycle: {txns?.pagination?.current_page}
             </Button>
-            <Button variant="contained">
+            <Button
+              variant="contained"
+              onClick={() => setCurrentCycle((prev) => prev + 1)}
+              disabled={
+                currentCycle === txns?.pagination?.total_pages ||
+                txns?.pagination?.total_pages === 0
+              }
+            >
               <ExpandMore />
             </Button>
           </ButtonGroup>

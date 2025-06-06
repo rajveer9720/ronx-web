@@ -18,10 +18,10 @@ import {
   GRID_X4,
 } from "../../utils/cytoscapeUtils";
 import { Box } from "@mui/material";
-import { NodeData } from "../../interfaces/grid";
+import { INodeData } from "../../interfaces/grid";
 
 interface GridX4Props {
-  nodesData: NodeData[];
+  nodesData: INodeData[];
 }
 
 cytoscape.use(dagre);
@@ -48,11 +48,8 @@ const GridX4 = ({ nodesData }: GridX4Props) => {
     [nodesData]
   );
 
-  const style = useMemo(
-    () => [
-      ...createNodeStyles("transparent", responsiveNodeSize),
-      ...createEdgeStyles(),
-    ],
+  const style: any = useMemo(
+    () => [...createNodeStyles("transparent"), ...createEdgeStyles()],
     [responsiveNodeSize]
   );
 
@@ -80,7 +77,9 @@ const GridX4 = ({ nodesData }: GridX4Props) => {
           }}
         >
           {hasLink ? (
-            <a href={nodeInfo!.link}>{label}</a>
+            <a href={nodeInfo!.link} target="_blank">
+              {label}
+            </a>
           ) : (
             <span>{label}</span>
           )}

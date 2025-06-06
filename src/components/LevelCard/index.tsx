@@ -24,25 +24,41 @@ import {
   useTheme,
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
-import { getBgColor, getLevelListItems } from "../../utils/levelUtils";
+import {
+  getBgColor,
+  getLevelListItems,
+  getNodesData,
+} from "../../utils/levelUtils";
 import { IUserLevel } from "../../interfaces/user-levels";
 import { PROGRAM_CONST } from "../../utils/slots";
 import GridX3 from "../GridX3";
 import GridX4 from "../GridX4";
 import { useAppSelector } from "../../store/hooks/hook";
 import { selectCurrentUser } from "../../store/slices/authSlice";
+import { ITransaction } from "../../interfaces/transaction";
 interface LevelCardProps {
   userLevel: IUserLevel;
+  transactions?: ITransaction[];
   large?: boolean;
   disabled?: boolean;
   route?: string;
   programName?: string;
+  cycles?: number;
 }
 
 const LevelCard = (props: LevelCardProps) => {
   const theme = useTheme();
-  const { userLevel, large, disabled, route, programName } = props;
+  const {
+    userLevel,
+    large,
+    disabled,
+    route,
+    programName,
+    transactions,
+    cycles,
+  } = props;
   const currentUser = useAppSelector(selectCurrentUser);
+  const nodesData = getNodesData(theme, transactions || []) || [];
 
   return (
     <Card
@@ -60,7 +76,7 @@ const LevelCard = (props: LevelCardProps) => {
       >
         <CardContent>
           <Grid container spacing={2}>
-            <Grid size={{ xs: 12, sm: 12, md: large ? 8 : 12 }}>
+            <Grid size={{ xs: 12, sm: 12, md: large ? 7 : 12 }}>
               <Box
                 display="flex"
                 justifyContent="space-between"
@@ -129,11 +145,11 @@ const LevelCard = (props: LevelCardProps) => {
                 ) : (
                   <Grid container spacing={1} py={large ? 4 : 2}>
                     {programName?.toLowerCase() === PROGRAM_CONST.X3 && (
-                      <GridX3 size={3} large={large} hide={!userLevel.unlock} />
+                      <GridX3 nodesData={nodesData} />
                     )}
 
                     {programName?.toLowerCase() === PROGRAM_CONST.X4 && (
-                      <GridX4 size={2} large={large} hide={!userLevel.unlock} />
+                      <GridX4 nodesData={nodesData} />
                     )}
                   </Grid>
                 )}
@@ -186,31 +202,31 @@ const LevelCard = (props: LevelCardProps) => {
                     size={large ? "medium" : "small"}
                     color={userLevel?.unlock ? "primary" : "default"}
                     icon={<CachedRounded />}
-                    label={55}
+                    label={cycles}
                   />
                 </Tooltip>
               </Box>
             </Grid>
 
             <Grid
-              size={{ xs: 12, sm: 12, md: 1 }}
+              size={{ xs: 12, sm: 12, md: 0.5 }}
               sx={{ display: { xs: "none", md: large ? "block" : "none" } }}
             >
               <Divider orientation="vertical" />
             </Grid>
             <Grid
-              size={{ xs: 12, sm: 12, md: 1 }}
+              size={{ xs: 12, sm: 12, md: 0.5 }}
               sx={{ display: { xs: large ? "block" : "none", md: "none" } }}
             >
               <Divider orientation="horizontal" />
             </Grid>
 
             <Grid
-              size={{ xs: 12, sm: 12, md: 3 }}
+              size={{ xs: 12, sm: 12, md: 4 }}
               sx={{ display: large ? "block" : "none" }}
             >
               <List disablePadding>
-                {getLevelListItems(userLevel)?.map((item, index) => {
+                {getLevelListItems(userLevel, 0, cycles)?.map((item, index) => {
                   const isLastItem =
                     index === getLevelListItems(userLevel).length - 1;
 

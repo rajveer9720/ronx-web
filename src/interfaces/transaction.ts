@@ -1,3 +1,4 @@
+import { IPaginate, IPagination } from "./pagination";
 import { IUser } from "./user";
 import { IUserLevel } from "./user-levels";
 
@@ -17,8 +18,16 @@ export interface ITransaction {
 
 export interface ITransactionRequest {
   user_id?: number;
-  parent_id?: number;
   program_id?: number;
   level?: number;
   cycle?: number;
 }
+
+export interface ITransactionResponse {
+  data: ITransaction[];
+  pagination: IPagination;
+}
+
+export interface ITransactionPaginateRequest
+  extends ITransactionRequest,
+    IPaginate {}

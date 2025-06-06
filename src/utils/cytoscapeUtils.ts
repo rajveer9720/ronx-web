@@ -32,45 +32,12 @@ export const createGridX3Elements = (nodesData: { id: string }[]) => {
   return nodes;
 };
 
-export const createNodeStyles = (color: string, size: number) => [
+export const createNodeStyles = (color: string) => [
   {
     selector: "node",
     style: {
       shape: "roundrectangle",
-      width: size,
-      height: size,
       "background-color": color,
-      "background-opacity": 1,
-      "border-radius": "10px",
-    },
-  },
-];
-
-export const createIndividualNodeStyles = (
-  nodesData: any[],
-  defaultSize: number
-) => [
-  ...nodesData.map((node) => ({
-    selector: `#${node.id}`,
-    style: {
-      shape: "roundrectangle",
-      width: node.nodeSize || defaultSize,
-      height: node.nodeSize || defaultSize,
-      "background-color": node.nodeColor || "#8e44ec",
-      "background-opacity": 1,
-
-      "border-radius": "10px",
-    },
-  })),
-  {
-    selector: "node",
-    style: {
-      shape: "roundrectangle",
-      width: defaultSize,
-      height: defaultSize,
-      "background-color": "#8e44ec",
-      "background-opacity": 1,
-      "border-radius": "10px",
     },
   },
 ];
@@ -132,13 +99,13 @@ export const applyNodeColors = (cy: cytoscape.Core, nodesData: any[]) => {
 };
 
 export const GRID_X3 = {
-  DESKTOP_HEIGHT: 240,
-  MOBILE_HEIGHT: 220,
-  DEFAULT_NODE_SIZE: 48,
+  DESKTOP_HEIGHT: 0,
+  MOBILE_HEIGHT: 0,
+  DEFAULT_NODE_SIZE: 50,
 };
 
 export const GRID_X4 = {
-  DESKTOP_HEIGHT: 320,
+  DESKTOP_HEIGHT: 200,
   MOBILE_HEIGHT: 180,
   DESKTOP_NODE_SIZE: 60,
   MOBILE_NODE_SIZE: 36,

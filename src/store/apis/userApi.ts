@@ -1,7 +1,8 @@
 import {
   IUser,
   IUserLogin,
-  IUserReferral,
+  IUserReferralRequest,
+  IUserReferralResponse,
   IUserRequest,
   IUserStats,
 } from "../../interfaces/user";
@@ -45,14 +46,11 @@ export const userApi = api.injectEndpoints({
       keepUnusedDataFor: 3600,
     }),
 
-    getUserReferrals: build.query<IUserReferral[], IUserRequest>({
+    getUserReferrals: build.query<IUserReferralResponse, IUserReferralRequest>({
       query: (params) => ({
         url: ApiEndpoints.USER_REFERRAL,
         params: params,
       }),
-      transformResponse(baseQueryReturnValue: any) {
-        return baseQueryReturnValue?.data as IUserReferral[];
-      },
       providesTags: ["User"],
       keepUnusedDataFor: 3600,
     }),

@@ -2,12 +2,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface SearchState {
   searchTerm: string;
-  type: "string" | "number";
 }
 
 const initialState: SearchState = {
   searchTerm: "",
-  type: "string",
 };
 
 const searchSlice = createSlice({
@@ -15,9 +13,7 @@ const searchSlice = createSlice({
   initialState,
   reducers: {
     setSearchTerm(state, action: PayloadAction<string>) {
-      const trimmedSearchTerm = action.payload.trim();
-      state.searchTerm = trimmedSearchTerm;
-      state.type = /^\d+$/.test(trimmedSearchTerm) ? "number" : "string";
+      state.searchTerm = action.payload.trim();
     },
   },
 });

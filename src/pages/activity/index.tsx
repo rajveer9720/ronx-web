@@ -1,17 +1,29 @@
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridPaginationModel } from "@mui/x-data-grid";
 import { useAppDispatch, useAppSelector } from "../../store/hooks/hook";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { selectSearchTerm } from "../../store/slices/searchSlice";
 import { hideLoader, showLoader } from "../../store/slices/loaderSlice";
 import { useGetTransactionsQuery } from "../../store/apis/transactionApi";
 import moment from "moment";
 import { Box } from "@mui/material";
+import { selectCurrentUser } from "../../store/slices/authSlice";
 
 const Activity = () => {
   const dispatch = useAppDispatch();
+  const loggedInUser = useAppSelector(selectCurrentUser);
   const { searchTerm } = useAppSelector(selectSearchTerm);
-  const { data: rows, isLoading } = useGetTransactionsQuery({
-    user_id: +searchTerm,
+  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
+    page: Number(import.meta.env.VITE_APP_PAGE_NUMBER),
+    pageSize: Number(import.meta.env.VITE_APP_PAGE_SIZE),
+  });
+  const {
+    data,
+    isLoading,
+    refetch,
+  } = useGetTransactionsQuery({
+    user_id: Number(searchTerm) || loggedInUser?.id,
+    page: paginationModel.page + 1,
+    limit: paginationModel.pageSize,
   });
 
   useEffect(() => {
@@ -21,6 +33,10 @@ const Activity = () => {
       dispatch(hideLoader());
     }
   }, [isLoading]);
+
+  useEffect(() => {
+    refetch();
+  }, [paginationModel]);
 
   const columns: GridColDef[] = [
     {
@@ -36,7 +52,7 @@ const Activity = () => {
     { field: "id", headerName: "User ID", flex: 1 },
     {
       field: "program",
-      headerName: "Matrix",
+      headerName: "Program",
       flex: 1,
       renderCell: (params) => params.row.user_level.level.program.name,
     },
@@ -53,13 +69,18 @@ const Activity = () => {
   return (
     <Box mt={4}>
       <DataGrid
-        rows={rows || []}
+        rows={data?.data || []}
+        rowCount={data?.pagination?.total_items || 0}
+        loading={isLoading}
         columns={columns}
         disableRowSelectionOnClick
         disableColumnMenu
         disableColumnFilter
         disableColumnSelector
         disableColumnResize
+        paginationMode="server"
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
       />
     </Box>
   );

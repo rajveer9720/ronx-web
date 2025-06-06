@@ -1,4 +1,4 @@
-export interface NodeData {
+export interface INodeData {
   id: string;
   label?: string;
   link?: string;

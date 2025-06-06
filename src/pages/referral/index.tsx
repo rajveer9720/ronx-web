@@ -1,17 +1,25 @@
 import { Box } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridPaginationModel } from "@mui/x-data-grid";
 import { useAppDispatch, useAppSelector } from "../../store/hooks/hook";
 import { selectSearchTerm } from "../../store/slices/searchSlice";
 import { useGetUserReferralsQuery } from "../../store/apis/userApi";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { hideLoader, showLoader } from "../../store/slices/loaderSlice";
 import moment from "moment";
+import { selectCurrentUser } from "../../store/slices/authSlice";
 
 const Referral = () => {
   const dispatch = useAppDispatch();
+  const loggedInUser = useAppSelector(selectCurrentUser);
   const { searchTerm } = useAppSelector(selectSearchTerm);
-  const { data: rows, isLoading } = useGetUserReferralsQuery({
-    id: +searchTerm,
+  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
+    page: Number(import.meta.env.VITE_APP_PAGE_NUMBER),
+    pageSize: Number(import.meta.env.VITE_APP_PAGE_SIZE),
+  });
+  const { data, isLoading, refetch } = useGetUserReferralsQuery({
+    id: Number(searchTerm) || loggedInUser?.id,
+    page: paginationModel.page + 1,
+    limit: paginationModel.pageSize,
   });
 
   useEffect(() => {
@@ -21,6 +29,10 @@ const Referral = () => {
       dispatch(hideLoader());
     }
   }, [isLoading]);
+
+  useEffect(() => {
+    refetch();
+  }, [paginationModel]);
 
   const columns: GridColDef[] = [
     {
@@ -40,13 +52,17 @@ const Referral = () => {
   return (
     <Box mt={4}>
       <DataGrid
-        rows={rows || []}
+        rows={data?.data || []}
+        rowCount={data?.pagination?.total_items || 0}
         columns={columns}
         disableRowSelectionOnClick
         disableColumnMenu
         disableColumnFilter
         disableColumnSelector
         disableColumnResize
+        paginationMode="server"
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
       />
     </Box>
   );

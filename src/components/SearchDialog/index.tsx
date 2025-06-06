@@ -6,20 +6,17 @@ import SearchField from "../SearchField";
 interface SearchDialogProps {
   open: boolean;
   handleClose: () => void;
+  onSearch?: (value: string) => void;
 }
 
 const SearchDialog = (props: SearchDialogProps) => {
-  const { open, handleClose } = props;
+  const { open, handleClose, onSearch } = props;
 
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Search by wallet address or ID</DialogTitle>
       <DialogContent>
-        <SearchField
-          onSearch={(_) => {
-            handleClose();
-          }}
-        />
+        <SearchField onSearch={onSearch} />
       </DialogContent>
     </Dialog>
   );

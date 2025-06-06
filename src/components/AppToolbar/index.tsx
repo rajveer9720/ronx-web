@@ -7,13 +7,14 @@ import { useConnectModal, useAccountModal } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import { truncateAddress } from "../../utils/userUtils";
 import { useEffect, useState } from "react";
-import { useLoginMutation } from "../../store/apis/userApi";
+import { useGetUserQuery, useLoginMutation } from "../../store/apis/userApi";
 import { IUserAuth } from "../../interfaces/auth";
 import { useAppDispatch } from "../../store/hooks/hook";
 import { logout, setCredentials } from "../../store/slices/authSlice";
 import { jwtDecode } from "jwt-decode";
 import { IUser } from "../../interfaces/user";
 import SearchDialog from "../SearchDialog";
+import { setSearchTerm } from "../../store/slices/searchSlice";
 
 interface AppToolbarProps {
   guest?: boolean;
@@ -27,6 +28,8 @@ export const ToolbarActions = (props: AppToolbarProps) => {
   const dispatch = useAppDispatch();
   const [login] = useLoginMutation();
   const [showSearchDialog, setShowSearchDialog] = useState<boolean>(false);
+  const [params, setParams] = useState<any>({});
+  const { data: user, refetch } = useGetUserQuery(params);
 
   const handleWalletConnect = () => {
     try {
@@ -55,6 +58,22 @@ export const ToolbarActions = (props: AppToolbarProps) => {
       }
     } catch (error) {}
   };
+
+  const handleSearch = async (value: string) => {
+    const type = /^\d+$/.test(value) ? "number" : "string";
+    if (type === "number") {
+      setParams({ id: Number(value) });
+    } else {
+      setParams({ wallet_address: value });
+    }
+  };
+
+  useEffect(() => {
+    if (params.id || params.wallet_address) {
+      refetch();
+      dispatch(setSearchTerm(user?.id.toString() || ""));
+    }
+  }, [params, user]);
 
   useEffect(() => {
     if (isConnected && address) {
@@ -93,6 +112,7 @@ export const ToolbarActions = (props: AppToolbarProps) => {
               <SearchField
                 placeholder="Search by wallet address or ID"
                 styles={{ width: "25vw" }}
+                onSearch={handleSearch}
               />
             </Box>
           </>
@@ -116,10 +136,7 @@ export const ToolbarActions = (props: AppToolbarProps) => {
         handleClose={() => {
           setShowSearchDialog(false);
         }}
-        // onSubmit={(value: string) => {
-        //   console.log(value);
-        //   setShowSearchDialog(false);
-        // }}
+        onSearch={handleSearch}
       />
     </>
   );

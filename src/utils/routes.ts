@@ -19,4 +19,5 @@ export enum ApiEndpoints {
   LEVEL = "/level",
   USER_LEVEL = "/user-level",
   TRANSACTION = "/transaction",
+  TRANSACTION_CYCLE = "/transaction/cycle",
 }

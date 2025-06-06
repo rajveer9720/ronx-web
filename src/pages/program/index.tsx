@@ -9,14 +9,16 @@ import { useGetProgramsQuery } from "../../store/apis/programApi";
 import { useGetUserLevelsQuery } from "../../store/apis/userlevelApi";
 import { hideLoader, showLoader } from "../../store/slices/loaderSlice";
 import { selectSearchTerm } from "../../store/slices/searchSlice";
+import { selectCurrentUser } from "../../store/slices/authSlice";
 
 const Program = () => {
   const { name } = useParams();
   const dispatch = useAppDispatch();
-  const searchTerm: string = useAppSelector(selectSearchTerm);
+  const loggedInUser = useAppSelector(selectCurrentUser);
+  const { searchTerm } = useAppSelector(selectSearchTerm);
   const { data: programs, isLoading: isProgramLoading } = useGetProgramsQuery();
   const { data: userLevels, isLoading: isUserLevelLoading } =
-    useGetUserLevelsQuery({ user_id: +searchTerm });
+    useGetUserLevelsQuery({ user_id: Number(searchTerm) || loggedInUser?.id });
   const program: IProgram | undefined = programs?.find(
     (program) => program.name.toLowerCase() === name?.toLowerCase()
   );

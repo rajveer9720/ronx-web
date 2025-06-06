@@ -1,24 +1,38 @@
 import {
-  ITransaction,
+  ITransactionPaginateRequest,
   ITransactionRequest,
+  ITransactionResponse,
 } from "../../interfaces/transaction";
 import { ApiEndpoints } from "../../utils/routes";
 import { api } from "./api";
 
 export const transactionApi = api.injectEndpoints({
   endpoints: (build) => ({
-    getTransactions: build.query<ITransaction[], ITransactionRequest>({
+    getTransactionsByCycle: build.query<
+      ITransactionResponse,
+      ITransactionRequest
+    >({
+      query: (params) => ({
+        url: ApiEndpoints.TRANSACTION_CYCLE,
+        params: params,
+      }),
+      providesTags: ["Transaction"],
+      keepUnusedDataFor: 0,
+    }),
+
+    getTransactions: build.query<
+      ITransactionResponse,
+      ITransactionPaginateRequest
+    >({
       query: (params) => ({
         url: ApiEndpoints.TRANSACTION,
         params: params,
       }),
-      transformResponse(baseQueryReturnValue: any) {
-        return baseQueryReturnValue?.data as ITransaction[];
-      },
       providesTags: ["Transaction"],
-      keepUnusedDataFor: 3600,
+      keepUnusedDataFor: 0,
     }),
   }),
 });
 
-export const { useGetTransactionsQuery } = transactionApi;
+export const { useGetTransactionsByCycleQuery, useGetTransactionsQuery } =
+  transactionApi;
