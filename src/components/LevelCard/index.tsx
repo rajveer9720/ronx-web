@@ -6,6 +6,7 @@ import {
   Tag,
   WarningAmberRounded,
 } from "@mui/icons-material";
+import { useEffect } from "react";
 import {
   Box,
   Button,
@@ -45,8 +46,18 @@ interface LevelCardProps {
   programName?: string;
   cycles?: number;
 }
+import ContractABI from "../../abi/abi.json";
+import {
+  useAccount,
+  useWriteContract,
+  useWaitForTransactionReceipt,
+} from "wagmi";
 
+import { showSnackbar } from "../../components/SnackbarUtils";
+const CONTRACT_ADDRESS = import.meta.env.VITE_CONTRACT_ADDRESS;
 const LevelCard = (props: LevelCardProps) => {
+  const { address } = useAccount();
+
   const theme = useTheme();
   const {
     userLevel,
@@ -59,6 +70,57 @@ const LevelCard = (props: LevelCardProps) => {
   } = props;
   const currentUser = useAppSelector(selectCurrentUser);
   const nodesData = getNodesData(theme, transactions || []) || [];
+
+  const {
+    data: hash,
+    writeContract,
+  } = useWriteContract();
+
+  const { isSuccess: isTransactionSuccess } = useWaitForTransactionReceipt({
+    hash,
+  });
+  const handleUpgradeLevel = async (matrix: number, level: number) => {
+    try {
+      if (!address) {
+        showSnackbar({
+          message: "Wallet not connected.",
+          severity: "warning",
+        });
+        return;
+      }
+
+      await writeContract({
+        address: CONTRACT_ADDRESS,
+        abi: ContractABI,
+        functionName: "buyNewLevelFor",
+        args: [address, matrix, level],
+      });
+
+    } catch (err: any) {
+      console.error("Upgrade failed:", err);
+      showSnackbar({
+        message: err?.reason || "Upgrade failed.",
+        severity: "error",
+      });
+    }
+  };
+
+
+
+  useEffect(() => {
+    if (isTransactionSuccess && hash) {
+      showSnackbar({
+        message: "upgrade successful.",
+        severity: "success",
+      });
+
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    }
+  }, [isTransactionSuccess, hash]);
+
 
   return (
     <Card
@@ -137,6 +199,10 @@ const LevelCard = (props: LevelCardProps) => {
                         color="primary"
                         fullWidth
                         disabled={!currentUser}
+                        onClick={() => handleUpgradeLevel(
+                          programName?.toLowerCase() === "x3" ? 1 : 2,
+                          userLevel?.level?.level
+                        )}
                       >
                         Unlock now
                       </Button>

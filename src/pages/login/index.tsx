@@ -8,31 +8,46 @@ import {
   Box,
   TextField,
 } from "@mui/material";
+import { useState, useEffect } from "react";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { useAccount, useDisconnect } from "wagmi";
-import { useEffect } from "react";
 import { showSnackbar } from "../../components/SnackbarUtils";
 import { IUserAuth } from "../../interfaces/auth";
 import { BINANCE_LOGO, LOGO } from "../../utils/constants";
 import { GridX3, GridX4 } from "../../components";
+import ContractABI from "../../abi/abi.json";
+import { useLazyGetUserQuery } from "../../store/apis/userApi";
+
+
+import { RoutePaths } from "../../utils/routes.ts";
+
+import {
+  useAccount,
+  useWriteContract,
+  useWaitForTransactionReceipt,
+  useDisconnect,
+} from "wagmi";
+
+const CONTRACT_ADDRESS = import.meta.env.VITE_CONTRACT_ADDRESS;
 
 const Login = () => {
   const { isConnected, address } = useAccount();
   const { openConnectModal } = useConnectModal();
   const { disconnect } = useDisconnect();
+  const [triggerGetUser] = useLazyGetUserQuery();
 
+  const {
+    data: hash,
+    writeContract,
+  } = useWriteContract();
+  const [uplineId, setUplineId] = useState("");
+  const { isSuccess: isTransactionSuccess } = useWaitForTransactionReceipt({
+    hash,
+  });
   const handleWalletConnect = () => {
-    try {
-      if (!isConnected) {
-        openConnectModal?.();
-        return;
-      }
-    } catch (error) {
-      console.error("Error connecting wallet:", error);
-      showSnackbar({
-        message: "Error connecting wallet. Please try again.",
-        severity: "error",
-      });
+    if (!isConnected) {
+      openConnectModal?.();
+    } else {
+      handleRegister();
     }
   };
 
@@ -55,8 +70,55 @@ const Login = () => {
           severity: "error",
         });
       }
-    } catch (error) {}
+    } catch (error) { }
   };
+
+
+  const handleRegister = async () => {
+    try {
+      if (!uplineId) {
+        showSnackbar({
+          message: "Please enter your upline ID.",
+          severity: "warning",
+        });
+        return;
+      }
+      const uplineResponse = await triggerGetUser({ id: Number(uplineId) }).unwrap();
+
+
+      const uplineWalletAddress = uplineResponse.wallet_address;
+
+
+      await writeContract({
+        address: CONTRACT_ADDRESS,
+        abi: ContractABI,
+        functionName: "registrationFor",
+        args: [address, uplineWalletAddress],
+      });
+    } catch (err: any) {
+      console.error(err);
+      showSnackbar({
+        message: err?.reason || "Registration failed.",
+        severity: "error",
+      });
+      disconnect();
+    }
+  };
+
+
+  useEffect(() => {
+    if (isTransactionSuccess && hash) {
+
+      showSnackbar({
+        message: "Registration successful.",
+        severity: "success",
+      });
+
+      setTimeout(() => {
+        window.location.href = `/${RoutePaths.DASHBOARD}`;
+      }, 2000);
+    }
+  }, [isTransactionSuccess, hash]);
 
   useEffect(() => {
     if (isConnected && address) {
@@ -153,7 +215,10 @@ const Login = () => {
 
               <Grid size={{ xs: 12, sm: 12, md: 4 }}>
                 <Box py={4} gap={4} display={"flex"} flexDirection="column">
-                  <TextField fullWidth label="Upline ID" />
+                  <TextField fullWidth label="Upline ID"
+                    value={uplineId}
+                    onChange={(e) => setUplineId(e.target.value)}
+                  />
 
                   <Button fullWidth onClick={handleWalletConnect} size="large">
                     {isConnected && address ? "Register Now" : "Connect Wallet"}

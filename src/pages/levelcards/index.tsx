@@ -31,15 +31,17 @@ import { selectCurrentUser } from "../../store/slices/authSlice";
 import { selectSearchTerm } from "../../store/slices/searchSlice";
 import { useGetUserQuery } from "../../store/apis/userApi";
 
+
 const LevelCards = () => {
   const { name, level } = useParams();
   const dispatch = useAppDispatch();
   const loggedInUser = useAppSelector(selectCurrentUser);
   const { searchTerm } = useAppSelector(selectSearchTerm);
-  const [currentCycle, setCurrentCycle] = useState<number>(1);
+
   const [currentLevelIndex, setCurrentLevelIndex] = useState<number>(
     Number(level) || 0
   );
+  const [currentCycle, setCurrentCycle] = useState<number>(1);
   const program = useGetProgramsQuery().data?.find(
     (program) => program.name.toLowerCase() === name?.toLowerCase()
   );
@@ -49,6 +51,7 @@ const LevelCards = () => {
   const { data: user } = useGetUserQuery({
     id: Number(searchTerm) || loggedInUser?.id,
   });
+
   const {
     data: userLevels,
     isLoading: isUserLevelLoading,
@@ -82,19 +85,23 @@ const LevelCards = () => {
       dispatch(showLoader());
     } else {
       dispatch(hideLoader());
-      setCurrentCycle(txns?.pagination?.total_pages || 1);
+
+      setCurrentCycle(txns?.pagination?.total_items || 1);
+
     }
   }, [isUserLevelLoading, isTxnLoading]);
 
   useEffect(() => {
-    setCurrentCycle(1);
+
     refetchTxns();
     refetchUserLevels();
   }, [currentLevelIndex]);
 
   useEffect(() => {
     refetchTxns();
-  }, [currentCycle, txns]);
+
+  }, [currentCycle]);
+
 
   return (
     <Grid container spacing={2}>
@@ -131,7 +138,9 @@ const LevelCards = () => {
             userLevel={currentLevel}
             programName={program?.name || name}
             transactions={txns?.data || []}
-            cycles={txns?.pagination?.total_pages || 0}
+
+            cycles={txns?.pagination?.total_items || 1}
+
           />
         </Box>
 
@@ -171,15 +180,16 @@ const LevelCards = () => {
               <ExpandLess />
             </Button>
             <Button disableRipple color="inherit">
-              Cycle: {txns?.pagination?.current_page}
+
+              Cycle: {currentCycle}
+
             </Button>
             <Button
               variant="contained"
               onClick={() => setCurrentCycle((prev) => prev + 1)}
-              disabled={
-                currentCycle === txns?.pagination?.total_pages ||
-                txns?.pagination?.total_pages === 0
-              }
+
+              disabled={currentCycle === txns?.pagination?.total_items}
+
             >
               <ExpandMore />
             </Button>

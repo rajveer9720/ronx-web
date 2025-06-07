@@ -17,7 +17,7 @@ export const transactionApi = api.injectEndpoints({
         params: params,
       }),
       providesTags: ["Transaction"],
-      keepUnusedDataFor: 0,
+
     }),
 
     getTransactions: build.query<
@@ -29,7 +29,7 @@ export const transactionApi = api.injectEndpoints({
         params: params,
       }),
       providesTags: ["Transaction"],
-      keepUnusedDataFor: 0,
+
     }),
   }),
 });
