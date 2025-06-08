@@ -17,19 +17,25 @@ const Program = () => {
   const loggedInUser = useAppSelector(selectCurrentUser);
   const { searchTerm } = useAppSelector(selectSearchTerm);
   const { data: programs, isLoading: isProgramLoading } = useGetProgramsQuery();
-  const { data: userLevels, isLoading: isUserLevelLoading } =
-    useGetUserLevelsQuery({ user_id: Number(searchTerm) || loggedInUser?.id });
   const program: IProgram | undefined = programs?.find(
     (program) => program.name.toLowerCase() === name?.toLowerCase()
   );
-  const filteredUserLevels =
-    userLevels?.filter((level) => level.level.program.id === program?.id) || [];
+
+  const { data: userLevels, isLoading: isUserLevelLoading } =
+    useGetUserLevelsQuery({
+      user_id: Number(searchTerm) || loggedInUser?.id,
+      program_id: program?.id,
+      page: 1,
+      limit: 100,
+    });
   const placeholderLevels =
-    program?.levels.slice(filteredUserLevels.length).map((programLevel) => ({
-      ...EmptyUserLevel,
-      level: programLevel,
-    })) || [];
-  const finalLevels = [...filteredUserLevels, ...placeholderLevels];
+    program?.levels
+      .slice(userLevels?.pagination?.total_items)
+      .map((programLevel) => ({
+        ...EmptyUserLevel,
+        level: programLevel,
+      })) || [];
+  const finalLevels = [...(userLevels?.data || []), ...placeholderLevels];
 
   useEffect(() => {
     if (isProgramLoading || isUserLevelLoading) {

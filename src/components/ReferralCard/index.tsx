@@ -58,7 +58,7 @@ const ReferralCard = (props: ReferralCardProps) => {
 
             <Typography
               variant="button"
-              textTransform={"capitalize"}
+              textTransform={"lowercase"}
             >{`${import.meta.env.VITE_APP_REF_LINK}${referral_code}`}</Typography>
           </Box>
         </Box>

@@ -12,9 +12,11 @@ import { EmptyUserLevel } from "../../utils/levelUtils";
 import { IProgram } from "../../interfaces/program";
 import { useGetUserLevelsQuery } from "../../store/apis/userlevelApi";
 import LevelList from "../LevelList";
-import { useAppSelector } from "../../store/hooks/hook";
+import { useAppDispatch, useAppSelector } from "../../store/hooks/hook";
 import { selectSearchTerm } from "../../store/slices/searchSlice";
 import { selectCurrentUser } from "../../store/slices/authSlice";
+import { useEffect } from "react";
+import { hideLoader, showLoader } from "../../store/slices/loaderSlice";
 
 interface ProgramCardProps {
   textPrimary?: string;
@@ -25,24 +27,36 @@ interface ProgramCardProps {
 
 const ProgramCard = (props: ProgramCardProps) => {
   const { textPrimary, href, program } = props;
+  const dispatch = useAppDispatch();
   const { searchTerm } = useAppSelector(selectSearchTerm);
-  const currentUser = useAppSelector(selectCurrentUser);
-  const { data: userLevels } = useGetUserLevelsQuery({ user_id: +searchTerm });
-
-  const filteredUserLevels =
-    userLevels?.filter((level) => level.level.program.id === program.id) || [];
+  const loggedInUser = useAppSelector(selectCurrentUser);
+  const { data: userLevels, isLoading: isUserLevelLoading } =
+    useGetUserLevelsQuery({
+      user_id: Number(searchTerm) || loggedInUser?.id,
+      program_id: program?.id,
+      page: 1,
+      limit: 100,
+    });
 
   const placeholderLevels = program.levels
-    .slice(filteredUserLevels.length, 3)
+    .slice(userLevels?.pagination?.total_items, 3)
     .map((programLevel) => ({
       ...EmptyUserLevel,
       level: programLevel,
     }));
 
   const finalLevels =
-    filteredUserLevels.length >= 3
-      ? filteredUserLevels.reverse().slice(0, 3)
-      : [...filteredUserLevels, ...placeholderLevels].reverse();
+    (userLevels?.pagination?.total_items || 0) >= 3
+      ? [...(userLevels?.data || [])].reverse().slice(0, 3)
+      : [...(userLevels?.data || []), ...placeholderLevels].slice().reverse();
+
+  useEffect(() => {
+    if (isUserLevelLoading) {
+      dispatch(showLoader());
+    } else {
+      dispatch(hideLoader());
+    }
+  }, [isUserLevelLoading]);
 
   return (
     <Card sx={cardStyle}>
@@ -65,14 +79,14 @@ const ProgramCard = (props: ProgramCardProps) => {
 
       <Divider />
 
-      <LevelList levels={finalLevels} href={href} />
+      <LevelList levels={finalLevels || []} href={href} />
 
       <CardActions sx={{ display: "flex", justifyContent: "center", px: 5 }}>
         <Button
           variant="contained"
           color="primary"
           fullWidth
-          disabled={!currentUser}
+          disabled={!loggedInUser?.id}
         >
           Upgrade
         </Button>

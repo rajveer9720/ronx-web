@@ -17,7 +17,6 @@ export const transactionApi = api.injectEndpoints({
         params: params,
       }),
       providesTags: ["Transaction"],
-
     }),
 
     getTransactions: build.query<
@@ -29,10 +28,12 @@ export const transactionApi = api.injectEndpoints({
         params: params,
       }),
       providesTags: ["Transaction"],
-
     }),
   }),
 });
 
-export const { useGetTransactionsByCycleQuery, useGetTransactionsQuery } =
-  transactionApi;
+export const {
+  useGetTransactionsByCycleQuery,
+  useGetTransactionsQuery,
+  useLazyGetTransactionsByCycleQuery,
+} = transactionApi;

@@ -1,20 +1,21 @@
-import { IUserLevel, IUserLevelRequest } from "../../interfaces/user-levels";
+import {
+  IUserLevelRequest,
+  IUserLevelResponse,
+} from "../../interfaces/user-levels";
 import { ApiEndpoints } from "../../utils/routes";
 import { api } from "./api";
 
 export const userlevelApi = api.injectEndpoints({
   endpoints: (build) => ({
-    getUserLevels: build.query<IUserLevel[], IUserLevelRequest>({
+    getUserLevels: build.query<IUserLevelResponse, IUserLevelRequest>({
       query: (params) => ({
         url: ApiEndpoints.USER_LEVEL,
         params: params,
       }),
       providesTags: ["UserLevel"],
-      transformResponse(baseQueryReturnValue: any) {
-        return baseQueryReturnValue?.data as IUserLevel[];
-      },
     }),
   }),
 });
 
-export const { useGetUserLevelsQuery } = userlevelApi;
+export const { useGetUserLevelsQuery, useLazyGetUserLevelsQuery } =
+  userlevelApi;

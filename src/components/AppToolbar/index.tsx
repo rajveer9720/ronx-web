@@ -91,7 +91,7 @@ export const ToolbarActions = (props: AppToolbarProps) => {
         alignItems="center"
         justifyContent="space-between"
         gap={0.5}
-        pr={guest ? 2 : 0}
+        pr={2}
       >
         {!guest && (
           <>

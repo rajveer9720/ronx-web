@@ -1,4 +1,5 @@
 import { ILevel } from "./level";
+import { IPaginate, IPagination } from "./pagination";
 import { IUser } from "./user";
 
 export interface IUserLevel {
@@ -14,8 +15,14 @@ export interface IUserLevel {
   updated_at: string;
 }
 
-export interface IUserLevelRequest {
+export interface IUserLevelRequest extends IPaginate {
   user_id?: number;
   level?: number;
   program_id?: number;
+}
+
+export interface IUserLevelResponse {
+  data: IUserLevel[];
+  pagination: IPagination;
+  total_cycles: number;
 }

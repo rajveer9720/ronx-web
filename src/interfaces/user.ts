@@ -28,6 +28,8 @@ export interface IUserStats {
 
 export interface IUserRequest {
   id?: number;
+  refer_code?: string;
+  wallet_address?: string;
 }
 
 export interface IUserReferralResponse {

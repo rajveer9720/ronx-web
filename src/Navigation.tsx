@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import {
   Dashboard,
-  Login,
+  SignUp,
   Activity,
   Calculator,
   Program,
@@ -19,7 +19,7 @@ const Navigation: React.FC = () => {
     <Routes>
       <Route path={RoutePaths.BASE} element={<Home />} />
       <Route element={<GuestLayout />}>
-        <Route path={RoutePaths.LOGIN} element={<Login />} />
+        <Route path={RoutePaths.SIGNUP} element={<SignUp />} />
         <Route path={RoutePaths.INVITE} element={<Invite />} />
       </Route>
 

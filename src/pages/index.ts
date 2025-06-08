@@ -1,5 +1,5 @@
 import Home from "./home";
-import Login from "./login";
+import SignUp from "./signup";
 import Dashboard from "./dashboard";
 import Activity from "./activity";
 import Calculator from "./calculator";
@@ -13,7 +13,7 @@ import GuestLayout from "./layouts/guest";
 export {
   Home,
   Dashboard,
-  Login,
+  SignUp,
   Activity,
   Calculator,
   Program,

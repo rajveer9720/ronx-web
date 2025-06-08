@@ -23,8 +23,9 @@ export const userApi = api.injectEndpoints({
     }),
 
     getUser: build.query<IUser, IUserRequest>({
-      query: ({ id }) => ({
-        url: `${ApiEndpoints.USER}/${id}`, 
+      query: (params) => ({
+        url: ApiEndpoints.USER,
+        params: params,
       }),
       transformResponse(baseQueryReturnValue: any) {
         return baseQueryReturnValue?.data as IUser;
@@ -32,7 +33,6 @@ export const userApi = api.injectEndpoints({
       providesTags: ["User"],
       keepUnusedDataFor: 3600,
     }),
-
 
     getUserStats: build.query<IUserStats, IUserRequest>({
       query: (params) => ({

@@ -19,42 +19,44 @@ const MainLayout = () => {
   const router = useToolpadRouter();
 
   return (
-    <AppProvider
-      navigation={Sidebar}
-      router={router}
-      theme={theme}
-      branding={{
-        logo: <img src={LOGO} alt="Logo" style={{ height: 32 }} />,
-        title: "",
-      }}
-    >
-      <BackdropSpin text="Processing your request, please wait..." />
-      <DashboardLayout
-        sidebarExpandedWidth={300}
-        slots={{
-          toolbarAccount: () => null,
-          toolbarActions: () => <ToolbarActions />,
-          appTitle: () => <ToolbarAppTitle />,
-          sidebarFooter: ({ mini }) => <Footer role="user" mini={mini} />,
+    <>
+      <SignupDialog />
+      <AppProvider
+        navigation={Sidebar}
+        router={router}
+        theme={theme}
+        branding={{
+          logo: <img src={LOGO} alt="Logo" style={{ height: 32 }} />,
+          title: "",
         }}
       >
-        <PageContainer
-          sx={{
-            position: { md: "relative" },
-            maxWidth: "100% !important",
-            width: "100%",
-            px: { xs: 2, sm: 2, md: 10 },
-            py: { xs: 2, sm: 2, md: 2 },
-          }}
+        <BackdropSpin text="Processing your request, please wait..." />
+        <DashboardLayout
+          sidebarExpandedWidth={300}
           slots={{
-            header: () => <PageHeader />,
+            toolbarAccount: () => null,
+            toolbarActions: () => <ToolbarActions />,
+            appTitle: () => <ToolbarAppTitle />,
+            sidebarFooter: ({ mini }) => <Footer role="user" mini={mini} />,
           }}
         >
-          <SignupDialog />
-          <Outlet />
-        </PageContainer>
-      </DashboardLayout>
-    </AppProvider>
+          <PageContainer
+            sx={{
+              position: { md: "relative" },
+              maxWidth: "100% !important",
+              width: "100%",
+              px: { xs: 2, sm: 2, md: 10 },
+              py: { xs: 2, sm: 2, md: 2 },
+            }}
+            slots={{
+              header: () => <PageHeader />,
+            }}
+          >
+            <Outlet />
+          </PageContainer>
+        </DashboardLayout>
+      </AppProvider>
+    </>
   );
 };
 

@@ -1,13 +1,13 @@
 export enum RoutePaths {
   BASE = "/",
   DASHBOARD = "dashboard",
-  LOGIN = "login",
+  SIGNUP = "signup",
   ACTIVITY = "activity",
   CALCULATOR = "calculator",
   PROGRAM = "program/:name",
   REFERRAL = "referral",
   LEVEL_CARDS = "program/:name/level/:level",
-  INVITE = "invitation",
+  INVITE = "i/:refer_code",
 }
 
 export enum ApiEndpoints {

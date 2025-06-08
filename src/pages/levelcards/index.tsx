@@ -23,21 +23,19 @@ import { Link as RouterLink } from "react-router-dom";
 import { EmptyUserLevel } from "../../utils/levelUtils";
 import { IUserLevel } from "../../interfaces/user-levels";
 import { useGetProgramsQuery } from "../../store/apis/programApi";
-import { useGetUserLevelsQuery } from "../../store/apis/userlevelApi";
+import { useLazyGetUserLevelsQuery } from "../../store/apis/userlevelApi";
 import { useAppDispatch, useAppSelector } from "../../store/hooks/hook";
 import { hideLoader, showLoader } from "../../store/slices/loaderSlice";
-import { useGetTransactionsByCycleQuery } from "../../store/apis/transactionApi";
+import { useLazyGetTransactionsByCycleQuery } from "../../store/apis/transactionApi";
 import { selectCurrentUser } from "../../store/slices/authSlice";
 import { selectSearchTerm } from "../../store/slices/searchSlice";
 import { useGetUserQuery } from "../../store/apis/userApi";
-
 
 const LevelCards = () => {
   const { name, level } = useParams();
   const dispatch = useAppDispatch();
   const loggedInUser = useAppSelector(selectCurrentUser);
   const { searchTerm } = useAppSelector(selectSearchTerm);
-
   const [currentLevelIndex, setCurrentLevelIndex] = useState<number>(
     Number(level) || 0
   );
@@ -52,29 +50,37 @@ const LevelCards = () => {
     id: Number(searchTerm) || loggedInUser?.id,
   });
 
-  const {
-    data: userLevels,
-    isLoading: isUserLevelLoading,
-    refetch: refetchUserLevels,
-  } = useGetUserLevelsQuery({
-    user_id: Number(searchTerm) || loggedInUser?.id,
-    level: currentLevelIndex,
-    program_id: program?.id,
-  });
+  const [triggerTxns, { data: txns, isLoading: isTxnLoading }] =
+    useLazyGetTransactionsByCycleQuery();
+  const [
+    triggerUserLevels,
+    { data: userLevels, isLoading: isUserLevelLoading },
+  ] = useLazyGetUserLevelsQuery();
 
-  const {
-    data: txns,
-    isLoading: isTxnLoading,
-    refetch: refetchTxns,
-  } = useGetTransactionsByCycleQuery({
-    user_id: Number(searchTerm) || loggedInUser?.id,
-    program_id: program?.id || 0,
-    level: currentLevelIndex,
-    cycle: currentCycle,
-  });
+  const refetchTxns = async () => {
+    const newTxns = await triggerTxns({
+      user_id: Number(searchTerm) || loggedInUser?.id,
+      program_id: program?.id || 0,
+      level: currentLevelIndex,
+      cycle: currentCycle,
+    }).unwrap();
+    if (currentCycle === newTxns?.pagination?.current_page) return;
+    setCurrentCycle(userLevels?.total_cycles || 1);
+  };
+
+  const refetchUserLevels = async () => {
+    const newUserLevels = await triggerUserLevels({
+      user_id: Number(searchTerm) || loggedInUser?.id,
+      level: currentLevelIndex,
+      program_id: program?.id,
+      page: 1,
+      limit: 100,
+    }).unwrap();
+    setCurrentCycle(newUserLevels?.total_cycles || 1);
+  };
 
   const currentLevel =
-    userLevels?.[0] ||
+    userLevels?.data?.[0] ||
     ({
       ...EmptyUserLevel,
       level: programLevel,
@@ -85,23 +91,21 @@ const LevelCards = () => {
       dispatch(showLoader());
     } else {
       dispatch(hideLoader());
-
-      setCurrentCycle(txns?.pagination?.total_items || 1);
-
     }
   }, [isUserLevelLoading, isTxnLoading]);
 
   useEffect(() => {
-
-    refetchTxns();
-    refetchUserLevels();
-  }, [currentLevelIndex]);
+    (async () => {
+      await refetchUserLevels();
+      await refetchTxns();
+    })();
+  }, [currentLevelIndex, searchTerm, loggedInUser]);
 
   useEffect(() => {
-    refetchTxns();
-
+    (async () => {
+      await refetchTxns();
+    })();
   }, [currentCycle]);
-
 
   return (
     <Grid container spacing={2}>
@@ -138,9 +142,7 @@ const LevelCards = () => {
             userLevel={currentLevel}
             programName={program?.name || name}
             transactions={txns?.data || []}
-
-            cycles={txns?.pagination?.total_items || 1}
-
+            cycles={userLevels?.total_cycles || 1}
           />
         </Box>
 
@@ -174,22 +176,18 @@ const LevelCards = () => {
           >
             <Button
               variant="contained"
-              onClick={() => setCurrentCycle((prev) => prev - 1)}
+              onClick={() => setCurrentCycle((prev) => prev && prev - 1)}
               disabled={currentCycle === 1}
             >
               <ExpandLess />
             </Button>
             <Button disableRipple color="inherit">
-
-              Cycle: {currentCycle}
-
+              Cycle: {txns?.pagination?.current_page}
             </Button>
             <Button
               variant="contained"
-              onClick={() => setCurrentCycle((prev) => prev + 1)}
-
-              disabled={currentCycle === txns?.pagination?.total_items}
-
+              onClick={() => setCurrentCycle((prev) => prev && prev + 1)}
+              disabled={currentCycle === userLevels?.total_cycles}
             >
               <ExpandMore />
             </Button>

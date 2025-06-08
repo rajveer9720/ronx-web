@@ -1,6 +1,5 @@
 import { AppProvider } from "@toolpad/core/AppProvider";
 import theme from "../../../utils/theme";
-import { LOGO } from "../../../utils/constants";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { PageContainer } from "@toolpad/core/PageContainer";
 import {

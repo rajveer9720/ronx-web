@@ -10,14 +10,11 @@ import {
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { showSnackbar } from "../../components/SnackbarUtils";
-import { IUserAuth } from "../../interfaces/auth";
-import { BINANCE_LOGO, LOGO } from "../../utils/constants";
-import { GridX3, GridX4 } from "../../components";
+import { showSnackbar } from "../../components/SnackbarUtils/index.tsx";
+import { IUserAuth } from "../../interfaces/auth.ts";
+import { BINANCE_LOGO, LOGO } from "../../utils/constants.ts";
 import ContractABI from "../../abi/abi.json";
-import { useLazyGetUserQuery } from "../../store/apis/userApi";
-
-
+import { useLazyGetUserQuery } from "../../store/apis/userApi.ts";
 import { RoutePaths } from "../../utils/routes.ts";
 
 import {
@@ -26,20 +23,17 @@ import {
   useWaitForTransactionReceipt,
   useDisconnect,
 } from "wagmi";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const CONTRACT_ADDRESS = import.meta.env.VITE_CONTRACT_ADDRESS;
-
-const Login = () => {
+const SignUp = () => {
+  const navigate = useNavigate();
+  const { upline_id } = useLocation().state;
   const { isConnected, address } = useAccount();
   const { openConnectModal } = useConnectModal();
   const { disconnect } = useDisconnect();
   const [triggerGetUser] = useLazyGetUserQuery();
-
-  const {
-    data: hash,
-    writeContract,
-  } = useWriteContract();
-  const [uplineId, setUplineId] = useState("");
+  const { data: hash, writeContract } = useWriteContract();
+  const [uplineId, setUplineId] = useState<number>(upline_id || 1);
   const { isSuccess: isTransactionSuccess } = useWaitForTransactionReceipt({
     hash,
   });
@@ -70,9 +64,8 @@ const Login = () => {
           severity: "error",
         });
       }
-    } catch (error) { }
+    } catch (error) {}
   };
-
 
   const handleRegister = async () => {
     try {
@@ -83,17 +76,14 @@ const Login = () => {
         });
         return;
       }
-      const uplineResponse = await triggerGetUser({ id: Number(uplineId) }).unwrap();
-
-
-      const uplineWalletAddress = uplineResponse.wallet_address;
-
-
-      await writeContract({
-        address: CONTRACT_ADDRESS,
+      const user = await triggerGetUser({
+        id: Number(uplineId),
+      }).unwrap();
+      writeContract({
+        address: import.meta.env.VITE_CONTRACT_ADDRESS,
         abi: ContractABI,
         functionName: "registrationFor",
-        args: [address, uplineWalletAddress],
+        args: [address, user.wallet_address],
       });
     } catch (err: any) {
       console.error(err);
@@ -105,93 +95,24 @@ const Login = () => {
     }
   };
 
-
   useEffect(() => {
     if (isTransactionSuccess && hash) {
-
       showSnackbar({
         message: "Registration successful.",
         severity: "success",
       });
 
       setTimeout(() => {
-        window.location.href = `/${RoutePaths.DASHBOARD}`;
+        navigate(`/${RoutePaths.DASHBOARD}`);
       }, 2000);
     }
   }, [isTransactionSuccess, hash]);
-
-  useEffect(() => {
-    if (isConnected && address) {
-    }
-  }, [isConnected, address]);
 
   return (
     <Grid container sx={{ py: { xs: 2, sm: 2, md: 20 } }}>
       <Grid size={{ xs: 12, sm: 12, md: 8 }} offset={{ xs: 0, sm: 0, md: 2 }}>
         <Card sx={cardStyle}>
           <CardContent>
-            <GridX3
-              nodesData={[
-                {
-                  id: "1",
-                  label: "Level 1",
-                  link: "/matrix/1",
-                  nodeColor: "#7b3de4",
-                },
-                {
-                  id: "2",
-                  label: "Level 2",
-                  link: "/matrix/2",
-                  nodeColor: "#7b3de4",
-                },
-                {
-                  id: "3",
-                  label: "Level 3",
-                  link: "/matrix/3",
-                  nodeColor: "#7b3de4",
-                },
-              ]}
-            />
-            <GridX4
-              nodesData={[
-                {
-                  id: "1",
-                  label: "Level 1",
-                  link: "/matrix/1",
-                  nodeColor: "#7b3de4",
-                },
-                {
-                  id: "2",
-                  label: "Level 2",
-                  link: "/matrix/2",
-                  nodeColor: "#7b3de4",
-                },
-                {
-                  id: "3",
-                  label: "Level 3",
-                  link: "/matrix/3",
-                  nodeColor: "#7b3de4",
-                },
-                {
-                  id: "4",
-                  label: "Level 4",
-                  link: "/matrix/4",
-                  nodeColor: "#7b3de4",
-                },
-                {
-                  id: "5",
-                  label: "Level 5",
-                  link: "/matrix/5",
-                  nodeColor: "#7b3de4",
-                },
-                {
-                  id: "6",
-                  label: "Level 6",
-                  link: "/matrix/6",
-                  nodeColor: "#7b3de4",
-                },
-              ]}
-            />
             <Grid container spacing={2}>
               <Grid size={{ xs: 12, sm: 12, md: 8 }}>
                 <Box display={"flex"} gap={2} alignItems={"center"}>
@@ -215,9 +136,13 @@ const Login = () => {
 
               <Grid size={{ xs: 12, sm: 12, md: 4 }}>
                 <Box py={4} gap={4} display={"flex"} flexDirection="column">
-                  <TextField fullWidth label="Upline ID"
+                  <TextField
+                    fullWidth
+                    size="small"
+                    type="number"
+                    label="Upline ID"
                     value={uplineId}
-                    onChange={(e) => setUplineId(e.target.value)}
+                    onChange={(e) => setUplineId(+e.target.value)}
                   />
 
                   <Button fullWidth onClick={handleWalletConnect} size="large">
@@ -243,4 +168,4 @@ const cardStyle = {
   justifyContent: "center",
 };
 
-export default Login;
+export default SignUp;

@@ -36,7 +36,7 @@ const SignupDialog = () => {
   }, [isConnected, currentUser]);
 
   return (
-    <>
+    <Box display={bannerOpen ? "block" : "none"}>
       <TrapFocus open disableAutoFocus disableEnforceFocus>
         <Fade appear={false} in={bannerOpen}>
           <Paper
@@ -46,17 +46,7 @@ const SignupDialog = () => {
             square
             variant="outlined"
             tabIndex={-1}
-            sx={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0,
-              m: 0,
-              p: 2,
-              borderWidth: 0,
-              borderTopWidth: 1,
-              zIndex: 1200,
-            }}
+            sx={{ px: 4, py: 1 }}
           >
             <Stack
               direction={{ xs: "column", sm: "row" }}
@@ -69,7 +59,7 @@ const SignupDialog = () => {
                 }}
               >
                 <Typography sx={{ fontWeight: "bold" }}>
-                  Don't have an account?
+                  You are not a registered user!
                 </Typography>
                 <Typography variant="body2">
                   Sign up now to get started with our platform and unlock
@@ -92,10 +82,17 @@ const SignupDialog = () => {
                   underline="none"
                   to={RoutePaths.LOGIN}
                 >
-                  <Button>Get started</Button>
+                  <Button size="small" variant="contained">
+                    Get started
+                  </Button>
                 </Link>
 
-                <Button onClick={closeBanner} color="inherit">
+                <Button
+                  size="small"
+                  variant="contained"
+                  onClick={closeBanner}
+                  color="inherit"
+                >
                   Not now
                 </Button>
               </Stack>
@@ -103,7 +100,7 @@ const SignupDialog = () => {
           </Paper>
         </Fade>
       </TrapFocus>
-    </>
+    </Box>
   );
 };
 

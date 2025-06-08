@@ -1,13 +1,19 @@
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Link, Typography } from "@mui/material";
 import { useGetUserQuery } from "../../store/apis/userApi";
 import { UserProfile } from "../../components";
 import { useEffect } from "react";
 import { useAppDispatch } from "../../store/hooks/hook";
 import { hideLoader, showLoader } from "../../store/slices/loaderSlice";
+import { useParams } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
+import { RoutePaths } from "../../utils/routes";
 
 const Invite = () => {
+  const { refer_code } = useParams();
   const dispatch = useAppDispatch();
-  const { data: user, isLoading: isUserLoading } = useGetUserQuery({ id: 1 });
+  const { data: user, isLoading: isUserLoading } = useGetUserQuery({
+    refer_code,
+  });
 
   useEffect(() => {
     if (isUserLoading) {
@@ -34,8 +40,17 @@ const Invite = () => {
           <Typography variant="h6" fontWeight={700} textAlign={"center"}>
             Invitation from
           </Typography>
-          <UserProfile data={user} />
-          <Button fullWidth size="large">Join team</Button>
+          {user && <UserProfile data={user} />}
+          <Link
+            component={RouterLink}
+            underline="none"
+            to={`/${RoutePaths.SIGNUP}`}
+            state={{ upline_id: user?.id }}
+          >
+            <Button fullWidth size="large">
+              Join team
+            </Button>
+          </Link>
         </Box>
       </Grid>
     </Grid>
