@@ -39,5 +39,5 @@ jobs:
             # Rename .env.dev to .env
             [ -f .env.dev ] && mv .env.dev .env
             npm install
-            npm run build"
+            npm run build
           "'
