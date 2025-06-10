@@ -27,7 +27,7 @@ jobs:
         run: |
           rsync -avz ./ ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}:${{ secrets.APP_PATH }}
 
-      - name: Install & Restart PM2
+      - name: Install & Build
         run: |
           ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} 'bash -lc "
             export NVM_DIR=\$HOME/.nvm
