@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ModalVideo from "./ModalVideo";
 import VideoThumb from "../../../../public/assets/images/hero-image-01.jpg";
 
 const HeroHome: React.FC = () => {
-  const [tabIndex, setTabIndex] = useState(0);
+  // const [tabIndex, setTabIndex] = useState(0);
 
-  const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
-    setTabIndex(newValue);
-  };
+  // const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
+  //   setTabIndex(newValue);
+  // };
 
   // Common button style
   const buttonStyle = {

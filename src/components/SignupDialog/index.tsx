@@ -80,7 +80,7 @@ const SignupDialog = () => {
                 <Link
                   component={RouterLink}
                   underline="none"
-                  to={RoutePaths.LOGIN}
+                  to={RoutePaths.SIGNUP}
                 >
                   <Button size="small" variant="contained">
                     Get started

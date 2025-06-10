@@ -1,16 +1,15 @@
 import { jwtDecode } from "jwt-decode";
 import { IUser } from "../interfaces/user";
-import { CustomJwtPayload } from "../interfaces/user";
 
 export const getToken = (): string | null => {
   return localStorage.getItem("access_token");
 };
 
-export const parseJwt = (): CustomJwtPayload | null => {
+export const parseJwt = () => {
   const token = getToken();
   if (!token) return null;
   try {
-    return jwtDecode<CustomJwtPayload>(token);
+    return jwtDecode(token);
   } catch (err) {
     console.error("Invalid token:", err);
     return null;

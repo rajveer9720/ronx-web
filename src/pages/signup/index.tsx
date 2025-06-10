@@ -11,7 +11,6 @@ import {
 import { useState, useEffect } from "react";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { showSnackbar } from "../../components/SnackbarUtils/index.tsx";
-import { IUserAuth } from "../../interfaces/auth.ts";
 import { BINANCE_LOGO, LOGO } from "../../utils/constants.ts";
 import ContractABI from "../../abi/abi.json";
 import { useLazyGetUserQuery } from "../../store/apis/userApi.ts";
@@ -43,28 +42,6 @@ const SignUp = () => {
     } else {
       handleRegister();
     }
-  };
-
-  const handleLogin = async () => {
-    try {
-      const payload: IUserAuth = { wallet_address: address as string };
-      const response: any = null;
-      if (response?.statusCode === 200) {
-        showSnackbar({
-          message: "Logged in successfully.",
-          severity: "success",
-        });
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        localStorage.setItem("access_token", response.data.access_token);
-        window.location.href = "/user/dashboard";
-      } else {
-        disconnect();
-        showSnackbar({
-          message: "Unknown wallet address, you are not a registered user.",
-          severity: "error",
-        });
-      }
-    } catch (error) {}
   };
 
   const handleRegister = async () => {
