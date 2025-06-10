@@ -36,12 +36,16 @@ export const getLevelIcon = (level: IUserLevel): ReactNode => {
 };
 
 export const getNodeColor = (theme: Theme, txn: ITransaction): string => {
-  if (txn.spill_down) return "green"; // Green for spill down
-  if (txn.spill_up) return "blue"; // Orange for gift
+  if (txn.spill_down) return "brown"; // Green for spill down
+  if (txn.spill_up) return "grey"; // Orange for gift
   return theme.palette.primary.main;
 };
 
-export const getNodesData = (theme: Theme, transactions: ITransaction[]) => {
+export const getNodesData = (
+  theme: Theme,
+  transactions: ITransaction[],
+  program_id: number
+) => {
   const data = transactions.map((txn: ITransaction) => {
     const node: INodeData = {
       id: txn.place.toString(),
@@ -52,23 +56,24 @@ export const getNodesData = (theme: Theme, transactions: ITransaction[]) => {
     return node;
   });
 
-  if (transactions.length != 3 && transactions.length != 6) {
+  if (
+    (transactions.length != 3 && program_id === 1) ||
+    (transactions.length != 6 && program_id === 2)
+  ) {
     const emptyNodes: INodeData[] = [];
-    for (
-      let i = transactions.length;
-      i < (transactions.length < 3 ? 3 : 6);
-      i++
-    ) {
-      emptyNodes.push({
-        id: (i + 1).toString(),
-        label: "NA",
-        link: "/",
-        nodeColor: theme.palette.common.white,
-      });
+    for (let i = 1; i <= (program_id === 1 ? 3 : 6); i++) {
+      const temp = transactions.find((txn) => txn.place === i);
+      if (!temp) {
+        emptyNodes.push({
+          id: i.toString(),
+          label: "NA",
+          link: "/",
+          nodeColor: theme.palette.common.white,
+        });
+      }
     }
     return [...data, ...emptyNodes];
   }
-
   return data;
 };
 

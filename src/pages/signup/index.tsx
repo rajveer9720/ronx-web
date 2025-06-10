@@ -27,7 +27,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const { upline_id } = useLocation().state;
+  const upline_id = useLocation().state?.upline_id;
   const { isConnected, address } = useAccount();
   const { openConnectModal } = useConnectModal();
   const { disconnect } = useDisconnect();

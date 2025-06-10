@@ -45,6 +45,7 @@ import {
 } from "wagmi";
 
 import { showSnackbar } from "../../components/SnackbarUtils";
+import { useGetProgramsQuery } from "../../store/apis/programApi";
 
 interface LevelCardProps {
   userLevel: IUserLevel;
@@ -69,8 +70,12 @@ const LevelCard = (props: LevelCardProps) => {
     cycles,
   } = props;
   const currentUser = useAppSelector(selectCurrentUser);
-  const nodesData = getNodesData(theme, transactions || []) || [];
   const { data: hash, writeContract } = useWriteContract();
+  const program = useGetProgramsQuery().data?.find(
+    (program) => program.name.toLowerCase() === programName?.toLowerCase()
+  );
+  const nodesData =
+    getNodesData(theme, transactions || [], program?.id || 0) || [];
   const { isSuccess: isTransactionSuccess } = useWaitForTransactionReceipt({
     hash,
   });
