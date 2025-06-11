@@ -74,21 +74,17 @@ const GridX4 = ({ nodesData }: GridX4Props) => {
             position: "absolute",
             left: `${pos.x}px`,
             top: `${pos.y}px`,
+            pointerEvents: "none",
+            cursor: hasLink ? "pointer" : "default",
           }}
         >
-          {hasLink ? (
-            <a href={nodeInfo!.link} target="_blank">
-              {label}
-            </a>
-          ) : (
-            <span>{label}</span>
-          )}
+          <span>{label}</span>
         </Box>
       );
     });
 
     setLabels(newLabels);
-  }, [nodesData, nodeInfoMap]);
+  }, [nodeInfoMap]);
 
   const refreshGraph = useCallback(() => {
     const cy = cyRef.current;
@@ -175,12 +171,18 @@ const GridX4 = ({ nodesData }: GridX4Props) => {
       cy.nodes().lock();
       cy.fit();
       drawNodeLabels();
+
+      cy.on("tap", "node", (e) => {
+        const link = nodeInfoMap.get(e.target.id())?.link;
+        if (link) window.location.href = link;
+      });
     });
 
     cy.on("render", drawNodeLabels);
 
     return () => {
       cy.removeListener("render");
+      cy.off("tap", "node");
       cleanupCytoscape(cyRef.current);
       cyRef.current = null;
     };

@@ -67,13 +67,10 @@ const GridX3 = ({ nodesData }: GridX3Props) => {
             top: `${pos.y + GRID_X3.DEFAULT_NODE_SIZE / 2 + offsetY}px`,
             transform: "translateX(-50%)",
             textAlign: "center",
+            cursor: hasLink ? "pointer" : "default",
           }}
         >
-          {hasLink ? (
-            <a href={nodeInfo!.link}>{label}</a>
-          ) : (
-            <span>{label}</span>
-          )}
+          <span>{label}</span>
         </Box>
       );
     });
@@ -164,10 +161,16 @@ const GridX3 = ({ nodesData }: GridX3Props) => {
       cy.resize();
       cy.fit();
       drawNodeLabels();
+
+      cy.on("tap", "node", (e) => {
+        const link = nodeInfoMap.get(e.target.id())?.link;
+        if (link) window.location.href = link;
+      });
     });
 
     return () => {
       cy.off("render", handleRender);
+      cy.off("tap", "node");
       cleanupCytoscape(cyRef.current);
       cyRef.current = null;
     };

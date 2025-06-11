@@ -13,19 +13,19 @@ import TelegramButton from "../layout/Telegram";
 
 const Landing = () => {
   return (
-    <div className="home-purple-gradient">
-      <Header/>
-      
+    <div className="home-purple-gradient home-page-background">
+      <Header />
+
       <PageIllustration />
       <HeroHome />
       {/* <Dashboard /> */}
       <Workflows />
       <Features />
       {/* <Testimonials /> */}
-      <Faq/>
+      <Faq />
       <Cta />
       <Footer />
-      <TelegramButton/>
+      <TelegramButton />
     </div>
   );
 };
