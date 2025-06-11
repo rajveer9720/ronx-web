@@ -1,13 +1,6 @@
+import { Box, Button, Chip, Grid, Link, ButtonGroup } from "@mui/material";
 import {
-  Box,
-  Button,
-  Chip,
-  Grid,
-  Typography,
-  Link,
-  ButtonGroup,
-} from "@mui/material";
-import {
+  AcUnitRounded,
   ChevronLeft,
   ChevronRight,
   ExpandLess,
@@ -128,10 +121,22 @@ const LevelCards = () => {
             alignItems={"center"}
             justifyContent={"flex-end"}
           >
-            <Typography variant="h6" fontWeight={600}>
-              Upline ID
-            </Typography>
-            <Chip color="primary" icon={<Tag />} label={user?.parent?.id} />
+            {currentLevel?.freeze && (
+              <Chip
+                color="secondary"
+                variant="outlined"
+                icon={
+                  <AcUnitRounded sx={{ color: "white" }} fontSize="small" />
+                }
+                label={"Freezed"}
+              />
+            )}
+            <Chip
+              color="secondary"
+              variant="outlined"
+              icon={<Tag />}
+              label={`UID: ${user?.id}`}
+            />
           </Box>
         </Box>
 

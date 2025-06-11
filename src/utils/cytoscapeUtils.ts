@@ -99,7 +99,7 @@ export const applyNodeColors = (cy: cytoscape.Core, nodesData: any[]) => {
 };
 
 export const GRID_X3 = {
-  DESKTOP_HEIGHT: 0,
+  DESKTOP_HEIGHT: 100,
   MOBILE_HEIGHT: 0,
   DEFAULT_NODE_SIZE: 50,
 };

@@ -6,7 +6,6 @@ import {
   RedeemRounded,
   CachedRounded,
   AccountBalanceWalletRounded,
-  PeopleRounded,
 } from "@mui/icons-material";
 import { ITransaction } from "../interfaces/transaction";
 import { INodeData } from "../interfaces/grid";
@@ -77,21 +76,10 @@ export const getNodesData = (
   return data;
 };
 
-export const getLevelListItems = (
-  level: IUserLevel,
-  partners: number = 1,
-  cycles: number = 1
-) => {
+export const getLevelListItems = (level: IUserLevel, cycles: number = 1) => {
   let items: any[] = [];
 
   items = [
-    {
-      icon: createElement(PeopleRounded, {
-        sx: { color: "white" },
-      }),
-      label: "Partners",
-      value: partners,
-    },
     {
       icon: createElement(CachedRounded, {
         sx: { color: "white" },

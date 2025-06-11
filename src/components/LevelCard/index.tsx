@@ -289,7 +289,7 @@ const LevelCard = (props: LevelCardProps) => {
               sx={{ display: large ? "block" : "none" }}
             >
               <List disablePadding>
-                {getLevelListItems(userLevel, 0, cycles)?.map((item, index) => {
+                {getLevelListItems(userLevel, cycles)?.map((item, index) => {
                   const isLastItem =
                     index === getLevelListItems(userLevel).length - 1;
 

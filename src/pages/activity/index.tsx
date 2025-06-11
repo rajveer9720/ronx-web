@@ -5,8 +5,11 @@ import { selectSearchTerm } from "../../store/slices/searchSlice";
 import { hideLoader, showLoader } from "../../store/slices/loaderSlice";
 import { useGetTransactionsQuery } from "../../store/apis/transactionApi";
 import moment from "moment";
-import { Box } from "@mui/material";
+import { Box, Link } from "@mui/material";
 import { selectCurrentUser } from "../../store/slices/authSlice";
+import { Link as RouterLink } from "react-router-dom";
+import { OpenInNew } from "@mui/icons-material";
+import { truncateAddress } from "../../utils/userUtils";
 
 const Activity = () => {
   const dispatch = useAppDispatch();
@@ -16,11 +19,7 @@ const Activity = () => {
     page: Number(import.meta.env.VITE_APP_PAGE_NUMBER),
     pageSize: Number(import.meta.env.VITE_APP_PAGE_SIZE),
   });
-  const {
-    data,
-    isLoading,
-    refetch,
-  } = useGetTransactionsQuery({
+  const { data, isLoading, refetch } = useGetTransactionsQuery({
     user_id: Number(searchTerm) || loggedInUser?.id,
     page: paginationModel.page + 1,
     limit: paginationModel.pageSize,
@@ -42,28 +41,41 @@ const Activity = () => {
     {
       field: "created_at",
       headerName: "Date & Time",
-      flex: 1,
+      flex: 0.5,
       renderCell: (params) =>
         moment(params?.row.created_at).format(
           import.meta.env.VITE_APP_TIME_STAMP
         ),
     },
-    { field: "type", headerName: "Type", flex: 1 },
-    { field: "id", headerName: "User ID", flex: 1 },
+    { field: "type", headerName: "Type" },
+    { field: "id", headerName: "User ID" },
     {
       field: "program",
       headerName: "Program",
-      flex: 1,
       renderCell: (params) => params.row.user_level.level.program.name,
     },
     {
       field: "level",
       headerName: "Level",
-      flex: 1,
       renderCell: (params) => params.row.user_level.level.level,
     },
-    { field: "hash", headerName: "Txn Hash", flex: 1 },
-    { field: "amount", headerName: "Cr/Dr (BUSD)", flex: 1 },
+    {
+      field: "hash",
+      headerName: "Txn Hash",
+      flex: 0.5,
+      renderCell: (params) => (
+        <Link
+          component={RouterLink}
+          underline="hover"
+          color="inherit"
+          to={`${import.meta.env.VITE_APP_BSC_URL}/${params.row.hash}`}
+        >
+          {truncateAddress(params.row.hash, 10, 6)}
+          <OpenInNew fontSize="small" sx={{ mx: 1 }} />
+        </Link>
+      ),
+    },
+    { field: "amount", headerName: "Revenue", flex: 0.5 },
   ];
 
   return (
