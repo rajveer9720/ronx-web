@@ -48,7 +48,11 @@ const Activity = () => {
         ),
     },
     { field: "type", headerName: "Type" },
-    { field: "id", headerName: "User ID" },
+    {
+      field: "id",
+      headerName: "User ID",
+      renderCell: (params) => params.row.user.id,
+    },
     {
       field: "program",
       headerName: "Program",
