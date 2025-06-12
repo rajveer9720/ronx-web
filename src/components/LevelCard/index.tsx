@@ -92,8 +92,8 @@ const LevelCard = (props: LevelCardProps) => {
       writeContract({
         address: import.meta.env.VITE_CONTRACT_ADDRESS,
         abi: ContractABI,
-        functionName: "buyNewLevelFor",
-        args: [address, matrix, level],
+        functionName: "buyNewLevel",
+        args: [matrix, level],
       });
     } catch (err: any) {
       console.error("Upgrade failed:", err);

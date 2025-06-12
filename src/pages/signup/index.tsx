@@ -32,7 +32,7 @@ const SignUp = () => {
   const { disconnect } = useDisconnect();
   const [triggerGetUser] = useLazyGetUserQuery();
   const { data: hash, writeContract } = useWriteContract();
-  const [uplineId, setUplineId] = useState<number>(upline_id || 1);
+  const [uplineId, setUplineId] = useState<number | undefined>(upline_id || 1);
   const { isSuccess: isTransactionSuccess } = useWaitForTransactionReceipt({
     hash,
   });
@@ -59,8 +59,8 @@ const SignUp = () => {
       writeContract({
         address: import.meta.env.VITE_CONTRACT_ADDRESS,
         abi: ContractABI,
-        functionName: "registrationFor",
-        args: [address, user.wallet_address],
+        functionName: "registrationExt",
+        args: [ user.wallet_address],
       });
     } catch (err: any) {
       console.error(err);
@@ -118,9 +118,13 @@ const SignUp = () => {
                     size="small"
                     type="number"
                     label="Upline ID"
-                    value={uplineId}
-                    onChange={(e) => setUplineId(+e.target.value)}
+                    value={uplineId === undefined ? "" : uplineId}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setUplineId(value === "" ? undefined : +value);
+                    }}
                   />
+
 
                   <Button fullWidth onClick={handleWalletConnect} size="large">
                     {isConnected && address ? "Register Now" : "Connect Wallet"}
