@@ -12,6 +12,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
       
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.9.0
@@ -25,20 +36,6 @@ jobs:
 
       - name: Upload project to VPS
         run: |
-          rsync -avz ./ ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}:${{ secrets.APP_PATH }}
+          rsync -avz --delete ./dist/ ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}:${{ secrets.APP_PATH }}/dist/
 
-      - name: Install & Build
-        run: |
-          ssh -o ServerAliveInterval=60 ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} 'bash -lc "
-            export NVM_DIR=\$HOME/.nvm
-            [ -s \"\$NVM_DIR/nvm.sh\" ] && \. \"\$NVM_DIR/nvm.sh\"
-            nvm use 22
-            cd ${{ secrets.APP_PATH }}
-            # Delete the existing .env file if it exists
-            [ -f .env ] && rm .env
-            # Rename .env.dev to .env
-            [ -f .env.dev ] && mv .env.dev .env
-            npm install
-            # export NODE_OPTIONS=--max-old-space-size=8192
-            # npm run build
-          "'
+      
