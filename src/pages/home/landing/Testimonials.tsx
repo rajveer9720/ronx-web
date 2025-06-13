@@ -1,5 +1,4 @@
 import { useState } from "react";
-import useMasonry from "../../../utils/useMasonry";
 import TestimonialImg01 from "/assets/images/testimonial-01.jpg";
 import TestimonialImg02 from "/assets/images/testimonial-02.jpg";
 import TestimonialImg03 from "/assets/images/testimonial-03.jpg";
@@ -104,7 +103,6 @@ const testimonials = [
 ];
 
 export default function Testimonials() {
-  const masonryContainer = useMasonry();
   const [category, setCategory] = useState<number>(1);
 
   return (
@@ -199,10 +197,7 @@ export default function Testimonials() {
             </button>
           </div>
         </div>
-        <div
-          className="mx-auto grid max-w-sm items-start gap-6 sm:max-w-none sm:grid-cols-2 lg:grid-cols-3"
-          ref={masonryContainer}
-        >
+        <div className="mx-auto grid max-w-sm items-start gap-6 sm:max-w-none sm:grid-cols-2 lg:grid-cols-3">
           {testimonials.map((testimonial, index) => (
             <div key={index} className="group">
               <Testimonial testimonial={testimonial} category={category}>
