@@ -36,6 +36,6 @@ jobs:
 
       - name: Upload project to VPS
         run: |
-          rsync -avz --delete ./dist/ ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}:${{ secrets.APP_PATH }}/dist/
+          rsync -avz --delete ./dist/ ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}:${{ secrets.APP_PATH }}/
 
       
