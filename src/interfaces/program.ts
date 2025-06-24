@@ -6,3 +6,11 @@ export interface IProgram {
   levels: ILevel[];
   created_at: string;
 }
+
+
+export interface ProgramCardProps {
+  textPrimary?: string;
+  textSecondary?: string;
+  program: IProgram;
+  href: string;
+}

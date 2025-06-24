@@ -17,7 +17,7 @@ const Referral = () => {
     pageSize: Number(import.meta.env.VITE_APP_PAGE_SIZE),
   });
   const { data, isLoading, refetch } = useGetUserReferralsQuery({
-    id: Number(searchTerm) || loggedInUser?.id,
+    id: Number(searchTerm) || loggedInUser?.id || 1,
     page: paginationModel.page + 1,
     limit: paginationModel.pageSize,
   });

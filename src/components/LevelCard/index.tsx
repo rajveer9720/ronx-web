@@ -6,7 +6,7 @@ import {
   Tag,
   WarningAmberRounded,
 } from "@mui/icons-material";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import {
   Box,
   Button,
@@ -31,22 +31,19 @@ import {
   getNodesData,
 } from "../../utils/levelUtils";
 import { IUserLevel } from "../../interfaces/user-levels";
-import { PROGRAM_CONST } from "../../utils/slots";
+import { ProgramIdEnum } from "../../utils/programUtils";
 import GridX3 from "../GridX3";
 import GridX4 from "../GridX4";
 import { useAppSelector } from "../../store/hooks/hook";
 import { selectCurrentUser } from "../../store/slices/authSlice";
 import { ITransaction } from "../../interfaces/transaction";
-import ContractABI from "../../abi/abi.json";
 import {
-  useAccount,
   useWriteContract,
   useWaitForTransactionReceipt,
 } from "wagmi";
 
 import { showSnackbar } from "../../components/SnackbarUtils";
 import { useGetProgramsQuery } from "../../store/apis/programApi";
-
 interface LevelCardProps {
   userLevel: IUserLevel;
   transactions?: ITransaction[];
@@ -55,10 +52,12 @@ interface LevelCardProps {
   route?: string;
   programName?: string;
   cycles?: number;
+  lastUnlockedLevel?: number;
+  onUpgradeClick?: (programId: number, level: number) => void;
+  onMouseEnter?: () => void;
 }
 
 const LevelCard = (props: LevelCardProps) => {
-  const { address } = useAccount();
   const theme = useTheme();
   const {
     userLevel,
@@ -68,9 +67,12 @@ const LevelCard = (props: LevelCardProps) => {
     programName,
     transactions,
     cycles,
+    lastUnlockedLevel = 0,
+    onUpgradeClick,
+    onMouseEnter,
   } = props;
-  const currentUser = useAppSelector(selectCurrentUser);
-  const { data: hash, writeContract } = useWriteContract();
+  const loggedInUser = useAppSelector(selectCurrentUser);
+  const { data: hash } = useWriteContract();
   const program = useGetProgramsQuery().data?.find(
     (program) => program.name.toLowerCase() === programName?.toLowerCase()
   );
@@ -79,30 +81,17 @@ const LevelCard = (props: LevelCardProps) => {
   const { isSuccess: isTransactionSuccess } = useWaitForTransactionReceipt({
     hash,
   });
-  const handleUpgradeLevel = async (matrix: number, level: number) => {
-    try {
-      if (!address) {
-        showSnackbar({
-          message: "Wallet not connected.",
-          severity: "warning",
-        });
-        return;
-      }
 
-      writeContract({
-        address: import.meta.env.VITE_CONTRACT_ADDRESS,
-        abi: ContractABI,
-        functionName: "buyNewLevel",
-        args: [matrix, level],
-      });
-    } catch (err: any) {
-      console.error("Upgrade failed:", err);
-      showSnackbar({
-        message: err?.reason || "Upgrade failed.",
-        severity: "error",
-      });
+
+  const handleUpgrade = () => {
+    if (onUpgradeClick && program?.id) {
+      onUpgradeClick(
+        program.id,
+        userLevel?.level?.level
+      );
     }
   };
+
 
   useEffect(() => {
     if (isTransactionSuccess && hash) {
@@ -116,6 +105,13 @@ const LevelCard = (props: LevelCardProps) => {
       }, 2000);
     }
   }, [isTransactionSuccess, hash]);
+
+
+  const handleMouseEnter = useCallback(() => {
+    if (onMouseEnter) {
+      onMouseEnter();
+    }
+  }, [onMouseEnter]);
 
   return (
     <Card
@@ -193,13 +189,12 @@ const LevelCard = (props: LevelCardProps) => {
                         variant="contained"
                         color="primary"
                         fullWidth
-                        disabled={!currentUser}
-                        onClick={() =>
-                          handleUpgradeLevel(
-                            programName?.toLowerCase() === "x3" ? 1 : 2,
-                            userLevel?.level?.level
-                          )
+                        disabled={
+                          loggedInUser?.id !== userLevel?.user?.id ||
+                          lastUnlockedLevel + 1 !== userLevel?.level?.level
                         }
+                        onClick={handleUpgrade}
+                        onMouseEnter={handleMouseEnter}
                       >
                         Unlock now
                       </Button>
@@ -207,11 +202,11 @@ const LevelCard = (props: LevelCardProps) => {
                   </Box>
                 ) : (
                   <Grid container spacing={1} py={large ? 4 : 2}>
-                    {programName?.toLowerCase() === PROGRAM_CONST.X3 && (
+                    {programName?.toLowerCase() === ProgramIdEnum.X3 && (
                       <GridX3 nodesData={nodesData} />
                     )}
 
-                    {programName?.toLowerCase() === PROGRAM_CONST.X4 && (
+                    {programName?.toLowerCase() === ProgramIdEnum.X4 && (
                       <GridX4 nodesData={nodesData} />
                     )}
                   </Grid>

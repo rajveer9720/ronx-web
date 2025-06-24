@@ -125,3 +125,43 @@ export const EmptyUserLevel: IUserLevel = {
   created_at: "",
   updated_at: "",
 };
+
+
+
+export const canUpgradeLevel = (
+  currentLevel: number,
+  allUserLevels: IUserLevel[] = []
+): boolean => {
+  const unlockedLevels = allUserLevels
+    .filter((level) => level.unlock)
+    .map((level) => level.level?.level || 0)
+    .sort((a, b) => a - b);
+
+  if (unlockedLevels.length === 0) {
+    return currentLevel === 1;
+  }
+
+  const highestUnlockedLevel = Math.max(...unlockedLevels);
+
+  return (
+    unlockedLevels.includes(currentLevel) ||
+    currentLevel === highestUnlockedLevel + 1
+  );
+};
+
+export const getNextRequiredLevel = (allUserLevels: IUserLevel[] = []): number => {
+  const unlockedLevels = allUserLevels
+    .filter((level) => level.unlock)
+    .map((level) => level.level?.level || 0)
+    .sort((a, b) => a - b);
+
+  if (unlockedLevels.length === 0) {
+    return 1;
+  }
+
+  return Math.max(...unlockedLevels) + 1;
+};
+
+
+
+

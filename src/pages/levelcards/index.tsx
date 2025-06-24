@@ -11,7 +11,7 @@ import {
 } from "@mui/icons-material";
 import { LevelCard } from "../../components";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { EmptyUserLevel } from "../../utils/levelUtils";
 import { IUserLevel } from "../../interfaces/user-levels";
@@ -23,16 +23,92 @@ import { useLazyGetTransactionsByCycleQuery } from "../../store/apis/transaction
 import { selectCurrentUser } from "../../store/slices/authSlice";
 import { selectSearchTerm } from "../../store/slices/searchSlice";
 import { useGetUserQuery } from "../../store/apis/userApi";
+import { useUpgradeLevel } from "../../utils/upgradeLevelUtils";
+import { useTokenBalances } from "../../hooks/useTokenBalances";
+import { useAccount } from "wagmi";
+import { showSnackbar } from "../../components/SnackbarUtils";
+import { checkNativeTokenForGas, checkBusdBalance } from "../../utils/web3Checks";
+import { useGetLevelsQuery } from "../../store/apis/levelApi";
+
+
 
 const LevelCards = () => {
   const { name, level } = useParams();
   const dispatch = useAppDispatch();
   const loggedInUser = useAppSelector(selectCurrentUser);
   const { searchTerm } = useAppSelector(selectSearchTerm);
+  const { isConnected, address, chain } = useAccount();
+  const { data: levels } = useGetLevelsQuery({});
+
+  const {
+    busdBalance,
+    nativeTokenBalance,
+    refetchBalances: refetchWalletBalances,
+  } = useTokenBalances();
+
+  const { upgradeLevel } = useUpgradeLevel({
+    onUpgradeComplete: () => window.location.reload(),
+  });
+
+  const getRequiredBusdForLevel = useCallback(
+    (programId: number, levelNumber: number) => {
+      if (!levels) return 0;
+      const levelConfig = levels.find(
+        (levelItem) => levelItem.program?.id === programId && levelItem.level === levelNumber
+      );
+      return levelConfig ? levelConfig.busd : 0;
+    },
+    [levels]
+  );
+
+  const handleUpgradeWithValidation = useCallback(async (programId: number, level: number) => {
+
+
+    try {
+
+      await refetchWalletBalances();
+
+      const requiredBusd = getRequiredBusdForLevel(programId, level);
+
+      if (!checkNativeTokenForGas(nativeTokenBalance, chain?.nativeCurrency?.symbol)) {
+        checkNativeTokenForGas(nativeTokenBalance, chain?.nativeCurrency?.symbol);
+        return;
+      }
+
+      if (!checkBusdBalance(busdBalance, requiredBusd)) {
+        checkBusdBalance(busdBalance, requiredBusd);
+        return;
+      }
+
+      await upgradeLevel(dispatch, programId, level);
+
+    } catch (error: any) {
+      console.error("Upgrade or validation failed:", error);
+      showSnackbar({
+        message: `Upgrade failed: ${error.message || 'Unknown error'}`,
+        severity: "error"
+      });
+    }
+  }, [
+    isConnected,
+    address,
+    refetchWalletBalances,
+    getRequiredBusdForLevel,
+    nativeTokenBalance,
+    chain?.nativeCurrency?.symbol,
+    busdBalance,
+    upgradeLevel,
+    dispatch
+  ]);
+
+
+
   const [currentLevelIndex, setCurrentLevelIndex] = useState<number>(
     Number(level) || 0
   );
   const [currentCycle, setCurrentCycle] = useState<number>(1);
+  const [allUserLevelsData, setAllUserLevelsData] = useState<IUserLevel[]>([]);
+
   const program = useGetProgramsQuery().data?.find(
     (program) => program.name.toLowerCase() === name?.toLowerCase()
   );
@@ -45,10 +121,16 @@ const LevelCards = () => {
 
   const [triggerTxns, { data: txns, isLoading: isTxnLoading }] =
     useLazyGetTransactionsByCycleQuery();
+  const [triggerAllUserLevels, { isLoading: isAllUserLevelsLoading }] =
+    useLazyGetUserLevelsQuery();
   const [
     triggerUserLevels,
     { data: userLevels, isLoading: isUserLevelLoading },
   ] = useLazyGetUserLevelsQuery();
+
+  const lastUnlockedLevel = [...allUserLevelsData]
+    ?.reverse()
+    ?.find((level) => level.unlock)?.level;
 
   const refetchTxns = async () => {
     const newTxns = await triggerTxns({
@@ -72,23 +154,35 @@ const LevelCards = () => {
     setCurrentCycle(newUserLevels?.total_cycles || 1);
   };
 
+  const refetchAllUserLevels = async () => {
+    const allLevels = await triggerAllUserLevels({
+      user_id: Number(searchTerm) || loggedInUser?.id,
+      program_id: program?.id,
+      page: 1,
+      limit: 100,
+    }).unwrap();
+    setAllUserLevelsData(allLevels?.data || []);
+  };
+
   const currentLevel =
     userLevels?.data?.[0] ||
     ({
       ...EmptyUserLevel,
       level: programLevel,
+      user: user,
     } as IUserLevel);
 
   useEffect(() => {
-    if (isUserLevelLoading || isTxnLoading) {
+    if (isUserLevelLoading || isTxnLoading || isAllUserLevelsLoading) {
       dispatch(showLoader());
     } else {
       dispatch(hideLoader());
     }
-  }, [isUserLevelLoading, isTxnLoading]);
+  }, [isUserLevelLoading, isTxnLoading, isAllUserLevelsLoading]);
 
   useEffect(() => {
     (async () => {
+      await refetchAllUserLevels();
       await refetchUserLevels();
       await refetchTxns();
     })();
@@ -99,6 +193,12 @@ const LevelCards = () => {
       await refetchTxns();
     })();
   }, [currentCycle]);
+
+  const handleProgramCardHover = useCallback(() => {
+    if (isConnected && address) {
+      refetchWalletBalances();
+    }
+  }, [isConnected, address, refetchWalletBalances]);
 
   return (
     <Grid container spacing={2}>
@@ -148,6 +248,9 @@ const LevelCards = () => {
             programName={program?.name || name}
             transactions={txns?.data || []}
             cycles={userLevels?.total_cycles || 1}
+            lastUnlockedLevel={lastUnlockedLevel?.level}
+            onUpgradeClick={handleUpgradeWithValidation}
+            onMouseEnter={handleProgramCardHover}
           />
         </Box>
 
@@ -184,7 +287,7 @@ const LevelCards = () => {
               onClick={() => setCurrentCycle((prev) => prev && prev - 1)}
               disabled={currentCycle === 1}
             >
-              <ExpandLess />
+              <ExpandMore />
             </Button>
             <Button disableRipple color="inherit">
               Cycle: {txns?.pagination?.current_page}
@@ -194,7 +297,7 @@ const LevelCards = () => {
               onClick={() => setCurrentCycle((prev) => prev && prev + 1)}
               disabled={currentCycle === userLevels?.total_cycles}
             >
-              <ExpandMore />
+              <ExpandLess />
             </Button>
           </ButtonGroup>
 

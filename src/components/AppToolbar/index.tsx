@@ -15,6 +15,8 @@ import { jwtDecode } from "jwt-decode";
 import { IUser } from "../../interfaces/user";
 import SearchDialog from "../SearchDialog";
 import { setSearchTerm } from "../../store/slices/searchSlice";
+import { useNavigate } from "react-router-dom";
+import { RoutePaths } from "../../utils/routes";
 
 interface AppToolbarProps {
   guest?: boolean;
@@ -29,7 +31,7 @@ export const ToolbarActions = (props: AppToolbarProps) => {
   const [login] = useLoginMutation();
   const [showSearchDialog, setShowSearchDialog] = useState<boolean>(false);
   const [params, setParams] = useState<any>({});
-  const { data: user, refetch } = useGetUserQuery(params);
+  const { refetch: refetchUser } = useGetUserQuery(params);
 
   const handleWalletConnect = () => {
     try {
@@ -68,12 +70,32 @@ export const ToolbarActions = (props: AppToolbarProps) => {
     }
   };
 
-  useEffect(() => {
+  const fetchUser = async () => {
     if (params.id || params.wallet_address) {
-      refetch();
-      dispatch(setSearchTerm(user?.id.toString() || ""));
+      refetchUser()
+        .then((result) => {
+          const data = result.data;
+          if (data && data.id) {
+            dispatch(setSearchTerm(data.id.toString()));
+          } else {
+            showSnackbar({
+              message: "No user found for the provided wallet address or ID.",
+              severity: "warning",
+            });
+          }
+        })
+        .catch(() => {
+          showSnackbar({
+            message: "An error occurred while searching for the user.",
+            severity: "error",
+          });
+        });
     }
-  }, [params, user]);
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, [params]);
 
   useEffect(() => {
     if (isConnected && address) {
@@ -144,6 +166,7 @@ export const ToolbarActions = (props: AppToolbarProps) => {
 
 export const ToolbarAppTitle = (props: AppToolbarProps) => {
   const { guest } = props;
+  const navigate = useNavigate();
   return (
     <Box
       display={"flex"}
@@ -151,7 +174,14 @@ export const ToolbarAppTitle = (props: AppToolbarProps) => {
       justifyContent="space-between"
       pl={guest ? 2 : 0}
     >
-      <img src={LOGO} alt="Logo" style={{ height: 30 }} />
+      <img
+        src={LOGO}
+        alt="Logo"
+        style={{ height: 30, cursor: "pointer" }}
+        onClick={() => {
+          navigate(RoutePaths.BASE);
+        }}
+      />
     </Box>
   );
 };

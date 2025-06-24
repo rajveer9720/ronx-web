@@ -23,7 +23,7 @@ const Program = () => {
 
   const { data: userLevels, isLoading: isUserLevelLoading } =
     useGetUserLevelsQuery({
-      user_id: Number(searchTerm) || loggedInUser?.id,
+      user_id: Number(searchTerm) || loggedInUser?.id || 1,
       program_id: program?.id,
       page: 1,
       limit: 100,
