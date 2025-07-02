@@ -41,7 +41,7 @@ const ProgramCard = (props: ProgramCardProps) => {
   const userId = Number(searchTerm) || currentUser?.id;
 
   const { data: userLevels, isLoading } = useGetUserLevelsQuery({
-    user_id: userId,
+    user_id: userId || loggedInUser?.id || 1,
     program_id: program?.id,
     page: 1,
     limit: 100,
