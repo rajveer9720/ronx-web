@@ -9,16 +9,13 @@ import {
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { useEffect, useMemo, useCallback } from "react";
-
 import { EmptyUserLevel } from "../../utils/levelUtils";
 import LevelList from "../LevelList";
-
 import { useGetUserLevelsQuery } from "../../store/apis/userlevelApi";
 import { useAppDispatch, useAppSelector } from "../../store/hooks/hook";
 import { selectSearchTerm } from "../../store/slices/searchSlice";
 import { selectCurrentUser } from "../../store/slices/authSlice";
 import { showLoader, hideLoader } from "../../store/slices/loaderSlice";
-
 import { IProgram } from "../../interfaces/program";
 
 interface ProgramCardProps {

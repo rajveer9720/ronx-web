@@ -6,7 +6,7 @@ import { showSnackbar } from "../SnackbarUtils";
 import { useConnectModal, useAccountModal } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import { truncateAddress } from "../../utils/userUtils";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useGetUserQuery, useLoginMutation } from "../../store/apis/userApi";
 import { IUserAuth } from "../../interfaces/auth";
 import { useAppDispatch } from "../../store/hooks/hook";
@@ -32,6 +32,8 @@ export const ToolbarActions = (props: AppToolbarProps) => {
   const [showSearchDialog, setShowSearchDialog] = useState<boolean>(false);
   const [params, setParams] = useState<any>({});
   const { refetch: refetchUser } = useGetUserQuery(params);
+  const previousAddress = useRef<string | undefined>(address);
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
   const handleWalletConnect = () => {
     try {
@@ -105,6 +107,86 @@ export const ToolbarActions = (props: AppToolbarProps) => {
       dispatch(logout());
     }
   }, [isConnected, address, isDisconnected]);
+
+  useEffect(() => {
+    if (address && !isInitialized) {
+      previousAddress.current = address;
+      setIsInitialized(true);
+      
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('currentWalletAddress', address);
+      }
+    }
+  }, [address, isInitialized]);
+
+  useEffect(() => {
+    if (!isInitialized || !address) return;
+    const currentAddress = address;
+    if (previousAddress.current && 
+        previousAddress.current !== currentAddress && 
+        previousAddress.current !== 'undefined') { 
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('currentWalletAddress', currentAddress);
+      }
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
+    }    
+    previousAddress.current = currentAddress;
+  }, [address, isInitialized]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.ethereum) return;
+    const handleAccountsChanged = (accounts: string[]) => {
+      if (accounts.length === 0) {
+        dispatch(logout());
+      } else if (accounts[0] && previousAddress.current && 
+                 accounts[0].toLowerCase() !== previousAddress.current.toLowerCase()) {
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('currentWalletAddress', accounts[0]);
+        }
+        setTimeout(() => {
+          window.location.reload();
+        }, 100);
+      }
+    };
+
+    const handleChainChanged = () => {
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
+    };
+
+    if (window.ethereum.on) {
+      window.ethereum.on('accountsChanged', handleAccountsChanged);
+      window.ethereum.on('chainChanged', handleChainChanged);
+    }
+
+    return () => {
+      if (window.ethereum.removeListener) {
+        window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+        window.ethereum.removeListener('chainChanged', handleChainChanged);
+      }
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'currentWalletAddress' && e.newValue && e.newValue !== address) {
+        setTimeout(() => {
+          window.location.reload();
+        }, 100);
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [address]);
 
   return (
     <>

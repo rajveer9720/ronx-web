@@ -89,8 +89,18 @@ export const cleanupCytoscape = (cy: cytoscape.Core | null) => {
 export const applyNodeColors = (cy: cytoscape.Core, nodesData: any[]) => {
   cy.nodes().forEach((node) => {
     const nodeData = nodesData.find((n) => n.id === node.id());
-    if (nodeData?.nodeColor) {
-      node.style("background-color", nodeData.nodeColor);
+    
+    let nodeColor = nodeData?.nodeColor || "#7b3de4";
+        if (nodeData?.spillInfo) {
+      if (nodeData.spillInfo.spill_up) {
+        nodeColor = "#FFA500"; 
+      } else if (nodeData.spillInfo.spill_down) {
+        nodeColor = "#FF5349"; 
+      }
+    }
+    
+    if (nodeColor) {
+      node.style("background-color", nodeColor);
       node.style("background-opacity", 1);
     }
 

@@ -21,6 +21,23 @@ const SearchField = (props: SearchFieldProps) => {
   const { placeholder, onSearch, styles } = props;
   const [searchValue, setSearchValue] = useState<string>(searchTerm || "");
 
+  const handleSearch = () => {
+    if (searchValue.trim()) {
+      onSearch?.(searchValue.trim());
+    }
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleSearch();
+    }
+  };
+
+  const handleIconClick = () => {
+    handleSearch();
+  };
+
   return (
     <SearchStyled>
       <TextField
@@ -32,18 +49,16 @@ const SearchField = (props: SearchFieldProps) => {
         onChange={(event) => {
           setSearchValue(event.target.value);
         }}
+        onKeyPress={handleKeyPress}
         sx={styles}
         slotProps={{
           input: {
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton
-                  disabled={searchValue == searchTerm}
+                  disabled={!searchValue.trim()}
                   size="small"
-                  onClick={(event) => {
-                    event.preventDefault();
-                    onSearch?.(searchValue);
-                  }}
+                  onClick={handleIconClick}
                   edge="end"
                 >
                   <Search />

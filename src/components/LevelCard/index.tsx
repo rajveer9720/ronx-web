@@ -201,15 +201,17 @@ const LevelCard = (props: LevelCardProps) => {
                     </Box>
                   </Box>
                 ) : (
-                  <Grid container spacing={1} py={large ? 4 : 2}>
-                    {programName?.toLowerCase() === ProgramIdEnum.X3 && (
-                      <GridX3 nodesData={nodesData} />
-                    )}
+                  <>
+                    <Grid container spacing={1} py={large ? 4 : 2}>
+                      {programName?.toLowerCase() === ProgramIdEnum.X3 && (
+                        <GridX3 nodesData={nodesData} />
+                      )}
 
-                    {programName?.toLowerCase() === ProgramIdEnum.X4 && (
-                      <GridX4 nodesData={nodesData} />
-                    )}
-                  </Grid>
+                      {programName?.toLowerCase() === ProgramIdEnum.X4 && (
+                        <GridX4 nodesData={nodesData} />
+                      )}
+                    </Grid>
+                  </>
                 )}
               </Box>
 

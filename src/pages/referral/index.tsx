@@ -33,6 +33,9 @@ const Referral = () => {
   useEffect(() => {
     refetch();
   }, [paginationModel]);
+  useEffect(() => {
+    refetch();
+  }, [searchTerm, refetch]);
 
   const columns: GridColDef[] = [
     {

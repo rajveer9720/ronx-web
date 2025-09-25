@@ -35,8 +35,8 @@ export const getLevelIcon = (level: IUserLevel): ReactNode => {
 };
 
 export const getNodeColor = (theme: Theme, txn: ITransaction): string => {
-  if (txn.spill_down) return "brown"; // Green for spill down
-  if (txn.spill_up) return "grey"; // Orange for gift
+  if (txn.spill_up) return "#ff6b6b"; 
+  if (txn.spill_down) return "#4ecdc4";
   return theme.palette.primary.main;
 };
 
@@ -51,6 +51,10 @@ export const getNodesData = (
       label: txn.user.id.toString(),
       link: `/user/${txn.user.id}`,
       nodeColor: getNodeColor(theme, txn),
+      spillInfo: {
+        spill_up: txn.spill_up,
+        spill_down: txn.spill_down,
+      },
     };
     return node;
   });
