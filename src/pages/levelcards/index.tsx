@@ -29,6 +29,7 @@ import { useAccount } from "wagmi";
 import { showSnackbar } from "../../components/SnackbarUtils";
 import { checkNativeTokenForGas, checkBusdBalance } from "../../utils/web3Checks";
 import { useGetLevelsQuery } from "../../store/apis/levelApi";
+import { ProgramIdEnum } from "../../utils/programUtils";
 
 
 
@@ -112,11 +113,12 @@ const LevelCards = () => {
   const program = useGetProgramsQuery().data?.find(
     (program) => program.name.toLowerCase() === name?.toLowerCase()
   );
+  const programId = program?.id || (name?.toLowerCase() === ProgramIdEnum.X3 ? 1 : 0);
   const programLevel = program?.levels?.find(
     (programLevel: any) => programLevel.level === currentLevelIndex
   );
   const { data: user } = useGetUserQuery({
-    id: Number(searchTerm) || loggedInUser?.id,
+    id: Number(searchTerm) || loggedInUser?.id || 1,
   });
 
   const [triggerTxns, { data: txns, isLoading: isTxnLoading }] =
@@ -132,45 +134,86 @@ const LevelCards = () => {
     ?.reverse()
     ?.find((level) => level.unlock)?.level;
 
-  const refetchTxns = async () => {
-    const newTxns = await triggerTxns({
-      user_id: Number(searchTerm) || loggedInUser?.id,
-      program_id: program?.id || 0,
-      level: currentLevelIndex,
-      cycle: currentCycle,
-    }).unwrap();
-    if (currentCycle === newTxns?.pagination?.current_page) return;
-    setCurrentCycle(userLevels?.total_cycles || 1);
+  const handleLevelChange = useCallback(async (newLevelIndex: number) => {
+    setCurrentLevelIndex(newLevelIndex);
+    setCurrentCycle(1);
+    try {
+      const newUserLevels = await triggerUserLevels({
+        user_id: Number(searchTerm) || loggedInUser?.id || 1,
+        level: newLevelIndex,
+        program_id: programId,
+        page: 1,
+        limit: 100,
+      }).unwrap();
+      const totalCycles = newUserLevels?.total_cycles || 1;
+      const appropriateCycle = totalCycles > 0 ? totalCycles : 1;
+      setCurrentCycle(appropriateCycle);
+    } catch (error) {
+      console.error('Error fetching user levels for level change:', error);
+      setCurrentCycle(1);
+    }
+  }, [programId, searchTerm, loggedInUser?.id, triggerUserLevels]);
+
+  const refetchTxns = async (skipCycleUpdate = false) => {
+    try {
+      const newTxns = await triggerTxns({
+        user_id: Number(searchTerm) || loggedInUser?.id || 1,
+        program_id: programId,
+        level: currentLevelIndex,
+        cycle: currentCycle,
+      }).unwrap();
+      if (!skipCycleUpdate && currentCycle !== newTxns?.pagination?.current_page && newTxns?.pagination?.current_page) {
+        setCurrentCycle(newTxns.pagination.current_page);
+      }
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+      if (!skipCycleUpdate) {
+        setCurrentCycle(1);
+      }
+    }
   };
 
-  const refetchUserLevels = async () => {
-    const newUserLevels = await triggerUserLevels({
-      user_id: Number(searchTerm) || loggedInUser?.id,
-      level: currentLevelIndex,
-      program_id: program?.id,
-      page: 1,
-      limit: 100,
-    }).unwrap();
-    setCurrentCycle(newUserLevels?.total_cycles || 1);
+  const refetchUserLevels = async (shouldUpdateCycle = false) => {
+    try {
+      const newUserLevels = await triggerUserLevels({
+        user_id: Number(searchTerm) || loggedInUser?.id || 1,
+        level: currentLevelIndex,
+        program_id: programId,
+        page: 1,
+        limit: 100,
+      }).unwrap();
+      if (shouldUpdateCycle || (!currentCycle || currentCycle === 1)) {
+        const totalCycles = newUserLevels?.total_cycles || 1;
+        setCurrentCycle(totalCycles);
+      }
+    } catch (error) {
+      console.error('Error fetching user levels:', error);
+      if (shouldUpdateCycle) {
+        setCurrentCycle(1);
+      }
+    }
   };
 
   const refetchAllUserLevels = async () => {
-    const allLevels = await triggerAllUserLevels({
-      user_id: Number(searchTerm) || loggedInUser?.id,
-      program_id: program?.id,
-      page: 1,
-      limit: 100,
-    }).unwrap();
-    setAllUserLevelsData(allLevels?.data || []);
+    try {
+      const allLevels = await triggerAllUserLevels({
+        user_id: Number(searchTerm) || loggedInUser?.id || 1,
+        program_id: programId,
+        page: 1,
+        limit: 100,
+      }).unwrap();
+      setAllUserLevelsData(allLevels?.data || []);
+    } catch (error) {
+      console.error('Error fetching all user levels:', error);
+      setAllUserLevelsData([]);
+    }
   };
 
-  const currentLevel =
-    userLevels?.data?.[0] ||
-    ({
-      ...EmptyUserLevel,
-      level: programLevel,
-      user: user,
-    } as IUserLevel);
+  const currentLevel = userLevels?.data?.[0] || {
+    ...EmptyUserLevel,
+    level: programLevel || { level: currentLevelIndex, program: program },
+    user: user || { id: Number(searchTerm) || loggedInUser?.id },
+  } as IUserLevel;
 
   useEffect(() => {
     if (isUserLevelLoading || isTxnLoading || isAllUserLevelsLoading) {
@@ -181,21 +224,29 @@ const LevelCards = () => {
   }, [isUserLevelLoading, isTxnLoading, isAllUserLevelsLoading]);
 
   useEffect(() => {
-    (async () => {
-      await refetchAllUserLevels();
-      await refetchUserLevels();
-      await refetchTxns();
-    })();
-  }, [currentLevelIndex, searchTerm, loggedInUser]);
+    const fetchData = async () => {
+      if (programId && (searchTerm || loggedInUser?.id || 1)) {
+        await Promise.all([
+          refetchAllUserLevels(),
+          refetchUserLevels(false),
+          refetchTxns(),
+        ]);
+      }
+    };
+    
+    fetchData();
+  }, [currentLevelIndex, searchTerm, loggedInUser, programId]);
 
   useEffect(() => {
-    (async () => {
-      await refetchTxns();
-    })();
-  }, [currentCycle]);
+    if (programId) {
+      (async () => {
+        await refetchTxns(true);
+      })();
+    }
+  }, [currentCycle, programId]);
 
   const handleProgramCardHover = useCallback(() => {
-    if (isConnected && address) {
+    if (isConnected && address && refetchWalletBalances) {
       refetchWalletBalances();
     }
   }, [isConnected, address, refetchWalletBalances]);
@@ -271,7 +322,7 @@ const LevelCards = () => {
               variant="contained"
               startIcon={<ChevronLeft />}
               onClick={() => {
-                setCurrentLevelIndex((prev) => prev - 1);
+                handleLevelChange(currentLevelIndex - 1);
               }}
             >
               Level {currentLevelIndex - 1}
@@ -284,18 +335,18 @@ const LevelCards = () => {
           >
             <Button
               variant="contained"
-              onClick={() => setCurrentCycle((prev) => prev && prev - 1)}
-              disabled={currentCycle === 1}
+              onClick={() => setCurrentCycle((prev) => Math.max(1, prev - 1))}
+              disabled={currentCycle <= 1}
             >
               <ExpandMore />
             </Button>
             <Button disableRipple color="inherit">
-              Cycle: {txns?.pagination?.current_page}
+              Cycle: {currentCycle}
             </Button>
             <Button
               variant="contained"
-              onClick={() => setCurrentCycle((prev) => prev && prev + 1)}
-              disabled={currentCycle === userLevels?.total_cycles}
+              onClick={() => setCurrentCycle((prev) => Math.min(userLevels?.total_cycles || 1, prev + 1))}
+              disabled={currentCycle >= (userLevels?.total_cycles || 1)}
             >
               <ExpandLess />
             </Button>
@@ -320,7 +371,7 @@ const LevelCards = () => {
               variant="contained"
               endIcon={<ChevronRight />}
               onClick={() => {
-                setCurrentLevelIndex((prev) => prev + 1);
+                handleLevelChange(currentLevelIndex + 1);
               }}
             >
               Level {currentLevelIndex + 1}

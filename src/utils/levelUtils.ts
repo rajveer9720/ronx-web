@@ -9,6 +9,7 @@ import {
 } from "@mui/icons-material";
 import { ITransaction } from "../interfaces/transaction";
 import { INodeData } from "../interfaces/grid";
+import { ProgramIds } from "./programUtils";
 
 export const getBgColor = (level: IUserLevel, theme: Theme): string => {
   if (level.unlock) return theme.palette.primary.light;
@@ -45,39 +46,36 @@ export const getNodesData = (
   transactions: ITransaction[],
   program_id: number
 ) => {
-  const data = transactions.map((txn: ITransaction) => {
-    const node: INodeData = {
-      id: txn.place.toString(),
-      label: txn.user.id.toString(),
-      link: `/user/${txn.user.id}`,
-      nodeColor: getNodeColor(theme, txn),
-      spillInfo: {
-        spill_up: txn.spill_up,
-        spill_down: txn.spill_down,
-      },
-    };
-    return node;
-  });
-
-  if (
-    (transactions.length != 3 && program_id === 1) ||
-    (transactions.length != 6 && program_id === 2)
-  ) {
-    const emptyNodes: INodeData[] = [];
-    for (let i = 1; i <= (program_id === 1 ? 3 : 6); i++) {
-      const temp = transactions.find((txn) => txn.place === i);
-      if (!temp) {
-        emptyNodes.push({
-          id: i.toString(),
-          label: "NA",
-          link: "/",
-          nodeColor: theme.palette.common.white,
-        });
-      }
+  const totalSlots = program_id === ProgramIds.X3 ? 3 : 6;
+  const nodes: INodeData[] = [];
+  for (let i = 1; i <= totalSlots; i++) {
+    const txn = transactions.find((transaction) => transaction.place === i);
+    
+    if (txn) {
+      nodes.push({
+        id: i.toString(),
+        label: txn.user.id.toString(),
+        link: `/user/${txn.user.id}`,
+        nodeColor: getNodeColor(theme, txn),
+        spillInfo: {
+          spill_up: txn.spill_up,
+          spill_down: txn.spill_down,
+        },
+      });
+    } else {
+      nodes.push({
+        id: i.toString(),
+        label: "NA",
+        link: "/",
+        nodeColor: theme.palette.common.white,
+        spillInfo: {
+          spill_up: false,
+          spill_down: false,
+        },
+      });
     }
-    return [...data, ...emptyNodes];
   }
-  return data;
+  return nodes;
 };
 
 export const getLevelListItems = (level: IUserLevel, cycles: number = 1) => {

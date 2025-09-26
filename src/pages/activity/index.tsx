@@ -20,7 +20,7 @@ const Activity = () => {
     pageSize: Number(import.meta.env.VITE_APP_PAGE_SIZE),
   });
   const { data, isLoading, refetch } = useGetTransactionsQuery({
-    user_id: Number(searchTerm) || loggedInUser?.id,
+    user_id: Number(searchTerm) || loggedInUser?.id || 1,
     page: paginationModel.page + 1,
     limit: paginationModel.pageSize,
   });

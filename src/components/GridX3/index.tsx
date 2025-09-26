@@ -30,18 +30,31 @@ const GridX3 = ({ nodesData }: GridX3Props) => {
   const [labels, setLabels] = useState<React.ReactNode[]>([]);
   const [height, setHeight] = useState(GRID_X3.DESKTOP_HEIGHT);
 
-  const elements = useMemo(() => createGridX3Elements(nodesData), [nodesData]);
+  const normalizedNodesData = useMemo(() => {
+    const nodes = [...(nodesData || [])];
+
+    while (nodes.length < 3) {
+      nodes.push({
+        id: (nodes.length + 1).toString(),
+        label: "NA",
+        link: "/",
+        nodeColor: "#ffffff",
+        spillInfo: { spill_up: false, spill_down: false },
+      });
+    }
+
+    return nodes.slice(0, 3);
+  }, [nodesData]);
+
+  const elements = useMemo(() => createGridX3Elements(normalizedNodesData), [normalizedNodesData]);
   const style: any = useMemo(() => createNodeStyles("#7b3de4"), []);
-  const layoutConfig = useMemo(
-    () => createGridLayout(Math.min(nodesData.length, 3)),
-    [nodesData.length]
-  );
+  const layoutConfig = useMemo(() => createGridLayout(3), []);
 
   const nodeInfoMap = useMemo(() => {
     const map = new Map();
-    nodesData.forEach((node) => map.set(node.id, node));
+    normalizedNodesData.forEach((node) => map.set(node.id, node));
     return map;
-  }, [nodesData]);
+  }, [normalizedNodesData]);
 
   const drawNodeLabels = useCallback(() => {
     const cy = cyRef.current;
@@ -156,7 +169,7 @@ const GridX3 = ({ nodesData }: GridX3Props) => {
     cy.on("render", handleRender);
 
     cy.ready(() => {
-      applyNodeColors(cy, nodesData);
+      applyNodeColors(cy, normalizedNodesData);
       cy.nodes().lock();
       cy.resize();
       cy.fit();
@@ -174,7 +187,7 @@ const GridX3 = ({ nodesData }: GridX3Props) => {
       cleanupCytoscape(cyRef.current);
       cyRef.current = null;
     };
-  }, [elements, style, layoutConfig, drawNodeLabels, nodesData]);
+  }, [elements, style, layoutConfig, drawNodeLabels, normalizedNodesData]);
 
   return (
     <Box className="matrix-card" sx={{ height: `${height}px` }}>
