@@ -13,7 +13,9 @@ export default function Header() {
         </div>
 
         <div className="flex items-center justify-end">
-          <button className="btn-sm flex items-center gap-2 bg-[#fff] py-[8px] px-4 text-gray-900 font-medium rounded-lg hover:bg-[#fe7e7e] hover:scale-[1.02] transition">
+          <button className="btn-sm flex items-center gap-2 bg-[#fff] py-[8px] px-4 text-gray-900 font-medium rounded-lg hover:bg-[#fe7e7e] hover:scale-[1.02] transition"
+            onClick={() => window.open("/dashboard", "_self")}
+          >
             Access Platform
             <ArrowForwardIcon fontSize="small" />
           </button>

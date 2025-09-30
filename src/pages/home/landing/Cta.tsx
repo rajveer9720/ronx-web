@@ -30,7 +30,7 @@ export default function Cta() {
             <div className="mx-auto mt-8 max-w-xs sm:flex sm:max-w-none sm:justify-center">
               <div data-aos="fade-up" data-aos-delay={400}>
                 <a
-                  href="#0"
+                  href="/dashboard"
                   className="btn-sm flex items-center gap-2 bg-[#fff] py-[8px] px-4 text-gray-900 font-medium rounded-lg hover:bg-[#fe7e7e] hover:scale-[1.02] transition mb-4 w-full sm:mb-0 sm:w-auto"
                 >
                   <span className="relative flex items-center gap-1">

@@ -59,6 +59,7 @@ const HeroHome: React.FC = () => {
                       ...buttonStyle,
                       mb: { xs: 2, sm: 0 },
                     }}
+                    href="/dashboard"
                   >
                     Get Started
                   </Button>
