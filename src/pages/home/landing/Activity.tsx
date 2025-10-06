@@ -1,5 +1,5 @@
 import React from "react";
-import { Colors } from "../../../utils/colors";
+import { APP_NAME } from "../../../utils/constants";
 
 const Dashboard: React.FC = () => {
   return (
@@ -73,7 +73,7 @@ const Dashboard: React.FC = () => {
 
             <div className="bg-gray-800/80 backdrop-blur-sm border border-gray-700/50 p-6 rounded-2xl shadow-xl">
               <h3 className="text-sm font-medium text-gray-400 mb-2">
-                 {Colors.title} BUSD Contracts
+                 {APP_NAME} BUSD Contracts
               </h3>
               <ul className="space-y-2">
                 {["x3", "x4"].map((contract) => (

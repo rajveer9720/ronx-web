@@ -15,7 +15,6 @@ export const Colors = {
   paragraph: import.meta.env.VITE_APP_PARAGRAPH_COLOR,
   link: import.meta.env.VITE_APP_LINK_COLOR,
   border: import.meta.env.VITE_APP_BORDER_COLOR,
-  title: import.meta.env.VITE_APP_TITLE,
 
   // Extra
   missed_revenue: import.meta.env.VITE_APP_MISSED_REVENUE,

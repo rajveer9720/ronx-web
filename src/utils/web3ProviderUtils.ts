@@ -8,7 +8,7 @@ import {
 import { Network, networkMap } from "./networkUtils";
 
 export const walletConfig = getDefaultConfig({
-  appName: import.meta.env.VITE_APP_TITLE || "",
+  appName: import.meta.env.VITE_APP_TITLE || "RONX",
   projectId: import.meta.env.VITE_APP_PROJECT_ID || "",
   chains: [networkMap[import.meta.env.VITE_APP_APPKIT_CHAIN_ID as Network]],
   wallets: [

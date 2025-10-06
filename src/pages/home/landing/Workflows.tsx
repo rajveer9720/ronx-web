@@ -8,6 +8,7 @@ import { APP_NAME } from "../../../utils/constants";
 export default function Workflows() {
   return (
     <section>
+    
       <style>{`
         .workflow-card {
           border: 1px solid var(--border);
@@ -34,10 +35,10 @@ export default function Workflows() {
               className="animate-[gradient_6s_linear_infinite] bg-[length:200%_auto] bg-clip-text pb-4 font-nacelle text-3xl font-semibold text-transparent md:text-4xl"
               style={{ color: Colors.heading }}
             >
-              Power Your Financial Growth with {Colors.title}
+              Power Your Financial Growth with {APP_NAME}
             </h2>
             <p className="text-lg" style={{ color: Colors.paragraph }}>
-              {Colors.title} is a 100% decentralized platform powered by blockchain smart contracts.
+              {APP_NAME} is a 100% decentralized platform powered by blockchain smart contracts.
               It offers peer-to-peer transactions, instant payments, and complete transparency.
               With automated programs like X3 and X4, every interaction is secure, scalable,
               and free from middlemen or hidden fees. Start building your journey in a trusted ecosystem.
@@ -67,7 +68,7 @@ export default function Workflows() {
                 className="workflow-card group/card relative h-full overflow-hidden rounded-2xl p-px before:pointer-events-none before:absolute before:-left-40 before:-top-40 before:z-10 before:h-80 before:w-80 before:translate-x-[var(--mouse-x)] before:translate-y-[var(--mouse-y)] before:rounded-full before:opacity-0 before:blur-3xl before:transition-opacity before:duration-500 after:pointer-events-none after:absolute after:-left-48 after:-top-48 after:z-30 after:h-64 after:w-64 after:translate-x-[var(--mouse-x)] after:translate-y-[var(--mouse-y)] after:rounded-full after:opacity-0 after:blur-3xl after:transition-opacity after:duration-500 hover:after:opacity-20 group-hover:before:opacity-100"
                 style={{
                   '--primary-color': Colors.primary,
-                  '--primary-color-80': Colors.primary + 'cc', // Adding 80% opacity
+                  '--primary-color-80': Colors.primary + 'cc',
                   '--border': Colors.border
                 } as React.CSSProperties & {
                   '--primary-color': string;
@@ -79,7 +80,6 @@ export default function Workflows() {
                 <div className="relative z-20 h-full overflow-hidden rounded-[inherit] after:absolute after:inset-0 after:bg-gradient-to-br " style={{ backgroundColor: Colors.card_bg, color: Colors.card_text }}>
                   <div
                     className="absolute right-6 top-6 flex h-8 w-8 items-center justify-center rounded-full border  transition-opacity group-hover/card:opacity-100"
-
                     aria-hidden="true"
                   >
                     <svg

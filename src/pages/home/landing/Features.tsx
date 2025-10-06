@@ -11,6 +11,7 @@ import {
 import BlurredShapeGray from "/assets/images/blurred-shape-gray.svg";
 import BlurredShape from "/assets/images/blurred-shape.svg";
 import { Colors } from "../../../utils/colors";
+import { APP_NAME } from "../../../utils/constants";
 
 const features: {
   title: string;
@@ -20,7 +21,7 @@ const features: {
   {
     title: "Independence",
     description:
-      `The ${Colors.title} ecosystem is powered by smart contracts and  operating fully autonomously and eliminating any influence from human intervention.`,
+      `The ${APP_NAME} ecosystem is powered by smart contracts and  operating fully autonomously and eliminating any influence from human intervention.`,
     icon: GlobeAltIcon,
   },
   {
@@ -38,7 +39,7 @@ const features: {
   {
     title: "End-to-end automation",
     description:
-      `Every process within the ${Colors.title} ecosystem is driven by smart contracts, removing the need for manual involvement and ensuring continuous, round-the-clock operation.`,
+      `Every process within the ${APP_NAME} ecosystem is driven by smart contracts, removing the need for manual involvement and ensuring continuous, round-the-clock operation.`,
     icon: BoltIcon,
   },
   {
@@ -88,28 +89,28 @@ const Features: React.FC = () => {
           <div className="mx-auto max-w-3xl pb-4 text-center md:pb-12">
             <div className="inline-flex items-center gap-3 pb-3 before:h-px before:w-8 before:bg-linear-to-r before:from-transparent before:to-indigo-200/50 after:h-px after:w-8 after:bg-linear-to-l after:from-transparent after:to-indigo-200/50">
               <span className="inline-flex  bg-clip-text text-transparent" style={{ color: Colors.paragraph }}>
-                {Colors.title} is powered entirely by blockchain-based smart contracts.
+                {APP_NAME} is powered entirely by blockchain-based smart contracts.
               </span>
             </div>
             <h2 className="animate-[gradient_6s_linear_infinite]  bg-[length:200%_auto] bg-clip-text pb-4 font-nacelle text-3xl font-semibold text-transparent md:text-4xl" style={{ color: Colors.heading }}>
-              Decentralized marketing with smart contracts and {Colors.title} secure
+              Decentralized marketing with smart contracts and {APP_NAME} secure
               open code.
             </h2>
           </div>
 
           <div className="mx-auto grid max-w-sm gap-12 sm:max-w-none sm:grid-cols-2 md:gap-x-14 md:gap-y-16 lg:grid-cols-3">
             {features.map((feature, idx) => (
-                <article key={idx}>
+              <article key={idx}>
                 <div
                   style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 9999,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  background: Colors.icon_bg || "#23272f",
-                  marginBottom: 12,
+                    width: 40,
+                    height: 40,
+                    borderRadius: 9999,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background: Colors.icon_bg || "#23272f",
+                    marginBottom: 12,
                   }}
                 >
                   <feature.icon className="h-6 w-6" style={{ color: Colors.icon }} />
@@ -118,7 +119,7 @@ const Features: React.FC = () => {
                   {feature.title}
                 </h3>
                 <p style={{ color: Colors.paragraph }}>{feature.description}</p>
-                </article>
+              </article>
             ))}
           </div>
         </div>
