@@ -100,7 +100,7 @@ const Activity = () => {
         paginationMode="server"
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
-      />
+        />
     </Box>
   );
 };

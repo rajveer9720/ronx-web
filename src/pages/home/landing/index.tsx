@@ -9,13 +9,13 @@ import Header from "../layout/Header";
 import Faq from "./Faq";
 import Footer from "../layout/Footer";
 // import Dashboard from "./Activity";
-import TelegramButton from "../layout/Telegram";
+// import TelegramButton from "../layout/Telegram";
+import { Colors } from "../../../utils/colors";
 
 const Landing = () => {
   return (
-    <div className="home-purple-gradient home-page-background">
+    <div style={{ background: Colors.bg }}>
       <Header />
-
       <PageIllustration />
       <HeroHome />
       {/* <Dashboard /> */}
@@ -25,7 +25,7 @@ const Landing = () => {
       <Faq />
       <Cta />
       <Footer />
-      <TelegramButton />
+      {/* <TelegramButton /> */}
     </div>
   );
 };

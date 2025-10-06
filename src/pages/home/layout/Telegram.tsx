@@ -1,4 +1,5 @@
 import React from "react";
+import { Colors } from "../../../utils/colors";
 
 const TelegramButton: React.FC = () => {
   return (
@@ -7,7 +8,7 @@ const TelegramButton: React.FC = () => {
         href="https://t.me/your_telegram_channel"
         target="_blank"
         rel="noopener noreferrer"
-        className="bg-purple-600 hover:bg-purple-700 text-white p-4 rounded-full shadow-lg transition duration-300 flex items-center justify-center"
+        className=" p-4 rounded-full shadow-lg transition duration-300 flex items-center justify-center" style={{ backgroundColor: Colors.button_bg, color: Colors.button_text }}
         aria-label="Telegram"
       >
         <svg

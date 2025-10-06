@@ -1,4 +1,5 @@
 import cytoscape from "cytoscape";
+import { Colors } from "./colors";
 
 export const createElementsFromNodes = (nodesData: { id: string }[]) => {
   const nodes = nodesData.map((node) => ({
@@ -90,12 +91,12 @@ export const applyNodeColors = (cy: cytoscape.Core, nodesData: any[]) => {
   cy.nodes().forEach((node) => {
     const nodeData = nodesData.find((n) => n.id === node.id());
     
-    let nodeColor = nodeData?.nodeColor || "#7b3de4";
+    let nodeColor = nodeData?.nodeColor || "#ffffff";
         if (nodeData?.spillInfo) {
       if (nodeData.spillInfo.spill_up) {
-        nodeColor = "#FFA500"; 
+        nodeColor = Colors.spill_over; 
       } else if (nodeData.spillInfo.spill_down) {
-        nodeColor = "#FF5349"; 
+        nodeColor = Colors.spill_below; 
       }
     }
     

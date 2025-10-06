@@ -283,7 +283,7 @@ const LevelCards = () => {
               />
             )}
             <Chip
-              color="secondary"
+              color="primary"
               variant="outlined"
               icon={<Tag />}
               label={`UID: ${user?.id}`}

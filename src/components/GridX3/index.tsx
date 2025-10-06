@@ -15,6 +15,7 @@ import {
   applyNodeColors,
   GRID_X3,
 } from "../../utils/cytoscapeUtils";
+import {Colors} from "../../utils/colors";
 import { Box } from "@mui/material";
 import { INodeData } from "../../interfaces/grid";
 
@@ -47,7 +48,7 @@ const GridX3 = ({ nodesData }: GridX3Props) => {
   }, [nodesData]);
 
   const elements = useMemo(() => createGridX3Elements(normalizedNodesData), [normalizedNodesData]);
-  const style: any = useMemo(() => createNodeStyles("#7b3de4"), []);
+  const style: any = useMemo(() => createNodeStyles(Colors.node_colors_x3), []);
   const layoutConfig = useMemo(() => createGridLayout(3), []);
 
   const nodeInfoMap = useMemo(() => {

@@ -10,6 +10,7 @@ import {
 import { ITransaction } from "../interfaces/transaction";
 import { INodeData } from "../interfaces/grid";
 import { ProgramIds } from "./programUtils";
+import { Colors } from "./colors";
 
 export const getBgColor = (level: IUserLevel, theme: Theme): string => {
   if (level.unlock) return theme.palette.primary.light;
@@ -36,8 +37,8 @@ export const getLevelIcon = (level: IUserLevel): ReactNode => {
 };
 
 export const getNodeColor = (theme: Theme, txn: ITransaction): string => {
-  if (txn.spill_up) return "#ff6b6b"; 
-  if (txn.spill_down) return "#4ecdc4";
+  if (txn.spill_up) return Colors.spill_over; 
+  if (txn.spill_down) return Colors.spill_below;
   return theme.palette.primary.main;
 };
 

@@ -3,6 +3,8 @@ import { Button } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ModalVideo from "./ModalVideo";
 import VideoThumb from "../../../../public/assets/images/hero-image-01.jpg";
+import { Colors } from "../../../utils/colors";
+import { APP_NAME } from "../../../utils/constants";
 
 const HeroHome: React.FC = () => {
   // const [tabIndex, setTabIndex] = useState(0);
@@ -13,8 +15,8 @@ const HeroHome: React.FC = () => {
 
   // Common button style
   const buttonStyle = {
-    backgroundColor: "#fff",
-    color: "#111827",
+    backgroundColor: Colors.button_bg,
+    color: Colors.button_text,
     textTransform: "none",
     fontWeight: 500,
     px: 3,
@@ -24,7 +26,7 @@ const HeroHome: React.FC = () => {
     alignItems: "center",
     gap: "8px",
     "&:hover": {
-      backgroundColor: "#fe7e7e",
+      backgroundColor: Colors.hover,
       transform: "scale(1.02)",
     },
     transition: "all 0.2s",
@@ -36,16 +38,16 @@ const HeroHome: React.FC = () => {
         <div className="py-12 md:py-20">
           <div className="text-center pb-12 md:pb-20">
             <h1
-              className="bg-gradient-to-r from-red-100 via-blue-200 to-red-50 bg-clip-text text-transparent text-4xl font-semibold animate-[gradient_6s_linear_infinite] md:text-5xl"
+              className="bg-clip-text  text-4xl font-semibold animate-[gradient_6s_linear_infinite] md:text-5xl" style={{ color: Colors.heading }}
               data-aos="fade-up"
             >
-              Welcome to Ronx BUSD
+              Welcome to {APP_NAME} BUSD
             </h1>
             <div className="mx-auto max-w-3xl">
               <p
-                className="mb-8 text-xl text-gray-300"
+                className="mb-8 text-xl"
                 data-aos="fade-up"
-                data-aos-delay={200}
+                data-aos-delay={200} style={{ color: Colors.paragraph }}
               >
                 Connect your wallet to start working. First time here? Watch a
                 tutorial to learn more

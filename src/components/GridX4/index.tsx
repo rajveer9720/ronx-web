@@ -8,6 +8,7 @@ import React, {
 import cytoscape from "cytoscape";
 import dagre from "cytoscape-dagre";
 import "./MatrixChart.css";
+import {Colors} from "../../utils/colors";
 import {
   createElementsFromNodes,
   createNodeStyles,
@@ -49,7 +50,7 @@ const GridX4 = ({ nodesData }: GridX4Props) => {
   );
 
   const style: any = useMemo(
-    () => [...createNodeStyles("transparent"), ...createEdgeStyles()],
+    () => [...createNodeStyles(Colors.node_colors_x4), ...createEdgeStyles()],
     [responsiveNodeSize]
   );
 

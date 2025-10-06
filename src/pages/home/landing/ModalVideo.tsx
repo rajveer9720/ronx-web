@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
 import SecondaryIllustration from "/assets/images/secondary-illustration.svg";
+import { Colors } from "../../../utils/colors";
 
 interface ModalVideoProps {
   thumb: string;
@@ -40,7 +41,8 @@ export default function ModalVideo({
       </div>
 
       <button
-        className="group relative flex items-center justify-center rounded-2xl focus:outline-hidden focus-visible:ring-3 focus-visible:ring-indigo-200"
+        className="group relative flex items-center justify-center rounded-2xl focus:outline-hidden focus-visible:ring-3"
+        style={{  color: Colors.button_text }}
         onClick={() => {
           setModalOpen(true);
         }}

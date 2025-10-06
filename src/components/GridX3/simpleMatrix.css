@@ -4,7 +4,6 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  color: #fff;
   font-family: Roboto, sans-serif;
   position: relative;
   box-sizing: border-box;
@@ -81,7 +80,6 @@
 }
 
 .matrix-node-label a {
-  color: #fff;
   text-decoration: none;
 }
 
